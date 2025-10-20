@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     // 요청 본문 파싱 및 검증
     const body = await request.json();
     const validatedData = AnalysisRequestSchema.parse(body);
-    const { jd, options = {} } = validatedData;
+    const { jd, options } = validatedData;
 
     // JD 파싱
     const parsedJD = await jdParser.parseJD(jd);
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
         };
 
         // 레시피 생성 (옵션이 활성화된 경우)
-        if (options.includeRecipe && finalCategory !== 'Human-critical') {
+        if (options?.includeRecipe && finalCategory !== 'Human-critical') {
           try {
             const recipe = await llmClient.generateRecipe(task);
             task.recipe = recipe;
