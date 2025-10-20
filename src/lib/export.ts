@@ -260,7 +260,7 @@ export class ExportService {
         if (task.recipe.outputs.length > 0) {
           markdown += `**출력 데이터:**\n`;
           task.recipe.outputs.forEach(output => {
-            markdown += `- **${output.name}** (${output.type}) - 대상: ${output.target}\n`;
+            markdown += `- **${output.name}** (${output.type}) - 출처: ${output.source}\n`;
           });
           markdown += `\n`;
         }
