@@ -49,101 +49,46 @@ export async function POST(req: NextRequest) {
 function generatePDFContent(result: AnalysisResult, options: ExportRequest['options']): string {
   const { tasks, summary, metadata } = result;
   
-  let content = `
-# JD Analysis Report
-## Analysis Summary
+  const header = '# JD Analysis Report\n## Analysis Summary\n\n';
+  const summaryText = `**Analysis Date:** ${new Date(metadata.analyzedAt).toLocaleString()}\n**Total Tasks:** ${summary.total}\n**Average ROI:** ${summary.averageROI.toFixed(1)}%\n\n`;
+  const distributionText = `### Task Distribution\n- **Automation Possible:** ${summary.automate} tasks\n- **AI Co-pilot:** ${summary.copilot} tasks\n- **Human-Critical:** ${summary.humanCritical} tasks\n\n`;
+  
+  const highImpactTasksText = '### High Impact Tasks\n' + summary.highImpactTasks.map((task, idx) => {
+    return `${idx + 1}. ${task.title}\n   - Score: ${task.score}/100\n   - ROI: ${task.roiEstimate}%\n   - Category: ${task.category}\n   - Difficulty: ${task.difficulty}/5`;
+  }).join('\n') + '\n\n---\n\n';
+  
+  const detailedAnalysisText = '## Detailed Task Analysis\n\n' + tasks.map((task, idx) => {
+    let taskText = `### ${idx + 1}. ${task.title}\n\n**Category:** ${task.category}\n**Automation Score:** ${task.score}/100\n**ROI Estimate:** ${task.roiEstimate}%\n**Difficulty:** ${task.difficulty}/5\n**Estimated Implementation Time:** ${task.estimatedTime}\n\n**Source Text:**\n${task.sourceText}\n\n**Evaluation Reasoning:**\n${task.reasoning}\n\n`;
+    
+    if (task.category === 'Automate' || task.category === 'Co-pilot') {
+      taskText += `#### AI Agent Type: ${getAgentType(task)}\n#### Key Features:\n${getAgentFeatures(task)}\n\n#### Expected Effects:\n${getExpectedEffects(task)}\n\n`;
+    }
+    
+    taskText += `**Risks:**\n${task.risks.map(r => `- ${r}`).join('\n')}\n\n`;
+    taskText += `**Safeguards:**\n${task.safeguards.map(s => `- ${s}`).join('\n')}\n\n`;
+    taskText += `**Required Tools:**\n${task.tools.map(t => `- ${t.name}: ${t.purpose}`).join('\n')}\n\n`;
+    
+    if (options.includeRecipes && task.recipe) {
+      taskText += `#### Implementation Recipe\n\n**Inputs:**\n${task.recipe.inputs.map(i => `- ${i.name} (${i.type}): ${i.source}`).join('\n')}\n\n`;
+      taskText += `**Outputs:**\n${task.recipe.outputs.map(o => `- ${o.name} (${o.type}): ${o.source}`).join('\n')}\n\n`;
+      taskText += `**Steps:**\n${task.recipe.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n`;
+      
+      if (options.includeCode && task.recipe.codeSamples.length > 0) {
+        taskText += `**Code Samples:**\n${task.recipe.codeSamples.map(cs => `\`\`\`${cs.lang}\n// ${cs.label}\n${cs.code}\n\`\`\``).join('\n')}\n\n`;
+      }
+      
+      taskText += `**Tests:**\n${task.recipe.tests.map(t => `- ${t}`).join('\n')}\n\n`;
+      taskText += `**Monitoring:**\n${task.recipe.monitoring.map(m => `- ${m}`).join('\n')}\n\n`;
+    }
+    
+    taskText += '---\n';
+    return taskText;
+  }).join('\n');
 
-**Analysis Date:** ${new Date(metadata.analyzedAt).toLocaleString()}
-**Total Tasks:** ${summary.total}
-**Average ROI:** ${summary.averageROI.toFixed(1)}%
-
-### Task Distribution
-- **Automation Possible:** ${summary.automate} tasks
-- **AI Co-pilot:** ${summary.copilot} tasks
-- **Human-Critical:** ${summary.humanCritical} tasks
-
-### High Impact Tasks
-${summary.highImpactTasks.map((task, idx) => `
-${idx + 1}. ${task.title}
-   - Score: ${task.score}/100
-   - ROI: ${task.roiEstimate}%
-   - Category: ${task.category}
-   - Difficulty: ${task.difficulty}/5
-`).join('\n')}
-
----
-
-## Detailed Task Analysis
-
-${tasks.map((task, idx) => `
-### ${idx + 1}. ${task.title}
-
-**Category:** ${task.category}
-**Automation Score:** ${task.score}/100
-**ROI Estimate:** ${task.roiEstimate}%
-**Difficulty:** ${task.difficulty}/5
-**Estimated Implementation Time:** ${task.estimatedTime}
-
-**Source Text:**
-${task.sourceText}
-
-**Evaluation Reasoning:**
-${task.reasoning}
-
-${task.category === 'Automate' || task.category === 'Co-pilot' ? `
-#### AI Agent Type: ${getAgentType(task)}
-#### Key Features:
-${getAgentFeatures(task)}
-
-#### Expected Effects:
-${getExpectedEffects(task)}
-` : ''}
-
-**Risks:**
-${task.risks.map(r => `- ${r}`).join('\n')}
-
-**Safeguards:**
-${task.safeguards.map(s => `- ${s}`).join('\n')}
-
-**Required Tools:**
-${task.tools.map(t => `- ${t.name}: ${t.purpose}`).join('\n')}
-
-${options.includeRecipes && task.recipe ? `
-#### Implementation Recipe
-
-**Inputs:**
-${task.recipe.inputs.map(i => `- ${i.name} (${i.type}): ${i.source}`).join('\n')}
-
-**Outputs:**
-${task.recipe.outputs.map(o => `- ${o.name} (${o.type}): ${o.source}`).join('\n')}
-
-**Steps:**
-${task.recipe.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}
-
-${options.includeCode && task.recipe.codeSamples.length > 0 ? `
-**Code Samples:**
-${task.recipe.codeSamples.map(cs => `
-\`\`\`${cs.lang}
-// ${cs.label}
-${cs.code}
-\`\`\`
-`).join('\n')}
-` : ''}
-
-**Tests:**
-${task.recipe.tests.map(t => `- ${t}`).join('\n')}
-
-**Monitoring:**
-${task.recipe.monitoring.map(m => `- ${m}`).join('\n')}
-` : ''}
-
----
-`).join('\n')}
-
-  return content;
+  return header + summaryText + distributionText + highImpactTasksText + detailedAnalysisText;
 }
 
-function getAgentType(task: any): string {
+function getAgentType(task: { title: string }): string {
   const title = task.title.toLowerCase();
   
   if (title.includes('data') || title.includes('process') || title.includes('extract')) {
@@ -165,8 +110,8 @@ function getAgentType(task: any): string {
   return 'Workflow Automation Agent';
 }
 
-function getAgentFeatures(task: any): string {
-  const features = [];
+function getAgentFeatures(task: { category: string; roiEstimate: number; difficulty: number }): string {
+  const features: string[] = [];
   
   if (task.category === 'Automate') {
     features.push('- Fully automated task execution');
@@ -184,8 +129,8 @@ function getAgentFeatures(task: any): string {
   return features.join('\n');
 }
 
-function getExpectedEffects(task: any): string {
-  const effects = [];
+function getExpectedEffects(task: { category: string; roiEstimate: number; risks: string[]; safeguards: string[] }): string {
+  const effects: string[] = [];
   
   effects.push(`**Time Savings:** ${task.roiEstimate}% reduction in task completion time`);
   effects.push(`**Cost Reduction:** Estimated annual savings based on ${task.roiEstimate}% efficiency gain`);
