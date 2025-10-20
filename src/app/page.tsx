@@ -123,7 +123,7 @@ export default function HomePage() {
       
       if (result.success) {
         // 선택된 작업의 레시피 업데이트
-        setSelectedTask(prev => prev ? { ...prev, recipe: result.data } : null);
+        setSelectedTask(prev => prev ? { ...prev, recipe: result.data } : undefined);
       } else {
         throw new Error(result.error || '알 수 없는 오류');
       }
