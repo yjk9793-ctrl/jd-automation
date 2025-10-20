@@ -169,36 +169,3 @@ async function sendEmailWithPDF(email: string, content: string, result: Analysis
   
   return true;
 }
-
-// Example with Nodemailer (uncomment and configure for production):
-/*
-import nodemailer from 'nodemailer';
-
-async function sendEmailWithPDF(email: string, content: string, result: AnalysisResult): Promise<boolean> {
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: false,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-
-  const mailOptions = {
-    from: process.env.FROM_EMAIL,
-    to: email,
-    subject: 'JD Analysis Report',
-    text: content,
-    attachments: [
-      {
-        filename: `jd-analysis-${Date.now()}.txt`,
-        content: content,
-      },
-    ],
-  };
-
-  await transporter.sendMail(mailOptions);
-  return true;
-}
-*/
