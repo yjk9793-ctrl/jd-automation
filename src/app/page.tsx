@@ -31,7 +31,7 @@ import { Toaster } from 'sonner';
 
 export default function HomePage() {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
-  const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
+  const [selectedTask, setSelectedTask] = useState<TaskItem | undefined>(undefined);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showDemo, setShowDemo] = useState(false);
   const [language, setLanguage] = useState<Language>('ko');
@@ -66,7 +66,7 @@ export default function HomePage() {
       
       if (result.success) {
         setAnalysisResult(result.data);
-        setSelectedTask(null);
+        setSelectedTask(undefined);
       } else {
         throw new Error(result.error || '알 수 없는 오류');
       }
@@ -83,7 +83,7 @@ export default function HomePage() {
     const demoResult = getDemoResult('hr');
     
     setAnalysisResult(demoResult);
-    setSelectedTask(null);
+    setSelectedTask(undefined);
     setShowDemo(true);
   };
 
@@ -91,7 +91,7 @@ export default function HomePage() {
     // 데모 모드에서는 실제 API 호출 없이 샘플 결과 반환
     const demoResult = getDemoResult('hr');
     setAnalysisResult(demoResult);
-    setSelectedTask(null);
+    setSelectedTask(undefined);
     setShowDemo(true);
   };
 
