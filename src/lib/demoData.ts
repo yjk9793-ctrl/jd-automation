@@ -179,44 +179,14 @@ export const DEMO_RESULTS = {
           ],
           codeSamples: [
             {
-              lang: 'ts',
+              lang: 'ts' as const,
               label: 'TypeScript 예시',
-              code: `interface ResumeScreening {
-  resume: string;
-  requirements: string[];
-  weights: Record<string, number>;
-}
-
-function screenResume(screening: ResumeScreening): ScreeningResult {
-  const keywords = extractKeywords(screening.resume);
-  const matches = findMatches(keywords, screening.requirements);
-  const score = calculateScore(matches, screening.weights);
-  
-  return {
-    score,
-    passed: score >= 70,
-    matchedKeywords: matches,
-    recommendations: generateRecommendations(score)
-  };
-}`
+              code: 'interface ResumeScreening {\n  resume: string;\n  requirements: string[];\n  weights: Record<string, number>;\n}\n\nfunction screenResume(screening: ResumeScreening): ScreeningResult {\n  const keywords = extractKeywords(screening.resume);\n  const matches = findMatches(keywords, screening.requirements);\n  const score = calculateScore(matches, screening.weights);\n  \n  return {\n    score,\n    passed: score >= 70,\n    matchedKeywords: matches,\n    recommendations: generateRecommendations(score)\n  };\n}'
             },
             {
-              lang: 'py',
+              lang: 'py' as const,
               label: 'Python 예시',
-              code: `import re
-from typing import List, Dict
-
-def screen_resume(resume_text: str, requirements: List[str]) -> Dict:
-    keywords = extract_keywords(resume_text)
-    matches = find_keyword_matches(keywords, requirements)
-    score = calculate_weighted_score(matches)
-    
-    return {
-        'score': score,
-        'passed': score >= 70,
-        'matched_keywords': matches,
-        'confidence': calculate_confidence(score, len(matches))
-    }`
+              code: 'import re\nfrom typing import List, Dict\n\ndef screen_resume(resume_text: str, requirements: List[str]) -> Dict:\n    keywords = extract_keywords(resume_text)\n    matches = find_keyword_matches(keywords, requirements)\n    score = calculate_weighted_score(matches)\n    \n    return {\n        \'score\': score,\n        \'passed\': score >= 70,\n        \'matched_keywords\': matches,\n        \'confidence\': calculate_confidence(score, len(matches))\n    }'
             }
           ],
           tests: [
