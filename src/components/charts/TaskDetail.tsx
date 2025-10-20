@@ -161,7 +161,7 @@ export function TaskDetail({ task, onGenerateRecipe, isGeneratingRecipe = false 
                   <div key={index} className="p-3 border rounded-lg">
                     <div className="font-medium text-sm">{output.name}</div>
                     <div className="text-xs text-muted-foreground">
-                      타입: {output.type} | 대상: {output.target}
+                      타입: {output.type} | 출처: {output.source}
                     </div>
                   </div>
                 ))}
