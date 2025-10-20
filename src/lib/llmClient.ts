@@ -422,7 +422,7 @@ def screen_resume(resume_text: str, requirements: List[str]) -> Dict:
         { name: "입력 데이터", type: "Text", source: "사용자 입력" }
       ],
       outputs: [
-        { name: "처리 결과", type: "JSON", target: "시스템" }
+        { name: "처리 결과", type: "JSON", source: "시스템" }
       ],
       flowMermaid: `graph TD
     A[시작] --> B[데이터 입력]
