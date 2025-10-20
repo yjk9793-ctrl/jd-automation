@@ -155,8 +155,8 @@ export const DEMO_RESULTS = {
             { name: '자격 요건', type: 'JSON', source: 'JD 파싱' }
           ],
           outputs: [
-            { name: '스크리닝 결과', type: 'JSON', target: 'ATS 시스템' },
-            { name: '점수 리포트', type: 'PDF', target: '채용 담당자' }
+            { name: '스크리닝 결과', type: 'JSON', source: 'ATS 시스템' },
+            { name: '점수 리포트', type: 'PDF', source: '채용 담당자' }
           ],
           flowMermaid: `graph TD
     A[이력서 업로드] --> B[문서 파싱]
