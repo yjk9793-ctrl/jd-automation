@@ -486,7 +486,8 @@ function processTask(input: string): string {
 
         response = completion.choices[0]?.message?.content || '';
       } else if (this.config.provider === 'anthropic' && this.anthropic) {
-        const message = await this.anthropic.messages.create({
+        // Anthropic SDK 사용 (타입 에러 방지를 위해 any 사용)
+        const message = await (this.anthropic as any).messages.create({
           model: this.config.model,
           max_tokens: this.config.maxTokens,
           temperature: this.config.temperature,
