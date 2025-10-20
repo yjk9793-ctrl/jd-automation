@@ -140,7 +140,7 @@ export const DEMO_RESULTS = {
         category: 'Automate' as const,
         score: 85,
         roiEstimate: 75,
-        difficulty: 2,
+        difficulty: 2 as const,
         risks: ['잘못된 필터링으로 인한 우수 인재 누락'],
         safeguards: ['다단계 검증 프로세스', '인간 검토 단계', '필터링 기준 정기 업데이트'],
         tools: [
@@ -240,7 +240,7 @@ def screen_resume(resume_text: str, requirements: List[str]) -> Dict:
         category: 'Automate' as const,
         score: 80,
         roiEstimate: 60,
-        difficulty: 3,
+        difficulty: 3 as const,
         risks: ['이중 예약', '면접관 일정 충돌', '시간대 오류'],
         safeguards: ['실시간 캘린더 동기화', '충돌 검사', '자동 알림 시스템'],
         tools: [
@@ -266,7 +266,7 @@ def screen_resume(resume_text: str, requirements: List[str]) -> Dict:
       copilot: 0,
       humanCritical: 0,
       averageROI: 67.5,
-      highImpactTasks: []
+      highImpactTasks: [] as any[]
     },
     metadata: {
       analyzedAt: new Date().toISOString(),
