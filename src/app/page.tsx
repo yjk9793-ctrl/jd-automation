@@ -279,79 +279,153 @@ export default function HomePage() {
       
       <main className="container mx-auto px-4 py-12 relative z-10">
         {/* 히어로 섹션 */}
-        <div className="text-center mb-16">
-          <div className="inline-block px-4 py-2 mb-6 glass rounded-full animate-fade-in">
-            <span className="text-sm font-medium text-gradient">
+        <div className="text-center mb-20">
+          {/* 상단 배지 */}
+          <div className="inline-flex items-center gap-2 px-6 py-3 mb-8 rounded-full bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-sm font-medium animate-fade-in">
+            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium">
               AI-Powered Job Description Analysis
             </span>
           </div>
           
-          <h1 className="text-3xl md:text-5xl font-bold mb-6 text-gradient text-shadow animate-slide-up">
+          {/* 메인 타이틀 */}
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 text-gradient text-shadow animate-slide-up leading-tight">
             {t.hero.title}
             <br />
-            <span className="text-lg md:text-xl">{t.hero.subtitle}</span>
+            <span className="text-2xl md:text-3xl lg:text-4xl text-muted-foreground font-normal">
+              {t.hero.subtitle}
+            </span>
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto whitespace-pre-line animate-fade-in">
-            {t.hero.description}
-          </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-scale-in">
+          {/* 서브 타이틀 */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <h2 className="text-xl md:text-2xl text-muted-foreground mb-6 animate-fade-in">
+              실시간 JD 분석부터 에이전트화 전략까지<br />
+              <span className="text-primary font-semibold">한 곳에서 가능한 원스톱 AI 플랫폼</span>
+            </h2>
+          </div>
+          
+          {/* CTA 버튼들 */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-scale-in">
             <Button 
               size="lg" 
               onClick={handleDemo}
-              className="h-12 px-8 btn-modern micro-interaction"
+              className="h-14 px-10 text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             >
-              <Play className="h-5 w-5 mr-2" />
+              <Play className="h-6 w-6 mr-3" />
               {t.hero.demoButton}
             </Button>
             <Button 
               variant="outline" 
               size="lg"
               onClick={() => document.getElementById('jd-input')?.scrollIntoView({ behavior: 'smooth' })}
-              className="h-12 px-8 border-2 hover:bg-accent transition-all micro-interaction glass"
+              className="h-14 px-10 text-lg font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 transform hover:scale-105"
             >
-              <ArrowRight className="h-5 w-5 mr-2" />
+              <ArrowRight className="h-6 w-6 mr-3" />
               {t.hero.startButton}
             </Button>
           </div>
 
-          {/* 특징 카드들 - 다크 테마 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <Card className="dark-card micro-interaction animate-fade-in dark-glow">
-              <CardContent className="p-6 text-center">
-                <div className="h-16 w-16 mx-auto mb-4 rounded-full gradient-primary flex items-center justify-center floating dark-pulse">
-                  <Zap className="h-8 w-8 text-white" />
+          {/* 특징 카드들 - ThinkingData 스타일 */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <Card className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
+              <CardContent className="p-8 text-center relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <Zap className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-4 text-white group-hover:text-blue-300 transition-colors duration-300">
+                    {t.hero.features.automation.title}
+                  </h3>
+                  <p className="text-gray-300 leading-relaxed">
+                    {t.hero.features.automation.description}
+                  </p>
                 </div>
-                <h3 className="font-semibold mb-2 text-gradient dark-text-glow">{t.hero.features.automation.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {t.hero.features.automation.description}
-                </p>
               </CardContent>
             </Card>
+
+            <Card className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
+              <CardContent className="p-8 text-center relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <BarChart3 className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-4 text-white group-hover:text-green-300 transition-colors duration-300">
+                    {t.hero.features.roi.title}
+                  </h3>
+                  <p className="text-gray-300 leading-relaxed">
+                    {t.hero.features.roi.description}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
+              <CardContent className="p-8 text-center relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <Users className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-4 text-white group-hover:text-purple-300 transition-colors duration-300">
+                    {t.hero.features.guide.title}
+                  </h3>
+                  <p className="text-gray-300 leading-relaxed">
+                    {t.hero.features.guide.description}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* 통계 섹션 - ThinkingData 스타일 */}
+        <div className="py-20 mb-20">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                1500+개 기업이 선택한<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                  쉽고 빠른 글로벌 원스톱 AI 플랫폼
+                </span>
+              </h2>
+            </div>
             
-            <Card className="dark-card micro-interaction animate-fade-in dark-glow" style={{animationDelay: '0.2s'}}>
-              <CardContent className="p-6 text-center">
-                <div className="h-16 w-16 mx-auto mb-4 rounded-full gradient-secondary flex items-center justify-center floating-delayed dark-pulse">
-                  <BarChart3 className="h-8 w-8 text-white" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div className="text-center group">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">
+                  10배
                 </div>
-                <h3 className="font-semibold mb-2 text-gradient dark-text-glow">{t.hero.features.roi.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {t.hero.features.roi.description}
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="dark-card micro-interaction animate-fade-in dark-glow" style={{animationDelay: '0.4s'}}>
-              <CardContent className="p-6 text-center">
-                <div className="h-16 w-16 mx-auto mb-4 rounded-full gradient-accent flex items-center justify-center floating dark-pulse" style={{animationDelay: '2s'}}>
-                  <Users className="h-8 w-8 text-white" />
+                <div className="text-lg text-gray-300 font-semibold mb-1">더 빠른 실행</div>
+                <div className="text-sm text-gray-400">AI 분석 속도</div>
+              </div>
+              
+              <div className="text-center group">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">
+                  2배
                 </div>
-                <h3 className="font-semibold mb-2 text-gradient dark-text-glow">{t.hero.features.guide.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {t.hero.features.guide.description}
-                </p>
-              </CardContent>
-            </Card>
+                <div className="text-lg text-gray-300 font-semibold mb-1">더 높은 성과</div>
+                <div className="text-sm text-gray-400">업무 효율성</div>
+              </div>
+              
+              <div className="text-center group">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">
+                  95%
+                </div>
+                <div className="text-lg text-gray-300 font-semibold mb-1">정확도</div>
+                <div className="text-sm text-gray-400">AI 분석 정확도</div>
+              </div>
+              
+              <div className="text-center group">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">
+                  24/7
+                </div>
+                <div className="text-lg text-gray-300 font-semibold mb-1">실시간 분석</div>
+                <div className="text-sm text-gray-400">언제든지 사용</div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -362,6 +436,90 @@ export default function HomePage() {
             isLoading={isAnalyzing}
             sampleData={getSampleJD('hr')}
           />
+        </div>
+
+        {/* 프로세스 섹션 - ThinkingData 스타일 */}
+        <div className="py-20 mb-20">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                JD가 움직이는 전 과정을<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                  풀퍼널로 연결합니다
+                </span>
+              </h2>
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                우리 서비스 속 JD를 이해하고 비즈니스를 성장시키기 위한 모든 과정을 하나로
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {/* 1단계 */}
+              <div className="text-center group">
+                <div className="relative mb-6">
+                  <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    1
+                  </div>
+                  <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 hidden lg:block">
+                    <ArrowRight className="h-6 w-6 text-gray-400" />
+                  </div>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">수집</h3>
+                <p className="text-gray-300 text-sm">
+                  모든 JD 데이터를<br />
+                  실시간으로 수집
+                </p>
+              </div>
+              
+              {/* 2단계 */}
+              <div className="text-center group">
+                <div className="relative mb-6">
+                  <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white text-xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    2
+                  </div>
+                  <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 hidden lg:block">
+                    <ArrowRight className="h-6 w-6 text-gray-400" />
+                  </div>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">분석</h3>
+                <p className="text-gray-300 text-sm">
+                  복잡한 JD도<br />
+                  쉽게 이해하도록 가공
+                </p>
+              </div>
+              
+              {/* 3단계 */}
+              <div className="text-center group">
+                <div className="relative mb-6">
+                  <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    3
+                  </div>
+                  <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 hidden lg:block">
+                    <ArrowRight className="h-6 w-6 text-gray-400" />
+                  </div>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">실행</h3>
+                <p className="text-gray-300 text-sm">
+                  AI 분석으로<br />
+                  빠른 인사이트 파악
+                </p>
+              </div>
+              
+              {/* 4단계 */}
+              <div className="text-center group">
+                <div className="relative mb-6">
+                  <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    4
+                  </div>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">개선</h3>
+                <p className="text-gray-300 text-sm">
+                  실시간 모니터링 및<br />
+                  N차 분석을 통한 개선
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* 데모 모드 안내 */}
