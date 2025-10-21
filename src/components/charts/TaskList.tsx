@@ -128,9 +128,8 @@ export function TaskList({ tasks, selectedTask, onTaskSelect, language = 'ko' }:
                 key={category}
                 variant={filter === category ? 'default' : 'outline'}
                 size="sm"
-                className="micro-interaction dark-glow"
+                className="micro-interaction dark-glow h-8"
                 onClick={() => setFilter(category)}
-                className="h-8"
               >
                 {category === 'all' 
                   ? (language === 'ko' ? '전체' : 'All') 
