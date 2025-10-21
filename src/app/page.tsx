@@ -484,19 +484,40 @@ export default function HomePage() {
                         </Badge>
                       </div>
                       <div className="flex items-center justify-center h-64">
-                        {/* 데이터 수집 시각화 */}
+                        {/* 데이터 수집 시각화 - 복잡한 네트워크 */}
                         <div className="relative w-full h-full">
                           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg"></div>
-                          <div className="absolute top-4 left-4 w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
-                          <div className="absolute top-8 right-8 w-2 h-2 bg-blue-300 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-                          <div className="absolute top-12 left-12 w-2.5 h-2.5 bg-blue-500 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-                          <div className="absolute bottom-8 left-8 w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
-                          <div className="absolute bottom-4 right-4 w-3 h-3 bg-blue-300 rounded-full animate-pulse" style={{animationDelay: '2s'}}></div>
-                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 border-2 border-blue-400 rounded-full flex items-center justify-center">
-                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                              <Zap className="h-4 w-4 text-white" />
+                          
+                          {/* 메인 중앙 허브 */}
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 border-2 border-blue-400 rounded-full flex items-center justify-center bg-blue-500/30">
+                            <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                              <Zap className="h-6 w-6 text-white" />
                             </div>
                           </div>
+                          
+                          {/* 데이터 노드들 */}
+                          <div className="absolute top-6 left-6 w-4 h-4 bg-cyan-400 rounded-full animate-pulse"></div>
+                          <div className="absolute top-8 right-12 w-3 h-3 bg-blue-300 rounded-full animate-pulse" style={{animationDelay: '0.3s'}}></div>
+                          <div className="absolute top-16 left-16 w-3.5 h-3.5 bg-blue-500 rounded-full animate-pulse" style={{animationDelay: '0.6s'}}></div>
+                          <div className="absolute bottom-12 left-8 w-3 h-3 bg-cyan-300 rounded-full animate-pulse" style={{animationDelay: '0.9s'}}></div>
+                          <div className="absolute bottom-6 right-6 w-4 h-4 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '1.2s'}}></div>
+                          <div className="absolute top-12 right-6 w-2.5 h-2.5 bg-cyan-500 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
+                          <div className="absolute bottom-16 right-16 w-3 h-3 bg-blue-300 rounded-full animate-pulse" style={{animationDelay: '1.8s'}}></div>
+                          
+                          {/* 연결선들 */}
+                          <svg className="absolute inset-0 w-full h-full" style={{zIndex: 1}}>
+                            <line x1="50%" y1="50%" x2="15%" y2="15%" stroke="#60A5FA" strokeWidth="1" opacity="0.6" />
+                            <line x1="50%" y1="50%" x2="85%" y2="20%" stroke="#60A5FA" strokeWidth="1" opacity="0.6" />
+                            <line x1="50%" y1="50%" x2="25%" y2="25%" stroke="#60A5FA" strokeWidth="1" opacity="0.6" />
+                            <line x1="50%" y1="50%" x2="20%" y2="75%" stroke="#60A5FA" strokeWidth="1" opacity="0.6" />
+                            <line x1="50%" y1="50%" x2="85%" y2="85%" stroke="#60A5FA" strokeWidth="1" opacity="0.6" />
+                            <line x1="50%" y1="50%" x2="85%" y2="15%" stroke="#60A5FA" strokeWidth="1" opacity="0.6" />
+                            <line x1="50%" y1="50%" x2="80%" y2="80%" stroke="#60A5FA" strokeWidth="1" opacity="0.6" />
+                          </svg>
+                          
+                          {/* 데이터 흐름 애니메이션 */}
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 border border-blue-300 rounded-full animate-spin" style={{animationDuration: '8s'}}></div>
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-blue-200 rounded-full animate-spin" style={{animationDuration: '12s', animationDirection: 'reverse'}}></div>
                         </div>
                       </div>
                     </CardContent>
@@ -515,16 +536,44 @@ export default function HomePage() {
                         </Badge>
                       </div>
                       <div className="flex items-center justify-center h-64">
-                        {/* AI 분석 시각화 */}
+                        {/* AI 분석 시각화 - 복잡한 뇌 네트워크 */}
                         <div className="relative w-full h-full">
                           <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-lg"></div>
-                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 border-2 border-green-400 rounded-full flex items-center justify-center">
-                            <Brain className="h-8 w-8 text-green-400" />
+                          
+                          {/* 메인 뇌 아이콘 */}
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 border-2 border-green-400 rounded-full flex items-center justify-center bg-green-500/20">
+                            <Brain className="h-10 w-10 text-green-400" />
                           </div>
-                          <div className="absolute top-8 left-8 w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
-                          <div className="absolute top-12 right-12 w-1.5 h-1.5 bg-green-300 rounded-full animate-ping" style={{animationDelay: '0.3s'}}></div>
-                          <div className="absolute bottom-12 left-12 w-2 h-2 bg-green-500 rounded-full animate-ping" style={{animationDelay: '0.6s'}}></div>
-                          <div className="absolute bottom-8 right-8 w-1.5 h-1.5 bg-green-400 rounded-full animate-ping" style={{animationDelay: '0.9s'}}></div>
+                          
+                          {/* 분석 노드들 */}
+                          <div className="absolute top-4 left-4 w-5 h-5 bg-emerald-400 rounded-full animate-ping"></div>
+                          <div className="absolute top-6 right-8 w-3 h-3 bg-green-300 rounded-full animate-ping" style={{animationDelay: '0.2s'}}></div>
+                          <div className="absolute top-12 left-12 w-4 h-4 bg-green-500 rounded-full animate-ping" style={{animationDelay: '0.4s'}}></div>
+                          <div className="absolute bottom-8 left-6 w-3.5 h-3.5 bg-emerald-300 rounded-full animate-ping" style={{animationDelay: '0.6s'}}></div>
+                          <div className="absolute bottom-4 right-4 w-4 h-4 bg-green-400 rounded-full animate-ping" style={{animationDelay: '0.8s'}}></div>
+                          <div className="absolute top-16 right-4 w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping" style={{animationDelay: '1s'}}></div>
+                          <div className="absolute bottom-12 right-12 w-3 h-3 bg-green-300 rounded-full animate-ping" style={{animationDelay: '1.2s'}}></div>
+                          
+                          {/* 신경망 연결선들 */}
+                          <svg className="absolute inset-0 w-full h-full" style={{zIndex: 1}}>
+                            <line x1="50%" y1="50%" x2="12%" y2="12%" stroke="#10B981" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="88%" y2="20%" stroke="#10B981" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="20%" y2="20%" stroke="#10B981" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="15%" y2="80%" stroke="#10B981" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="88%" y2="88%" stroke="#10B981" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="88%" y2="12%" stroke="#10B981" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="85%" y2="85%" stroke="#10B981" strokeWidth="2" opacity="0.7" />
+                          </svg>
+                          
+                          {/* 데이터 처리 파티클들 */}
+                          <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-green-300 rounded-full animate-ping" style={{animationDelay: '0.1s'}}></div>
+                          <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-emerald-300 rounded-full animate-ping" style={{animationDelay: '0.3s'}}></div>
+                          <div className="absolute bottom-1/3 left-1/3 w-1 h-1 bg-green-400 rounded-full animate-ping" style={{animationDelay: '0.5s'}}></div>
+                          <div className="absolute bottom-1/4 right-1/3 w-1 h-1 bg-emerald-400 rounded-full animate-ping" style={{animationDelay: '0.7s'}}></div>
+                          
+                          {/* 회전하는 분석 링들 */}
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28 border border-green-300 rounded-full animate-spin" style={{animationDuration: '6s'}}></div>
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-36 h-36 border border-green-200 rounded-full animate-spin" style={{animationDuration: '10s', animationDirection: 'reverse'}}></div>
                         </div>
                       </div>
                     </CardContent>
@@ -575,16 +624,58 @@ export default function HomePage() {
                         </Badge>
                       </div>
                       <div className="flex items-center justify-center h-64">
-                        {/* 실행 시각화 */}
+                        {/* 실행 시각화 - 복잡한 워크플로우 */}
                         <div className="relative w-full h-full">
                           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg"></div>
-                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 border-2 border-purple-400 rounded-full flex items-center justify-center">
-                            <Target className="h-8 w-8 text-purple-400" />
+                          
+                          {/* 메인 타겟 아이콘 */}
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 border-2 border-purple-400 rounded-full flex items-center justify-center bg-purple-500/20">
+                            <Target className="h-10 w-10 text-purple-400" />
                           </div>
-                          <div className="absolute top-8 left-8 w-3 h-3 bg-purple-400 rounded-full animate-bounce"></div>
-                          <div className="absolute top-12 right-12 w-2 h-2 bg-purple-300 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                          <div className="absolute bottom-12 left-12 w-2.5 h-2.5 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
-                          <div className="absolute bottom-8 right-8 w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay: '0.6s'}}></div>
+                          
+                          {/* 실행 노드들 */}
+                          <div className="absolute top-6 left-6 w-5 h-5 bg-violet-400 rounded-full animate-bounce"></div>
+                          <div className="absolute top-8 right-10 w-3 h-3 bg-purple-300 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                          <div className="absolute top-14 left-14 w-4 h-4 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
+                          <div className="absolute bottom-10 left-8 w-3.5 h-3.5 bg-violet-300 rounded-full animate-bounce" style={{animationDelay: '0.6s'}}></div>
+                          <div className="absolute bottom-6 right-6 w-4 h-4 bg-purple-400 rounded-full animate-bounce" style={{animationDelay: '0.8s'}}></div>
+                          <div className="absolute top-16 right-6 w-2.5 h-2.5 bg-violet-500 rounded-full animate-bounce" style={{animationDelay: '1s'}}></div>
+                          <div className="absolute bottom-14 right-14 w-3 h-3 bg-purple-300 rounded-full animate-bounce" style={{animationDelay: '1.2s'}}></div>
+                          
+                          {/* 워크플로우 연결선들 */}
+                          <svg className="absolute inset-0 w-full h-full" style={{zIndex: 1}}>
+                            <line x1="50%" y1="50%" x2="15%" y2="15%" stroke="#A855F7" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="85%" y2="20%" stroke="#A855F7" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="25%" y2="25%" stroke="#A855F7" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="20%" y2="75%" stroke="#A855F7" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="85%" y2="85%" stroke="#A855F7" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="85%" y2="15%" stroke="#A855F7" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="80%" y2="80%" stroke="#A855F7" strokeWidth="2" opacity="0.7" />
+                          </svg>
+                          
+                          {/* 실행 파티클들 */}
+                          <div className="absolute top-1/4 left-1/4 w-1.5 h-1.5 bg-purple-300 rounded-full animate-ping" style={{animationDelay: '0.1s'}}></div>
+                          <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-violet-300 rounded-full animate-ping" style={{animationDelay: '0.3s'}}></div>
+                          <div className="absolute bottom-1/3 left-1/3 w-1.5 h-1.5 bg-purple-400 rounded-full animate-ping" style={{animationDelay: '0.5s'}}></div>
+                          <div className="absolute bottom-1/4 right-1/3 w-1 h-1 bg-violet-400 rounded-full animate-ping" style={{animationDelay: '0.7s'}}></div>
+                          
+                          {/* 실행 링들 */}
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28 border border-purple-300 rounded-full animate-spin" style={{animationDuration: '5s'}}></div>
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-36 h-36 border border-purple-200 rounded-full animate-spin" style={{animationDuration: '8s', animationDirection: 'reverse'}}></div>
+                          
+                          {/* 성공 체크마크들 */}
+                          <div className="absolute top-2 left-2 w-3 h-3 bg-green-400 rounded-full flex items-center justify-center">
+                            <div className="w-1 h-1 bg-white rounded-full"></div>
+                          </div>
+                          <div className="absolute top-2 right-2 w-3 h-3 bg-green-400 rounded-full flex items-center justify-center">
+                            <div className="w-1 h-1 bg-white rounded-full"></div>
+                          </div>
+                          <div className="absolute bottom-2 left-2 w-3 h-3 bg-green-400 rounded-full flex items-center justify-center">
+                            <div className="w-1 h-1 bg-white rounded-full"></div>
+                          </div>
+                          <div className="absolute bottom-2 right-2 w-3 h-3 bg-green-400 rounded-full flex items-center justify-center">
+                            <div className="w-1 h-1 bg-white rounded-full"></div>
+                          </div>
                         </div>
                       </div>
                     </CardContent>
@@ -603,16 +694,62 @@ export default function HomePage() {
                         </Badge>
                       </div>
                       <div className="flex items-center justify-center h-64">
-                        {/* 개선 시각화 */}
+                        {/* 개선 시각화 - 복잡한 성장 차트 */}
                         <div className="relative w-full h-full">
                           <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-lg"></div>
-                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 border-2 border-orange-400 rounded-full flex items-center justify-center">
-                            <TrendingUp className="h-8 w-8 text-orange-400" />
+                          
+                          {/* 메인 트렌드 아이콘 */}
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 border-2 border-orange-400 rounded-full flex items-center justify-center bg-orange-500/20">
+                            <TrendingUp className="h-10 w-10 text-orange-400" />
                           </div>
-                          <div className="absolute top-6 left-6 w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
-                          <div className="absolute top-10 right-10 w-1.5 h-1.5 bg-orange-300 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-                          <div className="absolute bottom-10 left-10 w-2 h-2 bg-orange-500 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-                          <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-orange-400 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
+                          
+                          {/* 성장 노드들 */}
+                          <div className="absolute top-6 left-6 w-5 h-5 bg-amber-400 rounded-full animate-pulse"></div>
+                          <div className="absolute top-8 right-10 w-3 h-3 bg-orange-300 rounded-full animate-pulse" style={{animationDelay: '0.3s'}}></div>
+                          <div className="absolute top-14 left-14 w-4 h-4 bg-orange-500 rounded-full animate-pulse" style={{animationDelay: '0.6s'}}></div>
+                          <div className="absolute bottom-10 left-8 w-3.5 h-3.5 bg-amber-300 rounded-full animate-pulse" style={{animationDelay: '0.9s'}}></div>
+                          <div className="absolute bottom-6 right-6 w-4 h-4 bg-orange-400 rounded-full animate-pulse" style={{animationDelay: '1.2s'}}></div>
+                          <div className="absolute top-16 right-6 w-2.5 h-2.5 bg-amber-500 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
+                          <div className="absolute bottom-14 right-14 w-3 h-3 bg-orange-300 rounded-full animate-pulse" style={{animationDelay: '1.8s'}}></div>
+                          
+                          {/* 성장 연결선들 */}
+                          <svg className="absolute inset-0 w-full h-full" style={{zIndex: 1}}>
+                            <line x1="50%" y1="50%" x2="15%" y2="15%" stroke="#F97316" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="85%" y2="20%" stroke="#F97316" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="25%" y2="25%" stroke="#F97316" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="20%" y2="75%" stroke="#F97316" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="85%" y2="85%" stroke="#F97316" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="85%" y2="15%" stroke="#F97316" strokeWidth="2" opacity="0.7" />
+                            <line x1="50%" y1="50%" x2="80%" y2="80%" stroke="#F97316" strokeWidth="2" opacity="0.7" />
+                          </svg>
+                          
+                          {/* 성장 파티클들 */}
+                          <div className="absolute top-1/4 left-1/4 w-1.5 h-1.5 bg-orange-300 rounded-full animate-ping" style={{animationDelay: '0.1s'}}></div>
+                          <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-amber-300 rounded-full animate-ping" style={{animationDelay: '0.3s'}}></div>
+                          <div className="absolute bottom-1/3 left-1/3 w-1.5 h-1.5 bg-orange-400 rounded-full animate-ping" style={{animationDelay: '0.5s'}}></div>
+                          <div className="absolute bottom-1/4 right-1/3 w-1 h-1 bg-amber-400 rounded-full animate-ping" style={{animationDelay: '0.7s'}}></div>
+                          
+                          {/* 성장 링들 */}
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28 border border-orange-300 rounded-full animate-spin" style={{animationDuration: '7s'}}></div>
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-36 h-36 border border-orange-200 rounded-full animate-spin" style={{animationDuration: '11s', animationDirection: 'reverse'}}></div>
+                          
+                          {/* 성공 지표들 */}
+                          <div className="absolute top-2 left-2 w-3 h-3 bg-green-400 rounded-full flex items-center justify-center">
+                            <div className="w-1 h-1 bg-white rounded-full"></div>
+                          </div>
+                          <div className="absolute top-2 right-2 w-3 h-3 bg-green-400 rounded-full flex items-center justify-center">
+                            <div className="w-1 h-1 bg-white rounded-full"></div>
+                          </div>
+                          <div className="absolute bottom-2 left-2 w-3 h-3 bg-green-400 rounded-full flex items-center justify-center">
+                            <div className="w-1 h-1 bg-white rounded-full"></div>
+                          </div>
+                          <div className="absolute bottom-2 right-2 w-3 h-3 bg-green-400 rounded-full flex items-center justify-center">
+                            <div className="w-1 h-1 bg-white rounded-full"></div>
+                          </div>
+                          
+                          {/* 성장 화살표들 */}
+                          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-2 border-r-2 border-b-4 border-l-transparent border-r-transparent border-b-orange-400 animate-bounce"></div>
+                          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-2 border-r-2 border-t-4 border-l-transparent border-r-transparent border-t-orange-400 animate-bounce" style={{animationDelay: '0.5s'}}></div>
                         </div>
                       </div>
                     </CardContent>
