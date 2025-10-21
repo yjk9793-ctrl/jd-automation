@@ -440,7 +440,7 @@ export default function HomePage() {
 
         {/* 프로세스 섹션 - ThinkingData 스타일 */}
         <div className="py-20 mb-20">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 JD가 움직이는 전 과정을<br />
@@ -453,70 +453,185 @@ export default function HomePage() {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {/* 1단계 */}
-              <div className="text-center group">
-                <div className="relative mb-6">
-                  <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    1
+            {/* 프로세스 단계별 상세 카드 */}
+            <div className="space-y-12">
+              {/* 1단계: 수집 */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div className="order-2 lg:order-1">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                      1
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">Collect</h3>
                   </div>
-                  <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 hidden lg:block">
-                    <ArrowRight className="h-6 w-6 text-gray-400" />
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-semibold text-white">모든 고객 행동을</h4>
+                    <h4 className="text-lg font-semibold text-white">실시간으로 수집</h4>
+                    <p className="text-gray-300 leading-relaxed">
+                      JD 텍스트, 파일 업로드, 실시간 입력을 통해 모든 데이터를 
+                      자동으로 수집하고 전처리합니다.
+                    </p>
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">수집</h3>
-                <p className="text-gray-300 text-sm">
-                  모든 JD 데이터를<br />
-                  실시간으로 수집
-                </p>
+                <div className="order-1 lg:order-2">
+                  <Card className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden group hover:shadow-2xl transition-all duration-500">
+                    <CardContent className="p-8 relative">
+                      <div className="absolute top-4 right-4">
+                        <Badge className="bg-blue-500 text-white px-3 py-1 rounded-full">
+                          수집
+                        </Badge>
+                      </div>
+                      <div className="flex items-center justify-center h-64">
+                        {/* 데이터 수집 시각화 */}
+                        <div className="relative w-full h-full">
+                          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg"></div>
+                          <div className="absolute top-4 left-4 w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
+                          <div className="absolute top-8 right-8 w-2 h-2 bg-blue-300 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                          <div className="absolute top-12 left-12 w-2.5 h-2.5 bg-blue-500 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+                          <div className="absolute bottom-8 left-8 w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
+                          <div className="absolute bottom-4 right-4 w-3 h-3 bg-blue-300 rounded-full animate-pulse" style={{animationDelay: '2s'}}></div>
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 border-2 border-blue-400 rounded-full flex items-center justify-center">
+                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                              <Zap className="h-4 w-4 text-white" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
-              
-              {/* 2단계 */}
-              <div className="text-center group">
-                <div className="relative mb-6">
-                  <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white text-xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    2
+
+              {/* 2단계: 분석 */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div className="order-1">
+                  <Card className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden group hover:shadow-2xl transition-all duration-500">
+                    <CardContent className="p-8 relative">
+                      <div className="absolute top-4 right-4">
+                        <Badge className="bg-green-500 text-white px-3 py-1 rounded-full">
+                          분석
+                        </Badge>
+                      </div>
+                      <div className="flex items-center justify-center h-64">
+                        {/* AI 분석 시각화 */}
+                        <div className="relative w-full h-full">
+                          <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-lg"></div>
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 border-2 border-green-400 rounded-full flex items-center justify-center">
+                            <Brain className="h-8 w-8 text-green-400" />
+                          </div>
+                          <div className="absolute top-8 left-8 w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
+                          <div className="absolute top-12 right-12 w-1.5 h-1.5 bg-green-300 rounded-full animate-ping" style={{animationDelay: '0.3s'}}></div>
+                          <div className="absolute bottom-12 left-12 w-2 h-2 bg-green-500 rounded-full animate-ping" style={{animationDelay: '0.6s'}}></div>
+                          <div className="absolute bottom-8 right-8 w-1.5 h-1.5 bg-green-400 rounded-full animate-ping" style={{animationDelay: '0.9s'}}></div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                <div className="order-2">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                      2
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">Analyze</h3>
                   </div>
-                  <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 hidden lg:block">
-                    <ArrowRight className="h-6 w-6 text-gray-400" />
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-semibold text-white">복잡한 이벤트도</h4>
+                    <h4 className="text-lg font-semibold text-white">쉽게 이해하도록 가공</h4>
+                    <p className="text-gray-300 leading-relaxed">
+                      AI가 JD 내용을 분석하여 자동화 가능성, ROI, 난이도를 
+                      정확히 평가하고 구조화된 데이터로 변환합니다.
+                    </p>
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">분석</h3>
-                <p className="text-gray-300 text-sm">
-                  복잡한 JD도<br />
-                  쉽게 이해하도록 가공
-                </p>
               </div>
-              
-              {/* 3단계 */}
-              <div className="text-center group">
-                <div className="relative mb-6">
-                  <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    3
+
+              {/* 3단계: 실행 */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div className="order-2 lg:order-1">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                      3
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">Execute</h3>
                   </div>
-                  <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 hidden lg:block">
-                    <ArrowRight className="h-6 w-6 text-gray-400" />
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-semibold text-white">직관적이고 간단한 시나리오로</h4>
+                    <h4 className="text-lg font-semibold text-white">진행하는 AI 에이전트화</h4>
+                    <p className="text-gray-300 leading-relaxed">
+                      분석 결과를 바탕으로 구체적인 구현 가이드, 코드 예시, 
+                      레시피를 자동 생성하여 즉시 실행 가능한 솔루션을 제공합니다.
+                    </p>
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">실행</h3>
-                <p className="text-gray-300 text-sm">
-                  AI 분석으로<br />
-                  빠른 인사이트 파악
-                </p>
+                <div className="order-1 lg:order-2">
+                  <Card className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden group hover:shadow-2xl transition-all duration-500">
+                    <CardContent className="p-8 relative">
+                      <div className="absolute top-4 right-4">
+                        <Badge className="bg-purple-500 text-white px-3 py-1 rounded-full">
+                          실행
+                        </Badge>
+                      </div>
+                      <div className="flex items-center justify-center h-64">
+                        {/* 실행 시각화 */}
+                        <div className="relative w-full h-full">
+                          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg"></div>
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 border-2 border-purple-400 rounded-full flex items-center justify-center">
+                            <Target className="h-8 w-8 text-purple-400" />
+                          </div>
+                          <div className="absolute top-8 left-8 w-3 h-3 bg-purple-400 rounded-full animate-bounce"></div>
+                          <div className="absolute top-12 right-12 w-2 h-2 bg-purple-300 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                          <div className="absolute bottom-12 left-12 w-2.5 h-2.5 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
+                          <div className="absolute bottom-8 right-8 w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay: '0.6s'}}></div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
-              
-              {/* 4단계 */}
-              <div className="text-center group">
-                <div className="relative mb-6">
-                  <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    4
+
+              {/* 4단계: 개선 */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div className="order-1">
+                  <Card className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden group hover:shadow-2xl transition-all duration-500">
+                    <CardContent className="p-8 relative">
+                      <div className="absolute top-4 right-4">
+                        <Badge className="bg-orange-500 text-white px-3 py-1 rounded-full">
+                          개선
+                        </Badge>
+                      </div>
+                      <div className="flex items-center justify-center h-64">
+                        {/* 개선 시각화 */}
+                        <div className="relative w-full h-full">
+                          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-lg"></div>
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 border-2 border-orange-400 rounded-full flex items-center justify-center">
+                            <TrendingUp className="h-8 w-8 text-orange-400" />
+                          </div>
+                          <div className="absolute top-6 left-6 w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+                          <div className="absolute top-10 right-10 w-1.5 h-1.5 bg-orange-300 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                          <div className="absolute bottom-10 left-10 w-2 h-2 bg-orange-500 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+                          <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-orange-400 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                <div className="order-2">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                      4
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">Improve</h3>
+                  </div>
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-semibold text-white">실시간 행동 기반으로</h4>
+                    <h4 className="text-lg font-semibold text-white">푸시 메시지 자동 발송</h4>
+                    <p className="text-gray-300 leading-relaxed">
+                      운영 성과를 모니터링하고 N차 분석을 통한 
+                      지속적인 개선과 최적화를 제공합니다.
+                    </p>
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">개선</h3>
-                <p className="text-gray-300 text-sm">
-                  실시간 모니터링 및<br />
-                  N차 분석을 통한 개선
-                </p>
               </div>
             </div>
           </div>
