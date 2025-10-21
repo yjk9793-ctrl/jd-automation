@@ -23,7 +23,8 @@ import {
   Lightbulb,
   BarChart3,
   FileText,
-  Download
+  Download,
+  Brain
 } from 'lucide-react';
 import { JDInput as JDInputType, AnalysisResult, TaskItem } from '@/types';
 import { getSampleJD, getDemoResult } from '@/lib/demoData';
