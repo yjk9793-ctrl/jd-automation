@@ -15,20 +15,23 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { TaskItem, TaskCategory, DifficultyLevel } from '@/types';
+import { useTranslation, Language } from '@/lib/i18n';
 
 interface TaskListProps {
   tasks: TaskItem[];
   selectedTask?: TaskItem;
   onTaskSelect: (task: TaskItem) => void;
+  language?: Language;
 }
 
 type FilterType = 'all' | TaskCategory;
 type SortType = 'score' | 'roi' | 'difficulty' | 'title';
 
-export function TaskList({ tasks, selectedTask, onTaskSelect }: TaskListProps) {
+export function TaskList({ tasks, selectedTask, onTaskSelect, language = 'ko' }: TaskListProps) {
   const [filter, setFilter] = useState<FilterType>('all');
   const [sortBy, setSortBy] = useState<SortType>('score');
   const [searchQuery, setSearchQuery] = useState('');
+  const t = useTranslation(language);
 
   const filteredAndSortedTasks = useMemo(() => {
     let filtered = tasks;
@@ -108,11 +111,11 @@ export function TaskList({ tasks, selectedTask, onTaskSelect }: TaskListProps) {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full dark-card dark-glow">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-gradient dark-text-glow">
           <Filter className="h-5 w-5" />
-          작업 목록 ({filteredAndSortedTasks.length}개)
+          {t.analysis.tasks} ({filteredAndSortedTasks.length}{language === 'ko' ? '개' : ' items'})
         </CardTitle>
         
         {/* 필터 및 검색 */}
@@ -124,10 +127,11 @@ export function TaskList({ tasks, selectedTask, onTaskSelect }: TaskListProps) {
                 key={category}
                 variant={filter === category ? 'default' : 'outline'}
                 size="sm"
+                className="micro-interaction dark-glow"
                 onClick={() => setFilter(category)}
                 className="h-8"
               >
-                {category === 'all' ? '전체' : category}
+                {category === 'all' ? (language === 'ko' ? '전체' : 'All') : t.task.category[category.toLowerCase() as keyof typeof t.task.category]}
                 {category !== 'all' && (
                   <Badge variant="outline" className="ml-2 text-xs">
                     {categoryCounts[category]}

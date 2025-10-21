@@ -6,9 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Clock, Target, CheckCircle } from 'lucide-react';
 import { AnalysisResult } from '@/types';
+import { useTranslation, Language } from '@/lib/i18n';
 
 interface ResultSummaryProps {
   result: AnalysisResult;
+  language?: Language;
 }
 
 const COLORS = {
@@ -23,24 +25,25 @@ const COLORS_DARK = {
   'Human-critical': '#d97706', // amber-600
 };
 
-export function ResultSummary({ result }: ResultSummaryProps) {
+export function ResultSummary({ result, language = 'ko' }: ResultSummaryProps) {
   const { summary } = result;
+  const t = useTranslation(language);
 
   const pieData = [
     {
-      name: '자동화 가능',
+      name: t.task.category.automate,
       value: summary.automate,
       category: 'Automate',
       fill: COLORS.Automate,
     },
     {
-      name: '반자동화 권장',
+      name: t.task.category.copilot,
       value: summary.copilot,
       category: 'Co-pilot',
       fill: COLORS['Co-pilot'],
     },
     {
-      name: '사람 중심',
+      name: t.task.category.humanCritical,
       value: summary.humanCritical,
       category: 'Human-critical',
       fill: COLORS['Human-critical'],
@@ -84,58 +87,58 @@ export function ResultSummary({ result }: ResultSummaryProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {/* 요약 통계 */}
-      <Card>
+      <Card className="dark-card dark-glow">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">총 작업 수</CardTitle>
+          <CardTitle className="text-sm font-medium text-gradient dark-text-glow">{t.summary.totalTasks}</CardTitle>
           <Target className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{summary.total}</div>
-          <p className="text-xs text-muted-foreground">분석된 작업</p>
+          <p className="text-xs text-muted-foreground">{language === 'ko' ? '분석된 작업' : 'Analyzed tasks'}</p>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="dark-card dark-glow">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">평균 ROI</CardTitle>
+          <CardTitle className="text-sm font-medium text-gradient dark-text-glow">{t.summary.averageROI}</CardTitle>
           <TrendingUp className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{summary.averageROI.toFixed(0)}%</div>
-          <p className="text-xs text-muted-foreground">시간 절감 예상</p>
+          <p className="text-xs text-muted-foreground">{language === 'ko' ? '시간 절감 예상' : 'Expected time savings'}</p>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="dark-card dark-glow">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">자동화 가능</CardTitle>
+          <CardTitle className="text-sm font-medium text-gradient dark-text-glow">{t.summary.automateTasks}</CardTitle>
           <CheckCircle className="h-4 w-4 text-green-500" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-green-600">{summary.automate}</div>
           <p className="text-xs text-muted-foreground">
-            {((summary.automate / summary.total) * 100).toFixed(1)}% 비율
+            {((summary.automate / summary.total) * 100).toFixed(1)}% {language === 'ko' ? '비율' : 'ratio'}
           </p>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="dark-card dark-glow">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">처리 시간</CardTitle>
+          <CardTitle className="text-sm font-medium text-gradient dark-text-glow">{language === 'ko' ? '처리 시간' : 'Processing Time'}</CardTitle>
           <Clock className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
             {(result.metadata.processingTime / 1000).toFixed(1)}s
           </div>
-          <p className="text-xs text-muted-foreground">분석 소요 시간</p>
+          <p className="text-xs text-muted-foreground">{language === 'ko' ? '분석 소요 시간' : 'Analysis time'}</p>
         </CardContent>
       </Card>
 
       {/* 도넛 차트 */}
-      <Card className="md:col-span-2 lg:col-span-4">
+      <Card className="md:col-span-2 lg:col-span-4 dark-card dark-glow">
         <CardHeader>
-          <CardTitle>자동화 기회 분포</CardTitle>
+          <CardTitle className="text-gradient dark-text-glow">{language === 'ko' ? '자동화 기회 분포' : 'Automation Opportunity Distribution'}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-64 w-full">
@@ -164,11 +167,11 @@ export function ResultSummary({ result }: ResultSummaryProps) {
 
       {/* 고임팩트 작업 */}
       {summary.highImpactTasks.length > 0 && (
-        <Card className="md:col-span-2 lg:col-span-4">
+        <Card className="md:col-span-2 lg:col-span-4 dark-card dark-glow">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-gradient dark-text-glow">
               <TrendingUp className="h-5 w-5 text-green-500" />
-              고임팩트 자동화 기회
+              {t.summary.highImpactTasks}
             </CardTitle>
           </CardHeader>
           <CardContent>

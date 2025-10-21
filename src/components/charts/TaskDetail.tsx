@@ -16,24 +16,27 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { TaskItem, TaskRecipe } from '@/types';
+import { useTranslation, Language } from '@/lib/i18n';
 
 interface TaskDetailProps {
   task: TaskItem;
   onGenerateRecipe?: () => void;
   isGeneratingRecipe?: boolean;
+  language?: Language;
 }
 
 type TabType = 'overview' | 'recipe' | 'code' | 'diagram';
 
-export function TaskDetail({ task, onGenerateRecipe, isGeneratingRecipe = false }: TaskDetailProps) {
+export function TaskDetail({ task, onGenerateRecipe, isGeneratingRecipe = false, language = 'ko' }: TaskDetailProps) {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const t = useTranslation(language);
 
   const tabs = [
-    { id: 'overview', label: '개요', icon: FileText },
-    { id: 'recipe', label: '레시피', icon: Workflow },
-    { id: 'code', label: '코드', icon: Code },
-    { id: 'diagram', label: '플로우', icon: Workflow },
+    { id: 'overview', label: language === 'ko' ? '개요' : 'Overview', icon: FileText },
+    { id: 'recipe', label: language === 'ko' ? '레시피' : 'Recipe', icon: Workflow },
+    { id: 'code', label: language === 'ko' ? '코드' : 'Code', icon: Code },
+    { id: 'diagram', label: language === 'ko' ? '플로우' : 'Flow', icon: Workflow },
   ] as const;
 
   const copyToClipboard = async (text: string, type: string) => {

@@ -182,7 +182,7 @@ export default function HomePage() {
             {viewMode === 'summary' ? (
               <>
                 {/* 결과 요약 */}
-                <ResultSummary result={analysisResult} />
+                <ResultSummary result={analysisResult} language={language} />
 
                 {/* 메인 컨텐츠 */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -191,6 +191,7 @@ export default function HomePage() {
                     tasks={analysisResult.tasks}
                     selectedTask={selectedTask}
                     onTaskSelect={handleTaskSelect}
+                    language={language}
                   />
 
                   {/* 작업 상세 */}
@@ -198,6 +199,7 @@ export default function HomePage() {
                     <TaskDetail
                       task={selectedTask}
                       onGenerateRecipe={handleGenerateRecipe}
+                      language={language}
                     />
                   ) : (
                     <Card className="flex items-center justify-center min-h-[400px]">
