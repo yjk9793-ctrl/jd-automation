@@ -26,6 +26,7 @@ const COLORS_DARK = {
 };
 
 export function ResultSummary({ result, language = 'ko' }: ResultSummaryProps) {
+  console.log('ResultSummary rendering with language:', language);
   const { summary } = result;
   const t = useTranslation(language);
 

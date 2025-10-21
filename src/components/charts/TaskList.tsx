@@ -28,6 +28,7 @@ type FilterType = 'all' | TaskCategory;
 type SortType = 'score' | 'roi' | 'difficulty' | 'title';
 
 export function TaskList({ tasks, selectedTask, onTaskSelect, language = 'ko' }: TaskListProps) {
+  console.log('TaskList rendering with language:', language);
   const [filter, setFilter] = useState<FilterType>('all');
   const [sortBy, setSortBy] = useState<SortType>('score');
   const [searchQuery, setSearchQuery] = useState('');
