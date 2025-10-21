@@ -8,6 +8,7 @@ import { ResultSummary } from '@/components/charts/ResultSummary';
 import { TaskList } from '@/components/charts/TaskList';
 import { TaskDetail } from '@/components/charts/TaskDetail';
 import { DetailedReport } from '@/components/charts/DetailedReport';
+import { AgentAdvice } from '@/components/charts/AgentAdvice';
 import { PDFExportDialog } from '@/components/export/PDFExportDialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -219,6 +220,12 @@ export default function HomePage() {
                     </Card>
                   )}
                 </div>
+
+                {/* 에이전트 활용 조언 */}
+                <AgentAdvice 
+                  language={language} 
+                  jobRole={analysisResult.jobRole || 'General'} 
+                />
               </>
             ) : (
               <DetailedReport result={analysisResult} selectedTasks={selectedTask ? [selectedTask] : []} />

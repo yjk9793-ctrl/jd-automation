@@ -242,7 +242,8 @@ export const DEMO_RESULTS = {
       analyzedAt: new Date().toISOString(),
       jdLength: 1200,
       processingTime: 2500
-    }
+    },
+    jobRole: 'HR'
   }
 };
 

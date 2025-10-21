@@ -123,6 +123,32 @@ export interface Translations {
     analysisTime: string;
     available: string;
   };
+  advice: {
+    title: string;
+    subtitle: string;
+    sections: {
+      skills: {
+        title: string;
+        description: string;
+        items: string[];
+      };
+      tools: {
+        title: string;
+        description: string;
+        items: string[];
+      };
+      mindset: {
+        title: string;
+        description: string;
+        items: string[];
+      };
+      nextSteps: {
+        title: string;
+        description: string;
+        items: string[];
+      };
+    };
+  };
 }
 
 export const translations: Record<Language, Translations> = {
@@ -249,6 +275,52 @@ export const translations: Record<Language, Translations> = {
       analysisTime: '분석 시간',
       available: '사용 가능',
     },
+    advice: {
+      title: '에이전트 활용을 위한 조언',
+      subtitle: '당신의 직무에 맞는 에이전트 활용 전략을 확인하세요',
+      sections: {
+        skills: {
+          title: '필수 스킬',
+          description: '에이전트와 효과적으로 협업하기 위해 필요한 핵심 역량',
+          items: [
+            '프롬프트 엔지니어링: AI에게 명확하고 구체적인 지시를 내리는 기술',
+            '데이터 분석: 에이전트의 출력을 검증하고 개선점을 찾는 능력',
+            '워크플로우 설계: 반복 작업을 체계적으로 구조화하는 사고방식',
+            '품질 관리: 자동화된 결과의 정확성과 일관성을 모니터링하는 능력'
+          ]
+        },
+        tools: {
+          title: '추천 도구',
+          description: '에이전트 개발과 관리에 유용한 플랫폼과 도구들',
+          items: [
+            'OpenAI API: GPT 모델을 활용한 텍스트 처리 에이전트',
+            'Zapier/Make: 비즈니스 프로세스 자동화 플랫폼',
+            'LangChain: 복잡한 AI 애플리케이션 구축 프레임워크',
+            'Microsoft Power Automate: 엔터프라이즈 워크플로우 자동화'
+          ]
+        },
+        mindset: {
+          title: '마인드셋 전환',
+          description: '에이전트 시대에 적응하기 위한 사고방식의 변화',
+          items: [
+            '협업 중심: 에이전트를 경쟁 상대가 아닌 업무 파트너로 인식',
+            '지속적 학습: AI 기술 발전에 맞춰 끊임없이 새로운 기능을 습득',
+            '창의적 활용: 기존 업무 방식을 혁신적으로 재구성하는 시각',
+            '윤리적 고려: AI 사용 시 프라이버시와 편향성 문제를 고려한 판단'
+          ]
+        },
+        nextSteps: {
+          title: '다음 단계',
+          description: '에이전트 활용 역량을 키우기 위한 구체적인 실행 계획',
+          items: [
+            '1주차: 현재 업무 중 반복적인 부분을 식별하고 목록화',
+            '2주차: 간단한 자동화 도구(Zapier 등)로 첫 번째 워크플로우 구축',
+            '3주차: AI 도구를 활용해 업무 효율성 개선 실험',
+            '4주차: 팀원들과 에이전트 활용 경험을 공유하고 피드백 수집'
+          ]
+        }
+      }
+    },
   },
   en: {
     common: {
@@ -372,6 +444,52 @@ export const translations: Record<Language, Translations> = {
       averageROI: 'Average ROI',
       analysisTime: 'Analysis Time',
       available: 'Available',
+    },
+    advice: {
+      title: 'Agent Utilization Advice',
+      subtitle: 'Discover agent utilization strategies tailored to your role',
+      sections: {
+        skills: {
+          title: 'Essential Skills',
+          description: 'Core competencies needed to effectively collaborate with agents',
+          items: [
+            'Prompt Engineering: The art of giving clear and specific instructions to AI',
+            'Data Analysis: Ability to validate agent outputs and identify improvements',
+            'Workflow Design: Systematic thinking for structuring repetitive tasks',
+            'Quality Management: Monitoring accuracy and consistency of automated results'
+          ]
+        },
+        tools: {
+          title: 'Recommended Tools',
+          description: 'Platforms and tools useful for agent development and management',
+          items: [
+            'OpenAI API: Text processing agents using GPT models',
+            'Zapier/Make: Business process automation platforms',
+            'LangChain: Framework for building complex AI applications',
+            'Microsoft Power Automate: Enterprise workflow automation'
+          ]
+        },
+        mindset: {
+          title: 'Mindset Shift',
+          description: 'Changes in thinking required to adapt to the agent era',
+          items: [
+            'Collaboration Focus: View agents as work partners, not competitors',
+            'Continuous Learning: Constantly acquire new skills as AI technology advances',
+            'Creative Application: Innovative perspective on restructuring existing workflows',
+            'Ethical Consideration: Judgment considering privacy and bias issues in AI use'
+          ]
+        },
+        nextSteps: {
+          title: 'Next Steps',
+          description: 'Concrete action plan to develop agent utilization capabilities',
+          items: [
+            'Week 1: Identify and list repetitive parts of current work',
+            'Week 2: Build first workflow using simple automation tools (Zapier, etc.)',
+            'Week 3: Experiment with AI tools to improve work efficiency',
+            'Week 4: Share agent utilization experiences with team members and collect feedback'
+          ]
+        }
+      }
     },
   },
 };

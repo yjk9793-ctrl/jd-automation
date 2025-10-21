@@ -63,6 +63,7 @@ export interface AnalysisResult {
     jdLength: number;
     processingTime: number;
   };
+  jobRole?: string;
 }
 
 export interface JDInput {
