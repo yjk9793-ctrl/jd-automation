@@ -54,10 +54,10 @@ export function ResultSummary({ result, language = 'ko' }: ResultSummaryProps) {
     if (active && payload && payload.length) {
       const data = payload[0];
       return (
-        <div className="bg-background border border-border rounded-lg p-3 shadow-lg">
-          <p className="font-medium">{data.name}</p>
+        <div className="bg-background border border-border rounded-lg p-3 shadow-lg dark-card dark-glow">
+          <p className="font-medium text-gradient dark-text-glow">{data.name}</p>
           <p className="text-sm text-muted-foreground">
-            {data.value}개 작업 ({((data.value / summary.total) * 100).toFixed(1)}%)
+            {data.value}{language === 'ko' ? '개 작업' : ' tasks'} ({((data.value / summary.total) * 100).toFixed(1)}%)
           </p>
         </div>
       );
@@ -74,9 +74,9 @@ export function ResultSummary({ result, language = 'ko' }: ResultSummaryProps) {
               className="w-3 h-3 rounded-full"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-sm">{entry.value}</span>
-            <Badge variant="outline" className="text-xs">
-              {entry.payload.value}개
+            <span className="text-sm text-gradient dark-text-glow">{entry.value}</span>
+            <Badge variant="outline" className="text-xs dark-glow">
+              {entry.payload.value}{language === 'ko' ? '개' : ' items'}
             </Badge>
           </div>
         ))}

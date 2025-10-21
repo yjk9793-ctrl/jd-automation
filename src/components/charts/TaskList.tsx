@@ -131,7 +131,11 @@ export function TaskList({ tasks, selectedTask, onTaskSelect, language = 'ko' }:
                 onClick={() => setFilter(category)}
                 className="h-8"
               >
-                {category === 'all' ? (language === 'ko' ? '전체' : 'All') : t.task.category[category.toLowerCase() as keyof typeof t.task.category]}
+                {category === 'all' 
+                  ? (language === 'ko' ? '전체' : 'All') 
+                  : t.task.category[category === 'Automate' ? 'automate' : 
+                                   category === 'Co-pilot' ? 'copilot' : 
+                                   'humanCritical']}
                 {category !== 'all' && (
                   <Badge variant="outline" className="ml-2 text-xs">
                     {categoryCounts[category]}
@@ -147,21 +151,21 @@ export function TaskList({ tasks, selectedTask, onTaskSelect, language = 'ko' }:
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="작업 검색..."
+                placeholder={language === 'ko' ? '작업 검색...' : 'Search tasks...'}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-input rounded-md bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                className="w-full pl-10 pr-4 py-2 border border-input rounded-md bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring input-modern dark-border-glow"
               />
             </div>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortType)}
-              className="px-3 py-2 border border-input rounded-md bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="px-3 py-2 border border-input rounded-md bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring input-modern dark-border-glow"
             >
-              <option value="score">점수순</option>
-              <option value="roi">ROI순</option>
-              <option value="difficulty">난이도순</option>
-              <option value="title">제목순</option>
+              <option value="score">{language === 'ko' ? '점수순' : 'By Score'}</option>
+              <option value="roi">{language === 'ko' ? 'ROI순' : 'By ROI'}</option>
+              <option value="difficulty">{language === 'ko' ? '난이도순' : 'By Difficulty'}</option>
+              <option value="title">{language === 'ko' ? '제목순' : 'By Title'}</option>
             </select>
           </div>
         </div>
@@ -171,15 +175,15 @@ export function TaskList({ tasks, selectedTask, onTaskSelect, language = 'ko' }:
         {filteredAndSortedTasks.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             <Filter className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>조건에 맞는 작업이 없습니다.</p>
+            <p>{language === 'ko' ? '조건에 맞는 작업이 없습니다.' : 'No tasks match the criteria.'}</p>
           </div>
         ) : (
           filteredAndSortedTasks.map((task) => (
             <div
               key={task.id}
-              className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
+              className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md micro-interaction dark-card dark-glow ${
                 selectedTask?.id === task.id
-                  ? 'border-primary bg-primary/5 shadow-md'
+                  ? 'border-primary bg-primary/5 shadow-md dark-glow'
                   : 'hover:border-primary/50'
               }`}
               onClick={() => onTaskSelect(task)}
@@ -188,7 +192,7 @@ export function TaskList({ tasks, selectedTask, onTaskSelect, language = 'ko' }:
                 <div className="flex items-start gap-3 flex-1">
                   {getCategoryIcon(task.category)}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-sm mb-1 line-clamp-2">
+                    <h3 className="font-medium text-sm mb-1 line-clamp-2 text-gradient dark-text-glow">
                       {task.title}
                     </h3>
                     <p className="text-xs text-muted-foreground line-clamp-2">
@@ -200,23 +204,25 @@ export function TaskList({ tasks, selectedTask, onTaskSelect, language = 'ko' }:
               </div>
 
               <div className="flex flex-wrap gap-2 items-center">
-                <Badge variant={getCategoryVariant(task.category)}>
-                  {task.category}
+                <Badge variant={getCategoryVariant(task.category)} className="dark-glow">
+                  {t.task.category[task.category === 'Automate' ? 'automate' : 
+                                 task.category === 'Co-pilot' ? 'copilot' : 
+                                 'humanCritical']}
                 </Badge>
                 
-                <Badge variant="outline" className="text-xs">
-                  {task.score}점
+                <Badge variant="outline" className="text-xs dark-glow">
+                  {task.score}{language === 'ko' ? '점' : ' pts'}
                 </Badge>
                 
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="text-xs dark-glow">
                   ROI {task.roiEstimate}%
                 </Badge>
                 
                 <Badge 
                   variant="outline" 
-                  className={`text-xs ${getDifficultyColor(task.difficulty)}`}
+                  className={`text-xs dark-glow ${getDifficultyColor(task.difficulty)}`}
                 >
-                  난이도 {task.difficulty}/5
+                  {language === 'ko' ? '난이도' : 'Difficulty'} {task.difficulty}/5
                 </Badge>
 
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
