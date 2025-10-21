@@ -82,9 +82,9 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
+    <Card className="w-full max-w-4xl mx-auto card-modern animate-fade-in">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-gradient">
           <FileText className="h-5 w-5" />
           Job Description 입력
         </CardTitle>
@@ -93,14 +93,14 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
         {/* 파일 업로드 영역 */}
         <div
           {...getRootProps()}
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer micro-interaction glass ${
             isDragActive
               ? 'border-primary bg-primary/5'
               : 'border-muted-foreground/25 hover:border-primary/50'
           }`}
         >
           <input {...getInputProps()} />
-          <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+          <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground floating" />
           {isDragActive ? (
             <p className="text-primary font-medium">파일을 여기에 놓으세요...</p>
           ) : (
@@ -115,7 +115,7 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
 
         {/* 업로드된 파일 정보 */}
         {uploadedFile && (
-          <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+          <div className="flex items-center justify-between p-3 glass rounded-lg micro-interaction">
             <div className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
               <span className="text-sm font-medium">{uploadedFile.name}</span>
@@ -127,7 +127,7 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
               variant="ghost"
               size="sm"
               onClick={() => setUploadedFile(null)}
-              className="h-6 w-6 p-0"
+              className="h-6 w-6 p-0 micro-interaction"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -136,7 +136,7 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
 
         {/* 텍스트 입력 영역 */}
         <div className="space-y-2">
-          <label htmlFor="jd-text" className="text-sm font-medium">
+          <label htmlFor="jd-text" className="text-sm font-medium text-gradient">
             또는 직접 텍스트 입력
           </label>
           <Textarea
@@ -144,7 +144,7 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
             placeholder="Job Description을 여기에 입력하세요..."
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="min-h-[300px] resize-none"
+            className="min-h-[300px] resize-none input-modern"
             disabled={isLoading}
           />
           <div className="flex justify-between items-center text-xs text-muted-foreground">
@@ -154,7 +154,7 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
                 variant="ghost"
                 size="sm"
                 onClick={clearInput}
-                className="h-6 px-2 text-xs"
+                className="h-6 px-2 text-xs micro-interaction"
               >
                 <X className="h-3 w-3 mr-1" />
                 지우기
@@ -168,11 +168,11 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
           <Button
             onClick={handleAnalyze}
             disabled={!text.trim() || isLoading}
-            className="flex-1"
+            className="flex-1 btn-modern micro-interaction"
           >
             {isLoading ? (
               <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                <Loader2 className="h-4 w-4 mr-2 loading-spinner" />
                 분석 중...
               </>
             ) : (
@@ -185,6 +185,7 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
               variant="outline"
               onClick={handleSampleData}
               disabled={isLoading}
+              className="micro-interaction glass"
             >
               데모 데이터
             </Button>
@@ -192,7 +193,7 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
         </div>
 
         {/* 도움말 */}
-        <div className="text-xs text-muted-foreground space-y-1">
+        <div className="text-xs text-muted-foreground space-y-1 glass p-4 rounded-lg">
           <p>• 최소 10자 이상의 텍스트가 필요합니다</p>
           <p>• 업무 내용, 자격 요건, 우대 사항이 포함된 JD를 입력해주세요</p>
           <p>• 분석 결과는 브라우저에만 저장되며, 서버에는 전송되지 않습니다</p>

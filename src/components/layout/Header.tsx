@@ -35,16 +35,16 @@ export function Header({
   const t = translations[language];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full nav-modern">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* 로고 및 제목 */}
         <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+          <Link href="/" className="flex items-center gap-2 micro-interaction">
+            <div className="h-8 w-8 rounded-lg gradient-primary flex items-center justify-center floating">
               <span className="text-white font-bold text-sm">JD</span>
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-semibold">{t.title}</h1>
+              <h1 className="text-lg font-semibold text-gradient">{t.title}</h1>
               <p className="text-xs text-muted-foreground">{t.subtitle}</p>
             </div>
           </Link>
@@ -58,14 +58,14 @@ export function Header({
           )}
 
           {/* 도움말 */}
-          <Button variant="ghost" size="sm" asChild>
+          <Button variant="ghost" size="sm" asChild className="micro-interaction">
             <Link href="/help" aria-label="도움말">
               <HelpCircle className="h-4 w-4" />
             </Link>
           </Button>
 
           {/* GitHub 링크 */}
-          <Button variant="ghost" size="sm" asChild>
+          <Button variant="ghost" size="sm" asChild className="micro-interaction">
             <a 
               href="https://github.com/your-username/jd-automation" 
               target="_blank" 
@@ -78,7 +78,7 @@ export function Header({
 
           {/* 설정 */}
           {showSettings && onSettingsClick && (
-            <Button variant="ghost" size="sm" onClick={onSettingsClick} aria-label="설정">
+            <Button variant="ghost" size="sm" onClick={onSettingsClick} aria-label="설정" className="micro-interaction">
               <Settings className="h-4 w-4" />
             </Button>
           )}

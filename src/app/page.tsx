@@ -248,35 +248,42 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden">
+      {/* 배경 애니메이션 요소 */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-3xl floating"></div>
+        <div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-r from-pink-400/20 to-yellow-400/20 rounded-full blur-3xl floating-delayed"></div>
+        <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-gradient-to-r from-green-400/20 to-blue-400/20 rounded-full blur-3xl floating" style={{animationDelay: '4s'}}></div>
+      </div>
+      
       <Header 
         language={language}
         onLanguageChange={setLanguage}
       />
       
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-12 relative z-10">
         {/* 히어로 섹션 */}
         <div className="text-center mb-16">
-          <div className="inline-block px-4 py-2 mb-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 rounded-full border border-blue-200 dark:border-blue-800">
-            <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+          <div className="inline-block px-4 py-2 mb-6 glass rounded-full animate-fade-in">
+            <span className="text-sm font-medium text-gradient">
               AI-Powered Job Description Analysis
             </span>
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-gradient text-shadow animate-slide-up">
             {t.hero.title}
             <br />
             <span className="text-primary">{t.hero.titleHighlight}</span> {t.hero.subtitle}
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto whitespace-pre-line">
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto whitespace-pre-line animate-fade-in">
             {t.hero.description}
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-scale-in">
             <Button 
               size="lg" 
               onClick={handleDemo}
-              className="h-12 px-8 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all"
+              className="h-12 px-8 btn-modern micro-interaction"
             >
               <Play className="h-5 w-5 mr-2" />
               {t.hero.demoButton}
@@ -285,7 +292,7 @@ export default function HomePage() {
               variant="outline" 
               size="lg"
               onClick={() => document.getElementById('jd-input')?.scrollIntoView({ behavior: 'smooth' })}
-              className="h-12 px-8 border-2 hover:bg-accent transition-all"
+              className="h-12 px-8 border-2 hover:bg-accent transition-all micro-interaction glass"
             >
               <ArrowRight className="h-5 w-5 mr-2" />
               {t.hero.startButton}
@@ -294,36 +301,36 @@ export default function HomePage() {
 
           {/* 특징 카드들 */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <Card className="hover:shadow-lg transition-all hover:-translate-y-1">
+            <Card className="card-modern micro-interaction animate-fade-in">
               <CardContent className="p-6 text-center">
-                <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
+                <div className="h-16 w-16 mx-auto mb-4 rounded-full gradient-primary flex items-center justify-center floating">
                   <Zap className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="font-semibold mb-2">{t.hero.features.automation.title}</h3>
+                <h3 className="font-semibold mb-2 text-gradient">{t.hero.features.automation.title}</h3>
                 <p className="text-sm text-muted-foreground">
                   {t.hero.features.automation.description}
                 </p>
               </CardContent>
             </Card>
             
-            <Card className="hover:shadow-lg transition-all hover:-translate-y-1">
+            <Card className="card-modern micro-interaction animate-fade-in" style={{animationDelay: '0.2s'}}>
               <CardContent className="p-6 text-center">
-                <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center">
+                <div className="h-16 w-16 mx-auto mb-4 rounded-full gradient-secondary flex items-center justify-center floating-delayed">
                   <BarChart3 className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="font-semibold mb-2">{t.hero.features.roi.title}</h3>
+                <h3 className="font-semibold mb-2 text-gradient">{t.hero.features.roi.title}</h3>
                 <p className="text-sm text-muted-foreground">
                   {t.hero.features.roi.description}
                 </p>
               </CardContent>
             </Card>
             
-            <Card className="hover:shadow-lg transition-all hover:-translate-y-1">
+            <Card className="card-modern micro-interaction animate-fade-in" style={{animationDelay: '0.4s'}}>
               <CardContent className="p-6 text-center">
-                <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center">
+                <div className="h-16 w-16 mx-auto mb-4 rounded-full gradient-accent flex items-center justify-center floating" style={{animationDelay: '2s'}}>
                   <Users className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="font-semibold mb-2">{t.hero.features.guide.title}</h3>
+                <h3 className="font-semibold mb-2 text-gradient">{t.hero.features.guide.title}</h3>
                 <p className="text-sm text-muted-foreground">
                   {t.hero.features.guide.description}
                 </p>
