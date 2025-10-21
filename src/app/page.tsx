@@ -279,10 +279,10 @@ export default function HomePage() {
             </span>
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-gradient text-shadow animate-slide-up">
+          <h1 className="text-3xl md:text-5xl font-bold mb-6 text-gradient text-shadow animate-slide-up">
             {t.hero.title}
             <br />
-            <span className="text-primary">{t.hero.titleHighlight}</span> {t.hero.subtitle}
+            <span className="text-lg md:text-xl">{t.hero.subtitle}</span>
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto whitespace-pre-line animate-fade-in">
             {t.hero.description}
