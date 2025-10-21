@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { ShareBar } from '@/components/layout/ShareBar';
+import { Footer } from '@/components/layout/Footer';
 import { JDInput } from '@/components/forms/JDInput';
 import { ResultSummary } from '@/components/charts/ResultSummary';
 import { TaskList } from '@/components/charts/TaskList';
@@ -672,6 +673,9 @@ export default function HomePage() {
           </div>
         </div>
       </main>
+      
+      {/* 푸터 */}
+      <Footer language={language} />
       
       <Toaster />
     </div>
