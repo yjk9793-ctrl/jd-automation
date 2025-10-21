@@ -10,6 +10,11 @@ interface LanguageToggleProps {
 }
 
 export function LanguageToggle({ language, onLanguageChange }: LanguageToggleProps) {
+  const handleLanguageClick = (newLang: 'ko' | 'en') => {
+    console.log('LanguageToggle clicked:', newLang, 'current:', language);
+    onLanguageChange(newLang);
+  };
+
   return (
     <div className="flex items-center gap-2">
       <Globe className="h-4 w-4 text-muted-foreground" />
@@ -17,7 +22,7 @@ export function LanguageToggle({ language, onLanguageChange }: LanguageTogglePro
         <Button
           variant={language === 'ko' ? 'default' : 'ghost'}
           size="sm"
-          onClick={() => onLanguageChange('ko')}
+          onClick={() => handleLanguageClick('ko')}
           className="rounded-none border-0"
         >
           한국어
@@ -25,7 +30,7 @@ export function LanguageToggle({ language, onLanguageChange }: LanguageTogglePro
         <Button
           variant={language === 'en' ? 'default' : 'ghost'}
           size="sm"
-          onClick={() => onLanguageChange('en')}
+          onClick={() => handleLanguageClick('en')}
           className="rounded-none border-0"
         >
           English

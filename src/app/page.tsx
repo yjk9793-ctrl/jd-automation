@@ -40,6 +40,12 @@ export default function HomePage() {
   
   const t = useTranslation(language);
 
+  // 언어 변경 디버깅
+  const handleLanguageChange = (newLanguage: Language) => {
+    console.log('Language changing from', language, 'to', newLanguage);
+    setLanguage(newLanguage);
+  };
+
   const handleAnalyze = async (jd: JDInputType) => {
     setIsAnalyzing(true);
     
@@ -139,7 +145,7 @@ export default function HomePage() {
         <Header 
           showSettings={false} 
           language={language}
-          onLanguageChange={setLanguage}
+          onLanguageChange={handleLanguageChange}
         />
         
         <ShareBar 
