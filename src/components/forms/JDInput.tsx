@@ -82,27 +82,27 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto card-modern animate-fade-in">
+    <Card className="w-full max-w-4xl mx-auto dark-card animate-fade-in dark-glow">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-gradient">
+        <CardTitle className="flex items-center gap-2 text-gradient dark-text-glow">
           <FileText className="h-5 w-5" />
           Job Description 입력
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* 파일 업로드 영역 */}
+        {/* 파일 업로드 영역 - 다크 테마 */}
         <div
           {...getRootProps()}
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer micro-interaction glass ${
+          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer micro-interaction dark-border-glow ${
             isDragActive
-              ? 'border-primary bg-primary/5'
-              : 'border-muted-foreground/25 hover:border-primary/50'
+              ? 'border-primary bg-primary/10 dark-glow'
+              : 'border-muted-foreground/25 hover:border-primary/50 hover:dark-glow'
           }`}
         >
           <input {...getInputProps()} />
-          <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground floating" />
+          <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground floating dark-pulse" />
           {isDragActive ? (
-            <p className="text-primary font-medium">파일을 여기에 놓으세요...</p>
+            <p className="text-primary font-medium dark-text-glow">파일을 여기에 놓으세요...</p>
           ) : (
             <div>
               <p className="text-lg font-medium mb-2">파일을 드래그하거나 클릭하여 업로드</p>
@@ -134,9 +134,9 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
           </div>
         )}
 
-        {/* 텍스트 입력 영역 */}
+        {/* 텍스트 입력 영역 - 다크 테마 */}
         <div className="space-y-2">
-          <label htmlFor="jd-text" className="text-sm font-medium text-gradient">
+          <label htmlFor="jd-text" className="text-sm font-medium text-gradient dark-text-glow">
             또는 직접 텍스트 입력
           </label>
           <Textarea
@@ -144,7 +144,7 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
             placeholder="Job Description을 여기에 입력하세요..."
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="min-h-[300px] resize-none input-modern"
+            className="min-h-[300px] resize-none input-modern dark-border-glow"
             disabled={isLoading}
           />
           <div className="flex justify-between items-center text-xs text-muted-foreground">
@@ -154,7 +154,7 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
                 variant="ghost"
                 size="sm"
                 onClick={clearInput}
-                className="h-6 px-2 text-xs micro-interaction"
+                className="h-6 px-2 text-xs micro-interaction dark-glow"
               >
                 <X className="h-3 w-3 mr-1" />
                 지우기
@@ -163,12 +163,12 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
           </div>
         </div>
 
-        {/* 액션 버튼들 */}
+        {/* 액션 버튼들 - 다크 테마 */}
         <div className="flex gap-3">
           <Button
             onClick={handleAnalyze}
             disabled={!text.trim() || isLoading}
-            className="flex-1 btn-modern micro-interaction"
+            className="flex-1 btn-modern micro-interaction dark-glow"
           >
             {isLoading ? (
               <>
@@ -185,15 +185,15 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
               variant="outline"
               onClick={handleSampleData}
               disabled={isLoading}
-              className="micro-interaction glass"
+              className="micro-interaction dark-border-glow dark-glow"
             >
               데모 데이터
             </Button>
           )}
         </div>
 
-        {/* 도움말 */}
-        <div className="text-xs text-muted-foreground space-y-1 glass p-4 rounded-lg">
+        {/* 도움말 - 다크 테마 */}
+        <div className="text-xs text-muted-foreground space-y-1 dark-card p-4 rounded-lg dark-glow">
           <p>• 최소 10자 이상의 텍스트가 필요합니다</p>
           <p>• 업무 내용, 자격 요건, 우대 사항이 포함된 JD를 입력해주세요</p>
           <p>• 분석 결과는 브라우저에만 저장되며, 서버에는 전송되지 않습니다</p>

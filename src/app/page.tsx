@@ -135,7 +135,7 @@ export default function HomePage() {
 
   if (analysisResult) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         <Header 
           showSettings={false} 
           language={language}
@@ -248,12 +248,13 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden">
-      {/* 배경 애니메이션 요소 */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+      {/* 다크 테마 배경 애니메이션 요소 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-3xl floating"></div>
-        <div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-r from-pink-400/20 to-yellow-400/20 rounded-full blur-3xl floating-delayed"></div>
-        <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-gradient-to-r from-green-400/20 to-blue-400/20 rounded-full blur-3xl floating" style={{animationDelay: '4s'}}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl floating"></div>
+        <div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-3xl floating-delayed"></div>
+        <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-full blur-3xl floating" style={{animationDelay: '4s'}}></div>
+        <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-gradient-to-r from-rose-500/15 to-orange-500/15 rounded-full blur-3xl floating" style={{animationDelay: '6s'}}></div>
       </div>
       
       <Header 
@@ -299,38 +300,38 @@ export default function HomePage() {
             </Button>
           </div>
 
-          {/* 특징 카드들 */}
+          {/* 특징 카드들 - 다크 테마 */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <Card className="card-modern micro-interaction animate-fade-in">
+            <Card className="dark-card micro-interaction animate-fade-in dark-glow">
               <CardContent className="p-6 text-center">
-                <div className="h-16 w-16 mx-auto mb-4 rounded-full gradient-primary flex items-center justify-center floating">
+                <div className="h-16 w-16 mx-auto mb-4 rounded-full gradient-primary flex items-center justify-center floating dark-pulse">
                   <Zap className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="font-semibold mb-2 text-gradient">{t.hero.features.automation.title}</h3>
+                <h3 className="font-semibold mb-2 text-gradient dark-text-glow">{t.hero.features.automation.title}</h3>
                 <p className="text-sm text-muted-foreground">
                   {t.hero.features.automation.description}
                 </p>
               </CardContent>
             </Card>
             
-            <Card className="card-modern micro-interaction animate-fade-in" style={{animationDelay: '0.2s'}}>
+            <Card className="dark-card micro-interaction animate-fade-in dark-glow" style={{animationDelay: '0.2s'}}>
               <CardContent className="p-6 text-center">
-                <div className="h-16 w-16 mx-auto mb-4 rounded-full gradient-secondary flex items-center justify-center floating-delayed">
+                <div className="h-16 w-16 mx-auto mb-4 rounded-full gradient-secondary flex items-center justify-center floating-delayed dark-pulse">
                   <BarChart3 className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="font-semibold mb-2 text-gradient">{t.hero.features.roi.title}</h3>
+                <h3 className="font-semibold mb-2 text-gradient dark-text-glow">{t.hero.features.roi.title}</h3>
                 <p className="text-sm text-muted-foreground">
                   {t.hero.features.roi.description}
                 </p>
               </CardContent>
             </Card>
             
-            <Card className="card-modern micro-interaction animate-fade-in" style={{animationDelay: '0.4s'}}>
+            <Card className="dark-card micro-interaction animate-fade-in dark-glow" style={{animationDelay: '0.4s'}}>
               <CardContent className="p-6 text-center">
-                <div className="h-16 w-16 mx-auto mb-4 rounded-full gradient-accent flex items-center justify-center floating" style={{animationDelay: '2s'}}>
+                <div className="h-16 w-16 mx-auto mb-4 rounded-full gradient-accent flex items-center justify-center floating dark-pulse" style={{animationDelay: '2s'}}>
                   <Users className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="font-semibold mb-2 text-gradient">{t.hero.features.guide.title}</h3>
+                <h3 className="font-semibold mb-2 text-gradient dark-text-glow">{t.hero.features.guide.title}</h3>
                 <p className="text-sm text-muted-foreground">
                   {t.hero.features.guide.description}
                 </p>

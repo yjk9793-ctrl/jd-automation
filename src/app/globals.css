@@ -4,39 +4,41 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
+    /* 다크 테마 기본 설정 */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 94.1%;
     --radius: 0.5rem;
     
-    /* 최신 UI/UX 트렌드 색상 */
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --glass-bg: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.1);
-    --shadow-medium: 0 20px 40px rgba(0, 0, 0, 0.15);
-    --shadow-strong: 0 30px 60px rgba(0, 0, 0, 0.2);
+    /* 다크 테마 최신 UI/UX 트렌드 색상 */
+    --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+    --gradient-secondary: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+    --gradient-accent: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+    --glass-bg: rgba(0, 0, 0, 0.3);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --shadow-medium: 0 20px 40px rgba(0, 0, 0, 0.5);
+    --shadow-strong: 0 30px 60px rgba(0, 0, 0, 0.6);
   }
 
   .dark {
+    /* 다크 모드 강화 */
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
@@ -58,11 +60,11 @@
     --ring: 224.3 76.3% 94.1%;
     
     /* 다크 모드 최신 색상 */
-    --glass-bg: rgba(0, 0, 0, 0.2);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.3);
-    --shadow-medium: 0 20px 40px rgba(0, 0, 0, 0.4);
-    --shadow-strong: 0 30px 60px rgba(0, 0, 0, 0.5);
+    --glass-bg: rgba(0, 0, 0, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --shadow-medium: 0 20px 40px rgba(0, 0, 0, 0.6);
+    --shadow-strong: 0 30px 60px rgba(0, 0, 0, 0.7);
   }
 }
 
@@ -91,20 +93,20 @@
     overflow: hidden;
   }
 
-  /* 1. Neumorphism (뉴모피즘) */
+  /* 1. Neumorphism (뉴모피즘) - 다크 테마 */
   .neumorphism {
-    background: #f0f0f3;
+    background: #1a1a1a;
     box-shadow: 
-      20px 20px 60px #d0d0d3,
-      -20px -20px 60px #ffffff;
+      20px 20px 60px #0a0a0a,
+      -20px -20px 60px #2a2a2a;
     border-radius: 20px;
   }
 
   .neumorphism-inset {
-    background: #f0f0f3;
+    background: #1a1a1a;
     box-shadow: 
-      inset 20px 20px 60px #d0d0d3,
-      inset -20px -20px 60px #ffffff;
+      inset 20px 20px 60px #0a0a0a,
+      inset -20px -20px 60px #2a2a2a;
     border-radius: 20px;
   }
 
@@ -140,11 +142,17 @@
     transform: rotateX(-5deg) rotateY(5deg) translateZ(20px);
   }
 
-  /* 4. 애니메이션 그라데이션 */
+  /* 4. 애니메이션 그라데이션 - 다크 테마 */
   .animated-gradient {
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background: linear-gradient(-45deg, #8b5cf6, #ec4899, #06b6d4, #3b82f6);
     background-size: 400% 400%;
     animation: gradientShift 15s ease infinite;
+  }
+
+  .animated-gradient-dark {
+    background: linear-gradient(-45deg, #1e1b4b, #7c2d12, #0c4a6e, #1e3a8a);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
   }
 
   .gradient-primary {
@@ -423,6 +431,73 @@
   /* 20. 부드러운 전환 (기존 유지) */
   .smooth-transition {
     @apply transition-all duration-300 ease-in-out;
+  }
+
+  /* 21. 다크 테마 전용 스타일 */
+  .dark-theme {
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    color: #e2e8f0;
+  }
+
+  .dark-card {
+    background: rgba(15, 15, 35, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  .dark-glow {
+    box-shadow: 
+      0 0 20px rgba(139, 92, 246, 0.3),
+      0 0 40px rgba(139, 92, 246, 0.2),
+      0 0 60px rgba(139, 92, 246, 0.1);
+  }
+
+  .dark-text-glow {
+    text-shadow: 
+      0 0 10px rgba(139, 92, 246, 0.5),
+      0 0 20px rgba(139, 92, 246, 0.3),
+      0 0 30px rgba(139, 92, 246, 0.1);
+  }
+
+  .dark-border-glow {
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 0 20px rgba(139, 92, 246, 0.2);
+  }
+
+  /* 22. 다크 테마 애니메이션 */
+  .dark-pulse {
+    animation: darkPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes darkPulse {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
+    }
+  }
+
+  /* 23. 다크 테마 스크롤바 */
+  .dark-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .dark-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+  }
+
+  .dark-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #8b5cf6, #a855f7);
+    border-radius: 4px;
+  }
+
+  .dark-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #7c3aed, #9333ea);
   }
 }
 
