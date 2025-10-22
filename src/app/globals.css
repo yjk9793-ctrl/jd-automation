@@ -599,6 +599,38 @@ code {
   @apply bg-muted px-1.5 py-0.5 rounded text-sm;
 }
 
+/* JDX 로고 특별 애니메이션 */
+.logo-glow {
+  animation: logoGlow 2s ease-in-out infinite alternate;
+}
+
+.logo-pulse {
+  animation: logoPulse 1.5s ease-in-out infinite;
+}
+
+.logo-rotate {
+  animation: logoRotate 8s linear infinite;
+}
+
+@keyframes logoGlow {
+  0% { 
+    box-shadow: 0 0 5px rgba(147, 51, 234, 0.3), 0 0 10px rgba(147, 51, 234, 0.2);
+  }
+  100% { 
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.6), 0 0 30px rgba(147, 51, 234, 0.4);
+  }
+}
+
+@keyframes logoPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes logoRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 pre code {
   @apply bg-transparent p-0;
 }

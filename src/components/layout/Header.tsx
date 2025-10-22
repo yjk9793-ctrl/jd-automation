@@ -39,13 +39,26 @@ export function Header({
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* 로고 및 제목 */}
         <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-center gap-2 micro-interaction">
-            <div className="h-8 w-8 rounded-lg gradient-primary flex items-center justify-center floating">
-              <span className="text-white font-bold text-sm">JD</span>
+          <Link href="/" className="flex items-center gap-3 micro-interaction group">
+            {/* JDX 아이콘 */}
+            <div className="relative">
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-600 to-purple-700 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 logo-glow">
+                <span className="text-white font-bold text-lg logo-pulse">JD</span>
+              </div>
+              {/* 글로우 효과 */}
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-600 to-purple-700 opacity-0 group-hover:opacity-30 blur-sm transition-opacity duration-300"></div>
+              {/* 회전하는 테두리 */}
+              <div className="absolute inset-0 rounded-xl border-2 border-purple-400 opacity-0 group-hover:opacity-100 logo-rotate transition-opacity duration-300"></div>
             </div>
+            
+            {/* 텍스트 영역 */}
             <div className="hidden sm:block">
-              <h1 className="text-lg font-semibold text-gradient">{t.title}</h1>
-              <p className="text-xs text-muted-foreground">{t.subtitle}</p>
+              <h1 className="text-xl font-bold text-gradient group-hover:text-purple-400 transition-colors duration-300">
+                JDX
+              </h1>
+              <p className="text-sm text-muted-foreground group-hover:text-purple-300 transition-colors duration-300">
+                {t.subtitle}
+              </p>
             </div>
           </Link>
         </div>
