@@ -10,6 +10,7 @@ import { TaskList } from '@/components/charts/TaskList';
 import { TaskDetail } from '@/components/charts/TaskDetail';
 import { DetailedReport } from '@/components/charts/DetailedReport';
 import { AgentAdvice } from '@/components/charts/AgentAdvice';
+import { OverviewSummary } from '@/components/charts/OverviewSummary';
 import { PDFExportDialog } from '@/components/export/PDFExportDialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -190,37 +191,43 @@ export default function HomePage() {
 
             {viewMode === 'summary' ? (
               <>
-                {/* 결과 요약 */}
-                <ResultSummary result={analysisResult} language={language} />
+                {/* 전체 오버뷰 써머리 */}
+                <OverviewSummary result={analysisResult} language={language} />
 
-                {/* 메인 컨텐츠 */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* 작업 목록 */}
-                  <TaskList
-                    tasks={analysisResult.tasks}
-                    selectedTask={selectedTask}
-                    onTaskSelect={handleTaskSelect}
-                    language={language}
-                  />
-
-                  {/* 작업 상세 */}
-                  {selectedTask ? (
-                    <TaskDetail
-                      task={selectedTask}
-                      onGenerateRecipe={handleGenerateRecipe}
+                {/* 메인 컨텐츠 - 3열 그리드 */}
+                <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                  {/* 작업 목록 - 2열 */}
+                  <div className="xl:col-span-1">
+                    <TaskList
+                      tasks={analysisResult.tasks}
+                      selectedTask={selectedTask}
+                      onTaskSelect={handleTaskSelect}
                       language={language}
                     />
-                  ) : (
-                    <Card className="flex items-center justify-center min-h-[400px]">
-                      <CardContent className="text-center">
-                        <Target className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                        <h3 className="text-lg font-semibold mb-2">{t.analysis.selectTask}</h3>
-                        <p className="text-muted-foreground">
-                          {t.analysis.noTaskSelected}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  )}
+                  </div>
+
+                  {/* 작업 상세 - 2열 */}
+                  <div className="xl:col-span-2">
+                    {selectedTask ? (
+                      <TaskDetail
+                        task={selectedTask}
+                        onGenerateRecipe={handleGenerateRecipe}
+                        language={language}
+                      />
+                    ) : (
+                      <Card className="flex items-center justify-center min-h-[400px] dark-card dark-glow">
+                        <CardContent className="text-center">
+                          <Target className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                          <h3 className="text-lg font-semibold mb-2 text-gradient dark-text-glow">
+                            {t.analysis.selectTask}
+                          </h3>
+                          <p className="text-muted-foreground">
+                            {t.analysis.noTaskSelected}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
                 </div>
 
                 {/* 에이전트 활용 조언 */}
