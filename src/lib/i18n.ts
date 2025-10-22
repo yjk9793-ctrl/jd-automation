@@ -170,7 +170,7 @@ export const translations: Record<Language, Translations> = {
       close: '닫기',
     },
     hero: {
-      title: 'JDX',
+      title: 'JDX (Transformation)',
       subtitle: '당신의 직무, 에이전트가 가능한지 확인해보세요',
       titleHighlight: '에이전트화',
       description: '반복 업무는 자동화로, 판단이 필요한 일은 더 똑똑하게.\nJob Description을 분석하여 AI 에이전트화 기회를 발견하세요.',
@@ -340,7 +340,7 @@ export const translations: Record<Language, Translations> = {
       close: 'Close',
     },
     hero: {
-      title: 'JDX',
+      title: 'JDX (Transformation)',
       subtitle: 'Check if your job can be automated with agents',
       titleHighlight: 'Agentization',
       description: 'Automate repetitive tasks, make judgment calls smarter.\nAnalyze Job Descriptions to discover AI agentization opportunities.',

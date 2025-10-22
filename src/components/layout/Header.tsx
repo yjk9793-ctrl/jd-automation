@@ -54,7 +54,7 @@ export function Header({
             {/* 텍스트 영역 */}
             <div className="hidden sm:block">
               <h1 className="text-xl font-bold text-gradient group-hover:text-purple-400 transition-colors duration-300">
-                JDX
+                JDX <span className="text-lg font-normal text-purple-300">(Transformation)</span>
               </h1>
               <p className="text-sm text-muted-foreground group-hover:text-purple-300 transition-colors duration-300">
                 {t.subtitle}
