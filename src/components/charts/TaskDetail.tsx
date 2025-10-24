@@ -20,7 +20,7 @@ import { useTranslation, Language } from '@/lib/i18n';
 
 interface TaskDetailProps {
   task: TaskItem;
-  onGenerateRecipe?: () => void;
+  onGenerateRecipe?: (task: TaskItem) => Promise<void>;
   isGeneratingRecipe?: boolean;
   language?: Language;
 }
@@ -220,7 +220,7 @@ export function TaskDetail({ task, onGenerateRecipe, isGeneratingRecipe = false,
           <Workflow className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
           <p className="text-muted-foreground mb-4">아직 레시피가 생성되지 않았습니다.</p>
           {onGenerateRecipe && (
-            <Button onClick={onGenerateRecipe} disabled={isGeneratingRecipe}>
+            <Button onClick={() => onGenerateRecipe(task)} disabled={isGeneratingRecipe}>
               {isGeneratingRecipe ? '레시피 생성 중...' : '레시피 생성하기'}
             </Button>
           )}
