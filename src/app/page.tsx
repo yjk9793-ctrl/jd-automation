@@ -228,7 +228,7 @@ export default function HomePage() {
           </Row>
           
           <Row className="g-4">
-            {t.hero.features.map((feature, index) => (
+            {Object.values(t.hero.features).map((feature, index) => (
               <Col md={6} lg={4} key={index}>
                 <Card className="card-jdx h-100 border-0">
                   <Card.Body className="p-4 text-center">
