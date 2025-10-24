@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { Card, Form, Button, Alert, Spinner, Row, Col } from 'react-bootstrap';
 import { useDropzone } from 'react-dropzone';
-import { Upload, FileText, X, HelpCircle } from 'lucide-react';
+import { Upload, FileText, X, HelpCircle, AlertTriangle, Brain } from 'lucide-react';
 import { Language } from '@/lib/i18n';
 import { useTranslation } from '@/lib/i18n';
 

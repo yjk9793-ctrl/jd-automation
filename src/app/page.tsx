@@ -37,7 +37,8 @@ import {
   Rocket,
   Shield,
   Lightbulb,
-  ArrowRight
+  ArrowRight,
+  Play
 } from 'lucide-react';
 import { AnalysisResult, TaskItem } from '@/types';
 import { useTranslation, Language } from '@/lib/i18n';
