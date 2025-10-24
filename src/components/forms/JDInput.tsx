@@ -1,36 +1,40 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
+import { Card, Form, Button, Alert, Spinner, Row, Col } from 'react-bootstrap';
 import { useDropzone } from 'react-dropzone';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Upload, FileText, X, Loader2 } from 'lucide-react';
-import { JDInput as JDInputType } from '@/types';
+import { Upload, FileText, X, HelpCircle } from 'lucide-react';
+import { Language } from '@/lib/i18n';
+import { useTranslation } from '@/lib/i18n';
 
 interface JDInputProps {
-  onAnalyze: (jd: JDInputType) => void;
-  isLoading?: boolean;
-  sampleData?: string;
+  onAnalyze: (jd: string, file?: File) => void;
+  isAnalyzing: boolean;
+  language: Language;
 }
 
-export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputProps) {
-  const [text, setText] = useState('');
+export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
+  const [jd, setJd] = useState('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  
+  const t = useTranslation(language);
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+  const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
-    if (!file) return;
-
-    setUploadedFile(file);
-
-    try {
-      const fileText = await readFileAsText(file);
-      setText(fileText);
-    } catch (error) {
-      console.error('파일 읽기 실패:', error);
-      alert('파일을 읽을 수 없습니다. 텍스트 파일(.txt, .md)만 지원됩니다.');
-      setUploadedFile(null);
+    if (file) {
+      setUploadedFile(file);
+      setError(null);
+      
+      // Read file content if it's a text file
+      if (file.type === 'text/plain') {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target?.result as string;
+          setJd(content);
+        };
+        reader.readAsText(file);
+      }
     }
   }, []);
 
@@ -38,167 +42,180 @@ export function JDInput({ onAnalyze, isLoading = false, sampleData }: JDInputPro
     onDrop,
     accept: {
       'text/plain': ['.txt'],
-      'text/markdown': ['.md'],
       'application/pdf': ['.pdf'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
     },
     multiple: false,
-    maxSize: 10 * 1024 * 1024, // 10MB
   });
 
-  const readFileAsText = async (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsText(file);
-    });
-  };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
 
-  const handleAnalyze = () => {
-    if (!text.trim()) {
-      alert('JD 텍스트를 입력하거나 파일을 업로드해주세요.');
+    if (!jd.trim() && !uploadedFile) {
+      setError(language === 'ko' ? 'JD를 입력하거나 파일을 업로드해주세요.' : 'Please enter JD or upload a file.');
       return;
     }
 
-    const jdInput: JDInputType = {
-      text: text.trim(),
-      fileName: uploadedFile?.name,
-      fileType: uploadedFile?.type,
-    };
-
-    onAnalyze(jdInput);
+    onAnalyze(jd, uploadedFile || undefined);
   };
 
-  const handleSampleData = () => {
-    if (sampleData) {
-      setText(sampleData);
-      setUploadedFile(null);
-    }
-  };
-
-  const clearInput = () => {
-    setText('');
+  const removeFile = () => {
     setUploadedFile(null);
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto dark-card animate-fade-in dark-glow">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-gradient dark-text-glow">
-          <FileText className="h-5 w-5" />
-          Job Description 입력
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* 파일 업로드 영역 - 다크 테마 */}
-        <div
-          {...getRootProps()}
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer micro-interaction dark-border-glow ${
-            isDragActive
-              ? 'border-primary bg-primary/10 dark-glow'
-              : 'border-muted-foreground/25 hover:border-primary/50 hover:dark-glow'
-          }`}
-        >
-          <input {...getInputProps()} />
-          <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground floating dark-pulse" />
-          {isDragActive ? (
-            <p className="text-primary font-medium dark-text-glow">파일을 여기에 놓으세요...</p>
-          ) : (
-            <div>
-              <p className="text-lg font-medium mb-2">파일을 드래그하거나 클릭하여 업로드</p>
-              <p className="text-sm text-muted-foreground">
-                PDF, TXT, MD 파일 지원 (최대 10MB)
-              </p>
-            </div>
-          )}
-        </div>
+    <div className="fade-in">
+      <Form onSubmit={handleSubmit}>
+        <Row className="g-4">
+          {/* Text Input */}
+          <Col md={6}>
+            <Form.Group>
+              <Form.Label className="fw-bold mb-3">
+                <FileText className="me-2" size={20} />
+                {language === 'ko' ? 'JD 텍스트 입력' : 'JD Text Input'}
+              </Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={8}
+                value={jd}
+                onChange={(e) => setJd(e.target.value)}
+                placeholder={language === 'ko' 
+                  ? '분석하고 싶은 Job Description을 입력하세요...'
+                  : 'Enter the Job Description you want to analyze...'
+                }
+                className="form-control-jdx"
+                disabled={isAnalyzing}
+              />
+            </Form.Group>
+          </Col>
 
-        {/* 업로드된 파일 정보 */}
-        {uploadedFile && (
-          <div className="flex items-center justify-between p-3 glass rounded-lg micro-interaction">
-            <div className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              <span className="text-sm font-medium">{uploadedFile.name}</span>
-              <span className="text-xs text-muted-foreground">
-                ({(uploadedFile.size / 1024).toFixed(1)} KB)
-              </span>
-            </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setUploadedFile(null)}
-              className="h-6 w-6 p-0 micro-interaction"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
+          {/* File Upload */}
+          <Col md={6}>
+            <Form.Group>
+              <Form.Label className="fw-bold mb-3">
+                <Upload className="me-2" size={20} />
+                {language === 'ko' ? '파일 업로드' : 'File Upload'}
+              </Form.Label>
+              
+              <div
+                {...getRootProps()}
+                className={`jdx-card p-4 text-center border-2 border-dashed rounded-3 cursor-pointer transition-all ${
+                  isDragActive ? 'border-primary bg-primary bg-opacity-10' : 'border-secondary'
+                } ${isAnalyzing ? 'opacity-50' : ''}`}
+                style={{ minHeight: '200px' }}
+              >
+                <input {...getInputProps()} disabled={isAnalyzing} />
+                
+                {uploadedFile ? (
+                  <div>
+                    <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3">
+                      <FileText className="text-primary" size={32} />
+                    </div>
+                    <h6 className="fw-bold mb-2">{uploadedFile.name}</h6>
+                    <p className="text-muted small mb-3">
+                      {(uploadedFile.size / 1024).toFixed(1)} KB
+                    </p>
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeFile();
+                      }}
+                      disabled={isAnalyzing}
+                    >
+                      <X className="me-1" size={16} />
+                      {language === 'ko' ? '제거' : 'Remove'}
+                    </Button>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3 jdx-glow">
+                      <Upload className="text-primary" size={32} />
+                    </div>
+                    <h6 className="fw-bold mb-2">
+                      {isDragActive 
+                        ? (language === 'ko' ? '파일을 여기에 놓으세요' : 'Drop file here')
+                        : (language === 'ko' ? '파일을 드래그하거나 클릭하세요' : 'Drag & drop or click to select')
+                      }
+                    </h6>
+                    <p className="text-muted small mb-0">
+                      {language === 'ko' 
+                        ? 'TXT, PDF, DOCX 파일 지원'
+                        : 'Supports TXT, PDF, DOCX files'
+                      }
+                    </p>
+                  </div>
+                )}
+              </div>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        {/* Error Message */}
+        {error && (
+          <Alert variant="danger" className="alert-jdx mt-3">
+            <AlertTriangle className="me-2" size={16} />
+            {error}
+          </Alert>
         )}
 
-        {/* 텍스트 입력 영역 - 다크 테마 */}
-        <div className="space-y-2">
-          <label htmlFor="jd-text" className="text-sm font-medium text-gradient dark-text-glow">
-            또는 직접 텍스트 입력
-          </label>
-          <Textarea
-            id="jd-text"
-            placeholder="Job Description을 여기에 입력하세요..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            className="min-h-[300px] resize-none input-modern dark-border-glow"
-            disabled={isLoading}
-          />
-          <div className="flex justify-between items-center text-xs text-muted-foreground">
-            <span>{text.length.toLocaleString()}자</span>
-            {text.length > 0 && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={clearInput}
-                className="h-6 px-2 text-xs micro-interaction dark-glow"
-              >
-                <X className="h-3 w-3 mr-1" />
-                지우기
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* 액션 버튼들 - 다크 테마 */}
-        <div className="flex gap-3">
+        {/* Submit Button */}
+        <div className="text-center mt-4">
           <Button
-            onClick={handleAnalyze}
-            disabled={!text.trim() || isLoading}
-            className="flex-1 btn-modern micro-interaction dark-glow"
+            type="submit"
+            variant="primary"
+            size="lg"
+            className="btn-jdx px-5 py-3 rounded-pill"
+            disabled={isAnalyzing || (!jd.trim() && !uploadedFile)}
           >
-            {isLoading ? (
+            {isAnalyzing ? (
               <>
-                <Loader2 className="h-4 w-4 mr-2 loading-spinner" />
-                분석 중...
+                <Spinner animation="border" size="sm" className="me-2" />
+                {language === 'ko' ? '분석 중...' : 'Analyzing...'}
               </>
             ) : (
-              'JD 분석 시작'
+              <>
+                <Brain className="me-2" size={20} />
+                {language === 'ko' ? 'JD 분석 시작' : 'Start JD Analysis'}
+              </>
             )}
           </Button>
-          
-          {sampleData && (
-            <Button
-              variant="outline"
-              onClick={handleSampleData}
-              disabled={isLoading}
-              className="micro-interaction dark-border-glow dark-glow"
-            >
-              데모 데이터
-            </Button>
-          )}
         </div>
 
-        {/* 도움말 - 다크 테마 */}
-        <div className="text-xs text-muted-foreground space-y-1 dark-card p-4 rounded-lg dark-glow">
-          <p>• 최소 10자 이상의 텍스트가 필요합니다</p>
-          <p>• 업무 내용, 자격 요건, 우대 사항이 포함된 JD를 입력해주세요</p>
-          <p>• 분석 결과는 브라우저에만 저장되며, 서버에는 전송되지 않습니다</p>
+        {/* Help Text */}
+        <div className="jdx-card p-4 rounded-3 mt-4">
+          <div className="d-flex align-items-start">
+            <HelpCircle className="text-info me-3 mt-1" size={20} />
+            <div>
+              <h6 className="fw-bold mb-2">
+                {language === 'ko' ? '분석 도움말' : 'Analysis Help'}
+              </h6>
+              <ul className="text-muted small mb-0">
+                <li>
+                  {language === 'ko' 
+                    ? 'JD에는 직무명, 주요 업무, 자격요건, 우대사항 등이 포함되어야 합니다'
+                    : 'JD should include job title, main tasks, qualifications, and preferred requirements'
+                  }
+                </li>
+                <li>
+                  {language === 'ko' 
+                    ? '더 정확한 분석을 위해 구체적이고 상세한 JD를 입력해주세요'
+                    : 'For more accurate analysis, please enter specific and detailed JD'
+                  }
+                </li>
+                <li>
+                  {language === 'ko' 
+                    ? '파일 업로드 시 텍스트 파일(.txt)이 가장 빠르게 처리됩니다'
+                    : 'Text files (.txt) are processed fastest when uploading files'
+                  }
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </CardContent>
-    </Card>
+      </Form>
+    </div>
   );
 }

@@ -1,279 +1,151 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
-import { Brain, Mail, MapPin, User } from 'lucide-react';
+import { Container, Row, Col, Nav, Navbar } from 'react-bootstrap';
 import { Language } from '@/lib/i18n';
+import { useTranslation } from '@/lib/i18n';
 
 interface FooterProps {
   language: Language;
 }
 
 export function Footer({ language }: FooterProps) {
-  const currentYear = new Date().getFullYear();
-
-  const footerContent = {
-    ko: {
-      product: {
-        title: 'Product',
-        links: [
-          { name: '유저 행동 분석', href: '/analysis' },
-          { name: '인게이지먼트', href: '/engagement' },
-          { name: '데이터 인프라', href: '/infrastructure' }
-        ]
-      },
-      solution: {
-        title: 'Solution',
-        links: [
-          { name: '게임', href: '/solutions/game' },
-          { name: '이커머스', href: '/solutions/ecommerce' },
-          { name: '미디어', href: '/solutions/media' }
-        ]
-      },
-      resource: {
-        title: 'Resource',
-        links: [
-          { name: '온보딩 가이드', href: '/guide' },
-          { name: '개발 문서', href: '/docs' },
-          { name: '유저 가이드', href: '/user-guide' },
-          { name: '자주 묻는 질문', href: '/faq' },
-          { name: 'Release Note', href: '/releases' }
-        ]
-      },
-      blog: {
-        title: 'Blog',
-        links: [
-          { name: 'Blog', href: '/blog' },
-          { name: '고객사례', href: '/case-studies' }
-        ]
-      },
-      company: {
-        title: 'Company',
-        links: [
-          { name: '회사 소개', href: '/about' },
-          { name: '기업 문화', href: '/culture' },
-          { name: '뉴스', href: '/news' }
-        ]
-      },
-      legal: {
-        privacy: '개인정보 이용방침',
-        copyright: `Copyright ${currentYear} ©JDX. All Rights Reserved.`,
-        representative: '대표자 : YoungJong Kim',
-        businessNumber: '사업자등록번호 : 123-45-67890',
-        address: '주소 : 서울특별시 강남구 테헤란로 123',
-        contact: '문의 : info@jdx.ai'
-      }
-    },
-    en: {
-      product: {
-        title: 'Product',
-        links: [
-          { name: 'User Behavior Analysis', href: '/analysis' },
-          { name: 'Engagement', href: '/engagement' },
-          { name: 'Data Infrastructure', href: '/infrastructure' }
-        ]
-      },
-      solution: {
-        title: 'Solution',
-        links: [
-          { name: 'Gaming', href: '/solutions/game' },
-          { name: 'E-commerce', href: '/solutions/ecommerce' },
-          { name: 'Media', href: '/solutions/media' }
-        ]
-      },
-      resource: {
-        title: 'Resource',
-        links: [
-          { name: 'Onboarding Guide', href: '/guide' },
-          { name: 'Developer Docs', href: '/docs' },
-          { name: 'User Guide', href: '/user-guide' },
-          { name: 'FAQ', href: '/faq' },
-          { name: 'Release Note', href: '/releases' }
-        ]
-      },
-      blog: {
-        title: 'Blog',
-        links: [
-          { name: 'Blog', href: '/blog' },
-          { name: 'Case Studies', href: '/case-studies' }
-        ]
-      },
-      company: {
-        title: 'Company',
-        links: [
-          { name: 'About Us', href: '/about' },
-          { name: 'Culture', href: '/culture' },
-          { name: 'News', href: '/news' }
-        ]
-      },
-      legal: {
-        privacy: 'Privacy Policy',
-        copyright: `Copyright ${currentYear} ©JDX. All Rights Reserved.`,
-        representative: 'Representative : YoungJong Kim',
-        businessNumber: 'Business Registration : 123-45-67890',
-        address: 'Address : 123 Teheran-ro, Gangnam-gu, Seoul',
-        contact: 'Contact : info@jdx.ai'
-      }
-    }
-  };
-
-  const content = footerContent[language];
+  const t = useTranslation(language);
 
   return (
-    <footer className="bg-black text-white">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* 상단 섹션 */}
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-8 mb-12">
-          {/* 로고 */}
-          <div className="md:col-span-1">
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <Brain className="h-6 w-6 text-white" />
+    <footer className="bg-dark text-light py-5 mt-5">
+      <Container>
+        <Row className="g-4">
+          {/* Logo and Description */}
+          <Col lg={4}>
+            <div className="mb-4">
+              <div className="d-flex align-items-center mb-3">
+                <div className="jdx-logo d-flex align-items-center justify-content-center me-3" style={{width: '40px', height: '40px'}}>
+                  <span className="text-white fw-bold fs-5">JD</span>
+                </div>
+                <h5 className="fw-bold mb-0 jdx-gradient">JDX</h5>
               </div>
-              <span className="text-xl font-bold">JDX</span>
-            </Link>
-          </div>
-
-          {/* 네비게이션 링크들 */}
-          <div className="md:col-span-5 grid grid-cols-2 md:grid-cols-5 gap-8">
-            {/* Product */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-white">
-                {content.product.title}
-              </h3>
-              <ul className="space-y-2">
-                {content.product.links.map((link, index) => (
-                  <li key={index}>
-                    <Link 
-                      href={link.href}
-                      className="text-gray-300 hover:text-white transition-colors duration-200 text-sm"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Solution */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-white">
-                {content.solution.title}
-              </h3>
-              <ul className="space-y-2">
-                {content.solution.links.map((link, index) => (
-                  <li key={index}>
-                    <Link 
-                      href={link.href}
-                      className="text-gray-300 hover:text-white transition-colors duration-200 text-sm"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Resource */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-white">
-                {content.resource.title}
-              </h3>
-              <ul className="space-y-2">
-                {content.resource.links.map((link, index) => (
-                  <li key={index}>
-                    <Link 
-                      href={link.href}
-                      className="text-gray-300 hover:text-white transition-colors duration-200 text-sm"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Blog */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-white">
-                {content.blog.title}
-              </h3>
-              <ul className="space-y-2">
-                {content.blog.links.map((link, index) => (
-                  <li key={index}>
-                    <Link 
-                      href={link.href}
-                      className="text-gray-300 hover:text-white transition-colors duration-200 text-sm"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Company */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-white">
-                {content.company.title}
-              </h3>
-              <ul className="space-y-2">
-                {content.company.links.map((link, index) => (
-                  <li key={index}>
-                    <Link 
-                      href={link.href}
-                      className="text-gray-300 hover:text-white transition-colors duration-200 text-sm"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        {/* 하단 섹션 */}
-        <div className="border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            {/* 개인정보 처리방침 */}
-            <div>
-              <Link 
-                href="/privacy"
-                className="text-gray-300 hover:text-white transition-colors duration-200 text-sm"
-              >
-                {content.legal.privacy}
-              </Link>
-            </div>
-
-            {/* 저작권 및 회사 정보 */}
-            <div className="text-gray-300 text-sm space-y-1">
-              <div className="mb-2">
-                {content.legal.copyright}
-              </div>
-              <div className="flex flex-col md:flex-row md:items-center md:gap-4 space-y-1 md:space-y-0">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  <span>{content.legal.representative}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span>{content.legal.businessNumber}</span>
-                </div>
-              </div>
-              <div className="flex flex-col md:flex-row md:items-center md:gap-4 space-y-1 md:space-y-0">
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4" />
-                  <span>{content.legal.address}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  <span>{content.legal.contact}</span>
-                </div>
+              <p className="text-muted mb-3">
+                {language === 'ko' 
+                  ? 'AI 기반 Job Description 분석 플랫폼으로 업무 자동화의 새로운 가능성을 발견하세요.'
+                  : 'Discover new possibilities for work automation with our AI-based Job Description analysis platform.'
+                }
+              </p>
+              <div className="d-flex gap-2">
+                <a href="#" className="text-muted text-decoration-none">
+                  <i className="bi bi-twitter fs-5"></i>
+                </a>
+                <a href="#" className="text-muted text-decoration-none">
+                  <i className="bi bi-linkedin fs-5"></i>
+                </a>
+                <a href="#" className="text-muted text-decoration-none">
+                  <i className="bi bi-github fs-5"></i>
+                </a>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+          </Col>
+
+          {/* Product */}
+          <Col lg={2}>
+            <h6 className="fw-bold mb-3">{language === 'ko' ? '제품' : 'Product'}</h6>
+            <Nav className="flex-column">
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? 'JD 분석기' : 'JD Analyzer'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? '자동화 도구' : 'Automation Tools'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? 'AI 에이전트' : 'AI Agents'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? 'API' : 'API'}
+              </Nav.Link>
+            </Nav>
+          </Col>
+
+          {/* Solution */}
+          <Col lg={2}>
+            <h6 className="fw-bold mb-3">{language === 'ko' ? '솔루션' : 'Solution'}</h6>
+            <Nav className="flex-column">
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? 'HR 부서' : 'HR Department'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? '마케팅' : 'Marketing'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? '영업' : 'Sales'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? '개발팀' : 'Development'}
+              </Nav.Link>
+            </Nav>
+          </Col>
+
+          {/* Resource */}
+          <Col lg={2}>
+            <h6 className="fw-bold mb-3">{language === 'ko' ? '리소스' : 'Resources'}</h6>
+            <Nav className="flex-column">
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? '문서' : 'Documentation'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? '가이드' : 'Guides'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? 'API 레퍼런스' : 'API Reference'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? '지원' : 'Support'}
+              </Nav.Link>
+            </Nav>
+          </Col>
+
+          {/* Blog */}
+          <Col lg={2}>
+            <h6 className="fw-bold mb-3">{language === 'ko' ? '블로그' : 'Blog'}</h6>
+            <Nav className="flex-column">
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? '최신 소식' : 'Latest News'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? '사용 사례' : 'Case Studies'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? '기술 블로그' : 'Tech Blog'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 mb-2">
+                {language === 'ko' ? '뉴스레터' : 'Newsletter'}
+              </Nav.Link>
+            </Nav>
+          </Col>
+        </Row>
+
+        <hr className="my-4" />
+
+        {/* Bottom Section */}
+        <Row className="align-items-center">
+          <Col md={6}>
+            <p className="text-muted mb-0 small">
+              © 2024 JDX. {language === 'ko' ? '모든 권리 보유.' : 'All rights reserved.'}
+            </p>
+          </Col>
+          <Col md={6}>
+            <Nav className="justify-content-md-end">
+              <Nav.Link href="#" className="text-muted p-0 me-3 small">
+                {language === 'ko' ? '개인정보처리방침' : 'Privacy Policy'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 me-3 small">
+                {language === 'ko' ? '이용약관' : 'Terms of Service'}
+              </Nav.Link>
+              <Nav.Link href="#" className="text-muted p-0 small">
+                {language === 'ko' ? '쿠키 정책' : 'Cookie Policy'}
+              </Nav.Link>
+            </Nav>
+          </Col>
+        </Row>
+      </Container>
     </footer>
   );
 }

@@ -1,41 +1,37 @@
 'use client';
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { ButtonGroup, Button } from 'react-bootstrap';
 import { Globe } from 'lucide-react';
+import { Language } from '@/lib/i18n';
 
 interface LanguageToggleProps {
-  language: 'ko' | 'en';
-  onLanguageChange: (lang: 'ko' | 'en') => void;
+  currentLanguage: Language;
+  onLanguageChange: (language: Language) => void;
 }
 
-export function LanguageToggle({ language, onLanguageChange }: LanguageToggleProps) {
-  const handleLanguageClick = (newLang: 'ko' | 'en') => {
-    console.log('LanguageToggle clicked:', newLang, 'current:', language);
-    onLanguageChange(newLang);
+export function LanguageToggle({ currentLanguage, onLanguageChange }: LanguageToggleProps) {
+  const handleLanguageClick = (language: Language) => {
+    console.log('Language toggle clicked:', language);
+    onLanguageChange(language);
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <Globe className="h-4 w-4 text-muted-foreground" />
-      <div className="flex rounded-lg border border-border overflow-hidden">
-        <Button
-          variant={language === 'ko' ? 'default' : 'ghost'}
-          size="sm"
-          onClick={() => handleLanguageClick('ko')}
-          className="rounded-none border-0"
-        >
-          한국어
-        </Button>
-        <Button
-          variant={language === 'en' ? 'default' : 'ghost'}
-          size="sm"
-          onClick={() => handleLanguageClick('en')}
-          className="rounded-none border-0"
-        >
-          English
-        </Button>
-      </div>
-    </div>
+    <ButtonGroup size="sm">
+      <Button
+        variant={currentLanguage === 'ko' ? 'primary' : 'outline-primary'}
+        onClick={() => handleLanguageClick('ko')}
+        className="btn-jdx-outline"
+      >
+        🇰🇷 KO
+      </Button>
+      <Button
+        variant={currentLanguage === 'en' ? 'primary' : 'outline-primary'}
+        onClick={() => handleLanguageClick('en')}
+        className="btn-jdx-outline"
+      >
+        🇺🇸 EN
+      </Button>
+    </ButtonGroup>
   );
 }
