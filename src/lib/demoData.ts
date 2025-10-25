@@ -170,12 +170,12 @@ export const DEMO_RESULTS = {
     H --> J[인간 검토 큐]
     I --> K[결과 저장]`,
           steps: [
-            '이력서 문서를 텍스트로 변환',
-            '자격 요건 키워드 추출',
-            '이력서 내용과 키워드 매칭',
-            '가중치 기반 점수 계산',
-            '임계값 기준으로 합격/불합격 결정',
-            '결과를 ATS 시스템에 저장'
+            { title: '문서 변환', description: '이력서 문서를 텍스트로 변환' },
+            { title: '키워드 추출', description: '자격 요건 키워드 추출' },
+            { title: '내용 매칭', description: '이력서 내용과 키워드 매칭' },
+            { title: '점수 계산', description: '가중치 기반 점수 계산' },
+            { title: '합격 판정', description: '임계값 기준으로 합격/불합격 결정' },
+            { title: '결과 저장', description: '결과를 ATS 시스템에 저장' }
           ],
           codeSamples: [
             {
