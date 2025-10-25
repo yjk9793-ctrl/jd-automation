@@ -1,9 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Card, Badge, Button, Tab, Tabs, Row, Col, ListGroup, Table, Alert } from 'react-bootstrap';
 import { 
   Code, 
   Workflow, 
@@ -13,7 +11,11 @@ import {
   Wrench,
   Download,
   Copy,
-  CheckCircle
+  CheckCircle,
+  Clock,
+  DollarSign,
+  TrendingUp,
+  Target
 } from 'lucide-react';
 import { TaskItem, TaskRecipe } from '@/types';
 import { useTranslation, Language } from '@/lib/i18n';
@@ -30,351 +32,573 @@ type TabType = 'overview' | 'recipe' | 'code' | 'diagram';
 export function TaskDetail({ task, onGenerateRecipe, isGeneratingRecipe = false, language = 'ko' }: TaskDetailProps) {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  
   const t = useTranslation(language);
 
-  const tabs = [
-    { id: 'overview', label: language === 'ko' ? '개요' : 'Overview', icon: FileText },
-    { id: 'recipe', label: language === 'ko' ? '레시피' : 'Recipe', icon: Workflow },
-    { id: 'code', label: language === 'ko' ? '코드' : 'Code', icon: Code },
-    { id: 'diagram', label: language === 'ko' ? '플로우' : 'Flow', icon: Workflow },
-  ] as const;
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case 'Automate':
+        return 'success';
+      case 'Co-pilot':
+        return 'info';
+      case 'Human-critical':
+        return 'danger';
+      default:
+        return 'secondary';
+    }
+  };
 
-  const copyToClipboard = async (text: string, type: string) => {
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'Automate':
+        return <TrendingUp size={16} />;
+      case 'Co-pilot':
+        return <Shield size={16} />;
+      case 'Human-critical':
+        return <AlertTriangle size={16} />;
+      default:
+        return <Code size={16} />;
+    }
+  };
+
+  const getDifficultyColor = (difficulty: number) => {
+    if (difficulty <= 2) return 'success';
+    if (difficulty <= 3) return 'warning';
+    return 'danger';
+  };
+
+  const getDifficultyText = (difficulty: number) => {
+    const levels = language === 'ko' 
+      ? ['매우 쉬움', '쉬움', '보통', '어려움', '매우 어려움']
+      : ['Very Easy', 'Easy', 'Medium', 'Hard', 'Very Hard'];
+    return levels[difficulty - 1] || levels[2];
+  };
+
+  const copyToClipboard = async (text: string, codeType: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      setCopiedCode(type);
+      setCopiedCode(codeType);
       setTimeout(() => setCopiedCode(null), 2000);
-    } catch (error) {
-      console.error('복사 실패:', error);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
     }
   };
 
   const renderOverview = () => (
-    <div className="space-y-6">
-      {/* 기본 정보 */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="text-center p-3 bg-muted rounded-lg">
-          <div className="text-2xl font-bold text-green-600">{task.score}</div>
-          <div className="text-xs text-muted-foreground">자동화 점수</div>
+    <div>
+      {/* Task Header */}
+      <div className="mb-4">
+        <div className="d-flex align-items-center mb-3">
+          <Badge 
+            bg={getCategoryColor(task.category)} 
+            className="me-3 d-flex align-items-center"
+          >
+            {getCategoryIcon(task.category)}
+            <span className="ms-1">
+              {language === 'ko' 
+                ? (task.category === 'Automate' ? '자동화' : 
+                   task.category === 'Co-pilot' ? 'AI 협업' : '인간 판단')
+                : task.category
+              }
+            </span>
+          </Badge>
+          <Badge 
+            bg={getDifficultyColor(task.difficulty)} 
+            variant="outline"
+          >
+            {getDifficultyText(task.difficulty)}
+          </Badge>
         </div>
-        <div className="text-center p-3 bg-muted rounded-lg">
-          <div className="text-2xl font-bold text-blue-600">{task.roiEstimate}%</div>
-          <div className="text-xs text-muted-foreground">예상 ROI</div>
-        </div>
-        <div className="text-center p-3 bg-muted rounded-lg">
-          <div className="text-2xl font-bold text-orange-600">{task.difficulty}/5</div>
-          <div className="text-xs text-muted-foreground">구현 난이도</div>
-        </div>
-        <div className="text-center p-3 bg-muted rounded-lg">
-          <div className="text-2xl font-bold text-purple-600">{task.tools.length}</div>
-          <div className="text-xs text-muted-foreground">권장 도구</div>
-        </div>
-      </div>
-
-      {/* 평가 근거 */}
-      <div>
-        <h3 className="font-semibold mb-2">평가 근거</h3>
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          {task.reasoning}
+        
+        <h4 className="fw-bold mb-3" style={{color: '#ffffff'}}>
+          {task.title}
+        </h4>
+        
+        <p className="text-muted mb-4" style={{color: '#ffffff'}}>
+          {task.sourceText}
         </p>
       </div>
 
-      {/* 권장 도구 */}
-      <div>
-        <h3 className="font-semibold mb-3 flex items-center gap-2">
-          <Wrench className="h-4 w-4" />
-          권장 도구
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {task.tools.map((tool, index) => (
-            <div key={index} className="p-3 border rounded-lg">
-              <div className="font-medium text-sm mb-1">{tool.name}</div>
-              <div className="text-xs text-muted-foreground mb-2">{tool.purpose}</div>
-              {tool.alt && tool.alt.length > 0 && (
-                <div className="flex flex-wrap gap-1">
-                  {tool.alt.map((alt, altIndex) => (
-                    <Badge key={altIndex} variant="outline" className="text-xs">
-                      {alt}
-                    </Badge>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Key Metrics */}
+      <Row className="g-3 mb-4">
+        <Col md={3}>
+          <Card className="text-center border-0" style={{background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)'}}>
+            <Card.Body className="p-3">
+              <TrendingUp className="text-success mb-2" size={24} />
+              <h5 className="fw-bold mb-1" style={{color: '#10b981'}}>
+                {task.score}%
+              </h5>
+              <small style={{color: '#ffffff'}}>
+                {language === 'ko' ? '자동화 점수' : 'Automation Score'}
+              </small>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={3}>
+          <Card className="text-center border-0" style={{background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.2)'}}>
+            <Card.Body className="p-3">
+              <DollarSign className="text-warning mb-2" size={24} />
+              <h5 className="fw-bold mb-1" style={{color: '#f59e0b'}}>
+                {task.roiEstimate}%
+              </h5>
+              <small style={{color: '#ffffff'}}>
+                {language === 'ko' ? '예상 ROI' : 'Expected ROI'}
+              </small>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={3}>
+          <Card className="text-center border-0" style={{background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.2)'}}>
+            <Card.Body className="p-3">
+              <Clock className="text-primary mb-2" size={24} />
+              <h5 className="fw-bold mb-1" style={{color: '#3b82f6'}}>
+                {task.estimatedTime}
+              </h5>
+              <small style={{color: '#ffffff'}}>
+                {language === 'ko' ? '예상 시간' : 'Estimated Time'}
+              </small>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={3}>
+          <Card className="text-center border-0" style={{background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)'}}>
+            <Card.Body className="p-3">
+              <Target className="text-danger mb-2" size={24} />
+              <h5 className="fw-bold mb-1" style={{color: '#ef4444'}}>
+                {task.difficulty}/5
+              </h5>
+              <small style={{color: '#ffffff'}}>
+                {language === 'ko' ? '난이도' : 'Difficulty'}
+              </small>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
 
-      {/* 리스크 및 가드레일 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <h3 className="font-semibold mb-3 flex items-center gap-2 text-orange-600">
-            <AlertTriangle className="h-4 w-4" />
-            리스크 ({task.risks.length})
-          </h3>
-          <div className="space-y-2">
-            {task.risks.map((risk, index) => (
-              <div key={index} className="p-2 bg-orange-50 dark:bg-orange-950 rounded text-sm">
-                • {risk}
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* Reasoning */}
+      <Card className="mb-4 border-0" style={{background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+        <Card.Header className="bg-transparent border-0">
+          <h6 className="fw-bold mb-0" style={{color: '#ffffff'}}>
+            {language === 'ko' ? '분석 근거' : 'Analysis Reasoning'}
+          </h6>
+        </Card.Header>
+        <Card.Body>
+          <p className="mb-0" style={{color: '#ffffff'}}>
+            {task.reasoning}
+          </p>
+        </Card.Body>
+      </Card>
 
-        <div>
-          <h3 className="font-semibold mb-3 flex items-center gap-2 text-blue-600">
-            <Shield className="h-4 w-4" />
-            가드레일 ({task.safeguards.length})
-          </h3>
-          <div className="space-y-2">
-            {task.safeguards.map((safeguard, index) => (
-              <div key={index} className="p-2 bg-blue-50 dark:bg-blue-950 rounded text-sm">
-                • {safeguard}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* Risks and Safeguards */}
+      <Row className="g-3">
+        <Col md={6}>
+          <Card className="h-100 border-0" style={{background: 'rgba(239, 68, 68, 0.05)', border: '1px solid rgba(239, 68, 68, 0.1)'}}>
+            <Card.Header className="bg-transparent border-0">
+              <h6 className="fw-bold mb-0 d-flex align-items-center" style={{color: '#ef4444'}}>
+                <AlertTriangle className="me-2" size={16} />
+                {language === 'ko' ? '리스크' : 'Risks'}
+              </h6>
+            </Card.Header>
+            <Card.Body>
+              <ListGroup variant="flush">
+                {task.risks.map((risk, index) => (
+                  <ListGroup.Item 
+                    key={index} 
+                    className="border-0 px-0 py-2" 
+                    style={{background: 'transparent', color: '#ffffff'}}
+                  >
+                    • {risk}
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={6}>
+          <Card className="h-100 border-0" style={{background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.1)'}}>
+            <Card.Header className="bg-transparent border-0">
+              <h6 className="fw-bold mb-0 d-flex align-items-center" style={{color: '#10b981'}}>
+                <Shield className="me-2" size={16} />
+                {language === 'ko' ? '안전장치' : 'Safeguards'}
+              </h6>
+            </Card.Header>
+            <Card.Body>
+              <ListGroup variant="flush">
+                {task.safeguards.map((safeguard, index) => (
+                  <ListGroup.Item 
+                    key={index} 
+                    className="border-0 px-0 py-2" 
+                    style={{background: 'transparent', color: '#ffffff'}}
+                  >
+                    • {safeguard}
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 
-  const renderRecipe = () => (
-    <div className="space-y-6">
-      {task.recipe.steps.length > 0 ? (
-        <>
-          {/* 입력/출력 스키마 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="font-semibold mb-3">입력 데이터</h3>
-              <div className="space-y-2">
-                {task.recipe.inputs.map((input, index) => (
-                  <div key={index} className="p-3 border rounded-lg">
-                    <div className="font-medium text-sm">{input.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      타입: {input.type} | 출처: {input.source}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-3">출력 데이터</h3>
-              <div className="space-y-2">
-                {task.recipe.outputs.map((output, index) => (
-                  <div key={index} className="p-3 border rounded-lg">
-                    <div className="font-medium text-sm">{output.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      타입: {output.type} | 출처: {output.source}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* 구현 단계 */}
-          <div>
-            <h3 className="font-semibold mb-3">구현 단계</h3>
-            <div className="space-y-3">
-              {task.recipe.steps.map((step, index) => (
-                <div key={index} className="flex gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-medium">
-                    {index + 1}
-                  </div>
-                  <div className="flex-1 pt-1 text-sm">{step}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 테스트 케이스 */}
-          {task.recipe.tests.length > 0 && (
-            <div>
-              <h3 className="font-semibold mb-3">테스트 케이스</h3>
-              <div className="space-y-2">
-                {task.recipe.tests.map((test, index) => (
-                  <div key={index} className="p-2 bg-muted rounded text-sm">
-                    • {test}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 모니터링 지표 */}
-          {task.recipe.monitoring.length > 0 && (
-            <div>
-              <h3 className="font-semibold mb-3">모니터링 지표</h3>
-              <div className="space-y-2">
-                {task.recipe.monitoring.map((metric, index) => (
-                  <div key={index} className="p-2 bg-muted rounded text-sm">
-                    • {metric}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="text-center py-8">
-          <Workflow className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <p className="text-muted-foreground mb-4">아직 레시피가 생성되지 않았습니다.</p>
+  const renderRecipe = () => {
+    if (!task.recipe) {
+      return (
+        <div className="text-center py-5">
+          <Wrench className="text-muted mb-3" size={48} style={{color: '#6b7280'}} />
+          <h6 className="text-muted mb-3" style={{color: '#ffffff'}}>
+            {language === 'ko' ? '레시피가 생성되지 않았습니다' : 'No recipe generated'}
+          </h6>
+          <p className="text-muted small mb-4" style={{color: '#ffffff'}}>
+            {language === 'ko' 
+              ? 'AI 에이전트 구현을 위한 상세 레시피를 생성해보세요'
+              : 'Generate a detailed recipe for AI agent implementation'
+            }
+          </p>
           {onGenerateRecipe && (
-            <Button onClick={() => onGenerateRecipe(task)} disabled={isGeneratingRecipe}>
-              {isGeneratingRecipe ? '레시피 생성 중...' : '레시피 생성하기'}
-            </Button>
-          )}
-        </div>
-      )}
-    </div>
-  );
-
-  const renderCode = () => (
-    <div className="space-y-6">
-      {task.recipe.codeSamples.length > 0 ? (
-        task.recipe.codeSamples.map((sample, index) => (
-          <div key={index}>
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold flex items-center gap-2">
-                <Code className="h-4 w-4" />
-                {sample.label}
-              </h3>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => copyToClipboard(sample.code, `${sample.lang}-${index}`)}
-              >
-                {copiedCode === `${sample.lang}-${index}` ? (
-                  <>
-                    <CheckCircle className="h-4 w-4 mr-1" />
-                    복사됨
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-4 w-4 mr-1" />
-                    복사
-                  </>
-                )}
-              </Button>
-            </div>
-            <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm">
-              <code className={`language-${sample.lang}`}>{sample.code}</code>
-            </pre>
-          </div>
-        ))
-      ) : (
-        <div className="text-center py-8">
-          <Code className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <p className="text-muted-foreground">코드 예시가 없습니다.</p>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderDiagram = () => (
-    <div className="space-y-6">
-      {task.recipe.flowMermaid ? (
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold flex items-center gap-2">
-              <Workflow className="h-4 w-4" />
-              자동화 플로우
-            </h3>
             <Button
-              variant="outline"
-              size="sm"
-              onClick={() => copyToClipboard(task.recipe.flowMermaid, 'mermaid')}
+              variant="primary"
+              onClick={() => onGenerateRecipe(task)}
+              disabled={isGeneratingRecipe}
+              className="px-4 py-2"
             >
-              {copiedCode === 'mermaid' ? (
+              {isGeneratingRecipe ? (
                 <>
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  복사됨
+                  <div className="spinner-border spinner-border-sm me-2" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                  {language === 'ko' ? '생성 중...' : 'Generating...'}
                 </>
               ) : (
                 <>
-                  <Copy className="h-4 w-4 mr-1" />
-                  Mermaid 복사
+                  <Wrench className="me-2" size={16} />
+                  {language === 'ko' ? '레시피 생성하기' : 'Generate Recipe'}
                 </>
               )}
             </Button>
-          </div>
-          <div className="bg-muted p-4 rounded-lg">
-            <pre className="text-sm overflow-x-auto">
-              <code>{task.recipe.flowMermaid}</code>
+          )}
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        {/* Recipe Overview */}
+        <Card className="mb-4 border-0" style={{background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+          <Card.Header className="bg-transparent border-0">
+            <h6 className="fw-bold mb-0" style={{color: '#ffffff'}}>
+              {language === 'ko' ? '레시피 개요' : 'Recipe Overview'}
+            </h6>
+          </Card.Header>
+          <Card.Body>
+            <Row className="g-3">
+              <Col md={6}>
+                <div className="d-flex align-items-center mb-2">
+                  <FileText className="text-primary me-2" size={16} />
+                  <span className="fw-bold" style={{color: '#ffffff'}}>
+                    {language === 'ko' ? '입력' : 'Inputs'}: {task.recipe.inputs.length}
+                  </span>
+                </div>
+                <div className="d-flex align-items-center">
+                  <Target className="text-success me-2" size={16} />
+                  <span className="fw-bold" style={{color: '#ffffff'}}>
+                    {language === 'ko' ? '출력' : 'Outputs'}: {task.recipe.outputs.length}
+                  </span>
+                </div>
+              </Col>
+              <Col md={6}>
+                <div className="d-flex align-items-center mb-2">
+                  <Code className="text-info me-2" size={16} />
+                  <span className="fw-bold" style={{color: '#ffffff'}}>
+                    {language === 'ko' ? '코드 샘플' : 'Code Samples'}: {task.recipe.codeSamples.length}
+                  </span>
+                </div>
+                <div className="d-flex align-items-center">
+                  <CheckCircle className="text-warning me-2" size={16} />
+                  <span className="fw-bold" style={{color: '#ffffff'}}>
+                    {language === 'ko' ? '테스트' : 'Tests'}: {task.recipe.tests.length}
+                  </span>
+                </div>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
+
+        {/* Inputs and Outputs */}
+        <Row className="g-3 mb-4">
+          <Col md={6}>
+            <Card className="h-100 border-0" style={{background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.1)'}}>
+              <Card.Header className="bg-transparent border-0">
+                <h6 className="fw-bold mb-0" style={{color: '#3b82f6'}}>
+                  {language === 'ko' ? '입력 데이터' : 'Input Data'}
+                </h6>
+              </Card.Header>
+              <Card.Body>
+                <ListGroup variant="flush">
+                  {task.recipe.inputs.map((input, index) => (
+                    <ListGroup.Item 
+                      key={index} 
+                      className="border-0 px-0 py-2" 
+                      style={{background: 'transparent', color: '#ffffff'}}
+                    >
+                      <div className="d-flex justify-content-between">
+                        <span className="fw-bold">{input.name}</span>
+                        <Badge bg="secondary" className="small">
+                          {input.type}
+                        </Badge>
+                      </div>
+                      <small className="text-muted" style={{color: '#9ca3af'}}>
+                        {input.description}
+                      </small>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={6}>
+            <Card className="h-100 border-0" style={{background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.1)'}}>
+              <Card.Header className="bg-transparent border-0">
+                <h6 className="fw-bold mb-0" style={{color: '#10b981'}}>
+                  {language === 'ko' ? '출력 데이터' : 'Output Data'}
+                </h6>
+              </Card.Header>
+              <Card.Body>
+                <ListGroup variant="flush">
+                  {task.recipe.outputs.map((output, index) => (
+                    <ListGroup.Item 
+                      key={index} 
+                      className="border-0 px-0 py-2" 
+                      style={{background: 'transparent', color: '#ffffff'}}
+                    >
+                      <div className="d-flex justify-content-between">
+                        <span className="fw-bold">{output.name}</span>
+                        <Badge bg="success" className="small">
+                          {output.type}
+                        </Badge>
+                      </div>
+                      <small className="text-muted" style={{color: '#9ca3af'}}>
+                        {language === 'ko' ? '대상' : 'Target'}: {output.source}
+                      </small>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
+        {/* Steps */}
+        <Card className="mb-4 border-0" style={{background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+          <Card.Header className="bg-transparent border-0">
+            <h6 className="fw-bold mb-0" style={{color: '#ffffff'}}>
+              {language === 'ko' ? '구현 단계' : 'Implementation Steps'}
+            </h6>
+          </Card.Header>
+          <Card.Body>
+            <ListGroup variant="flush">
+              {task.recipe.steps.map((step, index) => (
+                <ListGroup.Item 
+                  key={index} 
+                  className="border-0 px-0 py-3" 
+                  style={{background: 'transparent', color: '#ffffff'}}
+                >
+                  <div className="d-flex">
+                    <Badge 
+                      bg="primary" 
+                      className="me-3 d-flex align-items-center justify-content-center" 
+                      style={{width: '24px', height: '24px', minWidth: '24px'}}
+                    >
+                      {index + 1}
+                    </Badge>
+                    <div className="flex-grow-1">
+                      <h6 className="fw-bold mb-1" style={{color: '#ffffff'}}>
+                        {step.title}
+                      </h6>
+                      <p className="mb-0" style={{color: '#ffffff'}}>
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          </Card.Body>
+        </Card>
+      </div>
+    );
+  };
+
+  const renderCode = () => {
+    if (!task.recipe || !task.recipe.codeSamples.length) {
+      return (
+        <div className="text-center py-5">
+          <Code className="text-muted mb-3" size={48} style={{color: '#6b7280'}} />
+          <h6 className="text-muted mb-3" style={{color: '#ffffff'}}>
+            {language === 'ko' ? '코드 샘플이 없습니다' : 'No code samples available'}
+          </h6>
+          <p className="text-muted small" style={{color: '#ffffff'}}>
+            {language === 'ko' 
+              ? '레시피를 먼저 생성해주세요'
+              : 'Please generate a recipe first'
+            }
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        {task.recipe.codeSamples.map((sample, index) => (
+          <Card key={index} className="mb-4 border-0" style={{background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+            <Card.Header className="bg-transparent border-0">
+              <div className="d-flex align-items-center justify-content-between">
+                <h6 className="fw-bold mb-0" style={{color: '#ffffff'}}>
+                  {sample.title}
+                </h6>
+                <div className="d-flex gap-2">
+                  <Badge bg="secondary" className="px-2 py-1">
+                    {sample.lang}
+                  </Badge>
+                  <Button
+                    variant="outline-secondary"
+                    size="sm"
+                    onClick={() => copyToClipboard(sample.code, `code-${index}`)}
+                    className="d-flex align-items-center"
+                  >
+                    {copiedCode === `code-${index}` ? (
+                      <>
+                        <CheckCircle className="me-1" size={14} />
+                        {language === 'ko' ? '복사됨' : 'Copied'}
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="me-1" size={14} />
+                        {language === 'ko' ? '복사' : 'Copy'}
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </Card.Header>
+            <Card.Body className="p-0">
+              <pre className="mb-0 p-3" style={{
+                background: '#1a1a1a',
+                color: '#ffffff',
+                fontSize: '14px',
+                lineHeight: '1.5',
+                overflow: 'auto',
+                maxHeight: '400px'
+              }}>
+                <code>{sample.code}</code>
+              </pre>
+            </Card.Body>
+          </Card>
+        ))}
+      </div>
+    );
+  };
+
+  const renderDiagram = () => {
+    if (!task.recipe || !task.recipe.flowMermaid) {
+      return (
+        <div className="text-center py-5">
+          <Workflow className="text-muted mb-3" size={48} style={{color: '#6b7280'}} />
+          <h6 className="text-muted mb-3" style={{color: '#ffffff'}}>
+            {language === 'ko' ? '플로우 다이어그램이 없습니다' : 'No flow diagram available'}
+          </h6>
+          <p className="text-muted small" style={{color: '#ffffff'}}>
+            {language === 'ko' 
+              ? '레시피를 먼저 생성해주세요'
+              : 'Please generate a recipe first'
+            }
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <Card className="border-0" style={{background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+        <Card.Header className="bg-transparent border-0">
+          <h6 className="fw-bold mb-0" style={{color: '#ffffff'}}>
+            {language === 'ko' ? '작업 플로우' : 'Task Flow'}
+          </h6>
+        </Card.Header>
+        <Card.Body>
+          <div className="text-center">
+            <Alert variant="info" className="border-0" style={{background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', border: '1px solid rgba(59, 130, 246, 0.2)'}}>
+              <Workflow className="me-2" size={16} />
+              {language === 'ko' 
+                ? 'Mermaid 다이어그램이 여기에 표시됩니다'
+                : 'Mermaid diagram will be displayed here'
+              }
+            </Alert>
+            <pre className="mt-3 p-3 rounded" style={{
+              background: '#1a1a1a',
+              color: '#ffffff',
+              fontSize: '12px',
+              overflow: 'auto'
+            }}>
+              {task.recipe.flowMermaid}
             </pre>
           </div>
-          <div className="text-xs text-muted-foreground mt-2">
-            💡 위 Mermaid 코드를 <a href="https://mermaid.live" target="_blank" rel="noopener noreferrer" className="underline">Mermaid Live Editor</a>에서 시각화할 수 있습니다.
-          </div>
-        </div>
-      ) : (
-        <div className="text-center py-8">
-          <Workflow className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <p className="text-muted-foreground">플로우 다이어그램이 없습니다.</p>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'overview':
-        return renderOverview();
-      case 'recipe':
-        return renderRecipe();
-      case 'code':
-        return renderCode();
-      case 'diagram':
-        return renderDiagram();
-      default:
-        return renderOverview();
-    }
+        </Card.Body>
+      </Card>
+    );
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <CardTitle className="text-lg mb-2">{task.title}</CardTitle>
-            <div className="flex flex-wrap gap-2 mb-4">
-              <Badge variant={task.category === 'Automate' ? 'automate' : task.category === 'Co-pilot' ? 'copilot' : 'humanCritical'}>
-                {task.category}
-              </Badge>
-              <Badge variant="outline">{task.score}점</Badge>
-              <Badge variant="outline">ROI {task.roiEstimate}%</Badge>
-              <Badge variant="outline">난이도 {task.difficulty}/5</Badge>
-            </div>
-          </div>
-          <Button variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-1" />
-            가이드 다운로드
-          </Button>
+    <Card className="h-100 border-0" style={{background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+      <Card.Header className="bg-transparent border-0">
+        <div className="d-flex align-items-center justify-content-between mb-3">
+          <h5 className="fw-bold mb-0" style={{color: '#ffffff'}}>
+            {language === 'ko' ? '작업 상세' : 'Task Details'}
+          </h5>
+          <Badge bg="primary" className="px-3 py-2">
+            {task.category}
+          </Badge>
         </div>
 
-        {/* 탭 네비게이션 */}
-        <div className="flex space-x-1 bg-muted p-1 rounded-lg">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            return (
-              <Button
-                key={tab.id}
-                variant={activeTab === tab.id ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setActiveTab(tab.id as TabType)}
-                className="flex-1"
-              >
-                <Icon className="h-4 w-4 mr-1" />
-                {tab.label}
-              </Button>
-            );
-          })}
-        </div>
-      </CardHeader>
+        <Tabs
+          activeKey={activeTab}
+          onSelect={(k) => setActiveTab(k as TabType)}
+          className="mb-0"
+        >
+          <Tab eventKey="overview" title={
+            <span className="d-flex align-items-center">
+              <FileText className="me-1" size={16} />
+              {language === 'ko' ? '개요' : 'Overview'}
+            </span>
+          } />
+          <Tab eventKey="recipe" title={
+            <span className="d-flex align-items-center">
+              <Wrench className="me-1" size={16} />
+              {language === 'ko' ? '레시피' : 'Recipe'}
+            </span>
+          } />
+          <Tab eventKey="code" title={
+            <span className="d-flex align-items-center">
+              <Code className="me-1" size={16} />
+              {language === 'ko' ? '코드' : 'Code'}
+            </span>
+          } />
+          <Tab eventKey="diagram" title={
+            <span className="d-flex align-items-center">
+              <Workflow className="me-1" size={16} />
+              {language === 'ko' ? '다이어그램' : 'Diagram'}
+            </span>
+          } />
+        </Tabs>
+      </Card.Header>
 
-      <CardContent>
-        {renderContent()}
-      </CardContent>
+      <Card.Body className="p-0" style={{maxHeight: '600px', overflowY: 'auto'}}>
+        <div className="p-3">
+          {activeTab === 'overview' && renderOverview()}
+          {activeTab === 'recipe' && renderRecipe()}
+          {activeTab === 'code' && renderCode()}
+          {activeTab === 'diagram' && renderDiagram()}
+        </div>
+      </Card.Body>
     </Card>
   );
 }

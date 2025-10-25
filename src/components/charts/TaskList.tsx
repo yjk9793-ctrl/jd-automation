@@ -1,9 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Card, Badge, Button, Form, InputGroup, Row, Col } from 'react-bootstrap';
 import { 
   Filter, 
   Search, 
@@ -28,232 +26,283 @@ type FilterType = 'all' | TaskCategory;
 type SortType = 'score' | 'roi' | 'difficulty' | 'title';
 
 export function TaskList({ tasks, selectedTask, onTaskSelect, language = 'ko' }: TaskListProps) {
-  console.log('TaskList rendering with language:', language);
+  const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState<FilterType>('all');
   const [sortBy, setSortBy] = useState<SortType>('score');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  
   const t = useTranslation(language);
 
   const filteredAndSortedTasks = useMemo(() => {
     let filtered = tasks;
 
-    // 필터 적용
+    // 검색 필터
+    if (searchTerm) {
+      filtered = filtered.filter(task =>
+        task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        task.sourceText.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // 카테고리 필터
     if (filter !== 'all') {
       filtered = filtered.filter(task => task.category === filter);
     }
 
-    // 검색 적용
-    if (searchQuery) {
-      filtered = filtered.filter(task =>
-        task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        task.sourceText.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    // 정렬 적용
+    // 정렬
     filtered.sort((a, b) => {
+      let aValue: number | string;
+      let bValue: number | string;
+
       switch (sortBy) {
         case 'score':
-          return b.score - a.score;
+          aValue = a.score;
+          bValue = b.score;
+          break;
         case 'roi':
-          return b.roiEstimate - a.roiEstimate;
+          aValue = a.roiEstimate;
+          bValue = b.roiEstimate;
+          break;
         case 'difficulty':
-          return a.difficulty - b.difficulty;
+          aValue = a.difficulty;
+          bValue = b.difficulty;
+          break;
         case 'title':
-          return a.title.localeCompare(b.title);
+          aValue = a.title;
+          bValue = b.title;
+          break;
         default:
           return 0;
       }
+
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return sortOrder === 'asc' 
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+
+      return 0;
     });
 
     return filtered;
-  }, [tasks, filter, sortBy, searchQuery]);
+  }, [tasks, searchTerm, filter, sortBy, sortOrder]);
+
+  const getCategoryColor = (category: TaskCategory) => {
+    switch (category) {
+      case 'Automate':
+        return 'success';
+      case 'Co-pilot':
+        return 'info';
+      case 'Human-critical':
+        return 'danger';
+      default:
+        return 'secondary';
+    }
+  };
 
   const getCategoryIcon = (category: TaskCategory) => {
     switch (category) {
       case 'Automate':
-        return <TrendingUp className="h-4 w-4 text-green-500" />;
+        return <TrendingUp size={16} />;
       case 'Co-pilot':
-        return <Code className="h-4 w-4 text-blue-500" />;
+        return <Shield size={16} />;
       case 'Human-critical':
-        return <AlertTriangle className="h-4 w-4 text-orange-500" />;
-    }
-  };
-
-  const getCategoryVariant = (category: TaskCategory) => {
-    switch (category) {
-      case 'Automate':
-        return 'automate' as const;
-      case 'Co-pilot':
-        return 'copilot' as const;
-      case 'Human-critical':
-        return 'humanCritical' as const;
+        return <AlertTriangle size={16} />;
+      default:
+        return <Code size={16} />;
     }
   };
 
   const getDifficultyColor = (difficulty: DifficultyLevel) => {
-    switch (difficulty) {
-      case 1:
-      case 2:
-        return 'text-green-600 bg-green-100 dark:bg-green-900 dark:text-green-200';
-      case 3:
-        return 'text-yellow-600 bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-200';
-      case 4:
-      case 5:
-        return 'text-red-600 bg-red-100 dark:bg-red-900 dark:text-red-200';
-    }
+    if (difficulty <= 2) return 'success';
+    if (difficulty <= 3) return 'warning';
+    return 'danger';
   };
 
-  const categoryCounts = {
-    all: tasks.length,
-    Automate: tasks.filter(t => t.category === 'Automate').length,
-    'Co-pilot': tasks.filter(t => t.category === 'Co-pilot').length,
-    'Human-critical': tasks.filter(t => t.category === 'Human-critical').length,
+  const getDifficultyText = (difficulty: DifficultyLevel) => {
+    const levels = language === 'ko' 
+      ? ['매우 쉬움', '쉬움', '보통', '어려움', '매우 어려움']
+      : ['Very Easy', 'Easy', 'Medium', 'Hard', 'Very Hard'];
+    return levels[difficulty - 1] || levels[2];
   };
 
   return (
-    <Card className="w-full dark-card dark-glow">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-gradient dark-text-glow">
-          <Filter className="h-5 w-5" />
-          {t.analysis.tasks} ({filteredAndSortedTasks.length}{language === 'ko' ? '개' : ' items'})
-        </CardTitle>
-        
-        {/* 필터 및 검색 */}
-        <div className="space-y-4">
-          {/* 카테고리 필터 */}
-          <div className="flex flex-wrap gap-2">
-            {(['all', 'Automate', 'Co-pilot', 'Human-critical'] as const).map(category => (
-              <Button
-                key={category}
-                variant={filter === category ? 'default' : 'outline'}
-                size="sm"
-                className="micro-interaction dark-glow h-8"
-                onClick={() => setFilter(category)}
-              >
-                {category === 'all' 
-                  ? (language === 'ko' ? '전체' : 'All') 
-                  : t.task.category[category === 'Automate' ? 'automate' : 
-                                   category === 'Co-pilot' ? 'copilot' : 
-                                   'humanCritical']}
-                {category !== 'all' && (
-                  <Badge variant="outline" className="ml-2 text-xs">
-                    {categoryCounts[category]}
-                  </Badge>
-                )}
-              </Button>
-            ))}
-          </div>
-
-          {/* 검색 및 정렬 */}
-          <div className="flex gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder={language === 'ko' ? '작업 검색...' : 'Search tasks...'}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-input rounded-md bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring input-modern dark-border-glow"
-              />
-            </div>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortType)}
-              className="px-3 py-2 border border-input rounded-md bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring input-modern dark-border-glow"
-            >
-              <option value="score">{language === 'ko' ? '점수순' : 'By Score'}</option>
-              <option value="roi">{language === 'ko' ? 'ROI순' : 'By ROI'}</option>
-              <option value="difficulty">{language === 'ko' ? '난이도순' : 'By Difficulty'}</option>
-              <option value="title">{language === 'ko' ? '제목순' : 'By Title'}</option>
-            </select>
-          </div>
+    <Card className="h-100 border-0" style={{background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+      <Card.Header className="bg-transparent border-0">
+        <div className="d-flex align-items-center justify-content-between mb-3">
+          <h5 className="fw-bold mb-0" style={{color: '#ffffff'}}>
+            {language === 'ko' ? '작업 목록' : 'Task List'}
+          </h5>
+          <Badge bg="primary" className="px-3 py-2">
+            {filteredAndSortedTasks.length} {language === 'ko' ? '개' : 'tasks'}
+          </Badge>
         </div>
-      </CardHeader>
 
-      <CardContent className="space-y-3 max-h-[600px] overflow-y-auto">
+        {/* 검색 및 필터 */}
+        <div className="mb-3">
+          <InputGroup className="mb-3">
+            <InputGroup.Text style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#ffffff'}}>
+              <Search size={16} />
+            </InputGroup.Text>
+            <Form.Control
+              type="text"
+              placeholder={language === 'ko' ? '작업 검색...' : 'Search tasks...'}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#ffffff'}}
+            />
+          </InputGroup>
+
+          <Row className="g-2">
+            <Col md={6}>
+              <Form.Select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value as FilterType)}
+                style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#ffffff'}}
+              >
+                <option value="all">{language === 'ko' ? '모든 카테고리' : 'All Categories'}</option>
+                <option value="Automate">{language === 'ko' ? '자동화 가능' : 'Automate'}</option>
+                <option value="Co-pilot">{language === 'ko' ? 'AI 협업' : 'Co-pilot'}</option>
+                <option value="Human-critical">{language === 'ko' ? '인간 판단' : 'Human-critical'}</option>
+              </Form.Select>
+            </Col>
+            <Col md={6}>
+              <Form.Select
+                value={`${sortBy}-${sortOrder}`}
+                onChange={(e) => {
+                  const [newSortBy, newSortOrder] = e.target.value.split('-') as [SortType, 'asc' | 'desc'];
+                  setSortBy(newSortBy);
+                  setSortOrder(newSortOrder);
+                }}
+                style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#ffffff'}}
+              >
+                <option value="score-desc">{language === 'ko' ? '점수 높은 순' : 'Score (High to Low)'}</option>
+                <option value="score-asc">{language === 'ko' ? '점수 낮은 순' : 'Score (Low to High)'}</option>
+                <option value="roi-desc">{language === 'ko' ? 'ROI 높은 순' : 'ROI (High to Low)'}</option>
+                <option value="roi-asc">{language === 'ko' ? 'ROI 낮은 순' : 'ROI (Low to High)'}</option>
+                <option value="difficulty-asc">{language === 'ko' ? '난이도 쉬운 순' : 'Difficulty (Easy to Hard)'}</option>
+                <option value="difficulty-desc">{language === 'ko' ? '난이도 어려운 순' : 'Difficulty (Hard to Easy)'}</option>
+                <option value="title-asc">{language === 'ko' ? '제목 A-Z' : 'Title A-Z'}</option>
+                <option value="title-desc">{language === 'ko' ? '제목 Z-A' : 'Title Z-A'}</option>
+              </Form.Select>
+            </Col>
+          </Row>
+        </div>
+      </Card.Header>
+
+      <Card.Body className="p-0" style={{maxHeight: '600px', overflowY: 'auto'}}>
         {filteredAndSortedTasks.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
-            <Filter className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>{language === 'ko' ? '조건에 맞는 작업이 없습니다.' : 'No tasks match the criteria.'}</p>
+          <div className="text-center py-5">
+            <Filter className="text-muted mb-3" size={48} style={{color: '#6b7280'}} />
+            <h6 className="text-muted" style={{color: '#ffffff'}}>
+              {language === 'ko' ? '검색 결과가 없습니다' : 'No tasks found'}
+            </h6>
+            <p className="text-muted small" style={{color: '#ffffff'}}>
+              {language === 'ko' 
+                ? '다른 검색어나 필터를 시도해보세요'
+                : 'Try different search terms or filters'
+              }
+            </p>
           </div>
         ) : (
-          filteredAndSortedTasks.map((task) => (
-            <div
-              key={task.id}
-              className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md micro-interaction dark-card dark-glow ${
-                selectedTask?.id === task.id
-                  ? 'border-primary bg-primary/5 shadow-md dark-glow'
-                  : 'hover:border-primary/50'
-              }`}
-              onClick={() => onTaskSelect(task)}
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-start gap-3 flex-1">
-                  {getCategoryIcon(task.category)}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-sm mb-1 line-clamp-2 text-gradient dark-text-glow">
-                      {task.title}
-                    </h3>
-                    <p className="text-xs text-muted-foreground line-clamp-2">
-                      {task.sourceText}
-                    </p>
-                  </div>
-                </div>
-                <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0 ml-2" />
-              </div>
-
-              <div className="flex flex-wrap gap-2 items-center">
-                <Badge variant={getCategoryVariant(task.category)} className="dark-glow">
-                  {t.task.category[task.category === 'Automate' ? 'automate' : 
-                                 task.category === 'Co-pilot' ? 'copilot' : 
-                                 'humanCritical']}
-                </Badge>
-                
-                <Badge variant="outline" className="text-xs dark-glow">
-                  {task.score}{language === 'ko' ? '점' : ' pts'}
-                </Badge>
-                
-                <Badge variant="outline" className="text-xs dark-glow">
-                  ROI {task.roiEstimate}%
-                </Badge>
-                
-                <Badge 
-                  variant="outline" 
-                  className={`text-xs dark-glow ${getDifficultyColor(task.difficulty)}`}
-                >
-                  {language === 'ko' ? '난이도' : 'Difficulty'} {task.difficulty}/5
-                </Badge>
-
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Clock className="h-3 w-3" />
-                  {task.estimatedTime}
-                </div>
-              </div>
-
-              {/* 리스크 및 가드레일 표시 */}
-              {(task.risks.length > 0 || task.safeguards.length > 0) && (
-                <div className="mt-3 pt-3 border-t border-border">
-                  <div className="flex gap-4 text-xs">
-                    {task.risks.length > 0 && (
-                      <div className="flex items-center gap-1 text-orange-600">
-                        <AlertTriangle className="h-3 w-3" />
-                        <span>{task.risks.length}개 리스크</span>
+          <div className="p-3">
+            {filteredAndSortedTasks.map((task) => (
+              <Card
+                key={task.id}
+                className={`mb-3 cursor-pointer transition-all ${
+                  selectedTask?.id === task.id ? 'border-primary' : 'border-secondary'
+                }`}
+                onClick={() => onTaskSelect(task)}
+                style={{
+                  background: selectedTask?.id === task.id 
+                    ? 'rgba(59, 130, 246, 0.1)' 
+                    : 'rgba(255, 255, 255, 0.03)',
+                  border: selectedTask?.id === task.id 
+                    ? '1px solid #3b82f6' 
+                    : '1px solid rgba(255, 255, 255, 0.1)',
+                  cursor: 'pointer'
+                }}
+              >
+                <Card.Body className="p-3">
+                  <div className="d-flex align-items-start justify-content-between mb-2">
+                    <div className="flex-grow-1">
+                      <div className="d-flex align-items-center mb-2">
+                        <Badge 
+                          bg={getCategoryColor(task.category)} 
+                          className="me-2 d-flex align-items-center"
+                        >
+                          {getCategoryIcon(task.category)}
+                          <span className="ms-1">
+                            {language === 'ko' 
+                              ? (task.category === 'Automate' ? '자동화' : 
+                                 task.category === 'Co-pilot' ? 'AI 협업' : '인간 판단')
+                              : task.category
+                            }
+                          </span>
+                        </Badge>
+                        <Badge 
+                          bg={getDifficultyColor(task.difficulty)} 
+                          variant="outline"
+                          className="small"
+                        >
+                          {getDifficultyText(task.difficulty)}
+                        </Badge>
                       </div>
-                    )}
-                    {task.safeguards.length > 0 && (
-                      <div className="flex items-center gap-1 text-blue-600">
-                        <Shield className="h-3 w-3" />
-                        <span>{task.safeguards.length}개 가드레일</span>
+                      <h6 className="fw-bold mb-2" style={{color: '#ffffff'}}>
+                        {task.title}
+                      </h6>
+                      <p className="text-muted small mb-2" style={{color: '#ffffff'}}>
+                        {task.sourceText.length > 100 
+                          ? `${task.sourceText.substring(0, 100)}...`
+                          : task.sourceText
+                        }
+                      </p>
+                    </div>
+                    <div className="text-end">
+                      <div className="d-flex align-items-center mb-1">
+                        <TrendingUp className="text-success me-1" size={14} />
+                        <span className="fw-bold" style={{color: '#10b981'}}>
+                          {task.score}%
+                        </span>
                       </div>
-                    )}
+                      <div className="d-flex align-items-center">
+                        <Clock className="text-muted me-1" size={14} style={{color: '#6b7280'}} />
+                        <span className="small" style={{color: '#ffffff'}}>
+                          {task.estimatedTime}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          ))
+
+                  <div className="d-flex align-items-center justify-content-between">
+                    <div className="d-flex align-items-center">
+                      <span className="small me-3" style={{color: '#ffffff'}}>
+                        ROI: <strong style={{color: '#f59e0b'}}>{task.roiEstimate}%</strong>
+                      </span>
+                    </div>
+                    <Button
+                      variant="outline-primary"
+                      size="sm"
+                      className="d-flex align-items-center"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onTaskSelect(task);
+                      }}
+                    >
+                      {language === 'ko' ? '자세히 보기' : 'View Details'}
+                      <ArrowRight className="ms-1" size={14} />
+                    </Button>
+                  </div>
+                </Card.Body>
+              </Card>
+            ))}
+          </div>
         )}
-      </CardContent>
+      </Card.Body>
     </Card>
   );
 }

@@ -1,9 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { Card, Row, Col, Badge, ProgressBar } from 'react-bootstrap';
 import { 
   TrendingUp, 
   Zap, 
@@ -28,306 +26,223 @@ interface OverviewSummaryProps {
 
 export function OverviewSummary({ result, language }: OverviewSummaryProps) {
   const t = useTranslation(language);
+
+  if (!result) {
+    return null;
+  }
+
   const { summary } = result;
-
-  // 자동화 가능성 계산
-  const automationPotential = Math.round((summary.automate / summary.total) * 100);
-  const copilotPotential = Math.round((summary.copilot / summary.total) * 100);
-  const humanCritical = Math.round((summary.humanCritical / summary.total) * 100);
-
-  // 전체 점수 계산 (가중 평균)
-  const overallScore = Math.round(
-    (summary.automate * 90 + summary.copilot * 60 + summary.humanCritical * 20) / summary.total
-  );
-
-  // 위험도 계산
-  const riskLevel = summary.humanCritical > summary.automate ? 'high' : 
-                   summary.humanCritical > summary.copilot ? 'medium' : 'low';
-
-  const getRiskColor = (level: string) => {
-    switch (level) {
-      case 'high': return 'text-red-500';
-      case 'medium': return 'text-yellow-500';
-      case 'low': return 'text-green-500';
-      default: return 'text-gray-500';
-    }
-  };
-
-  const getRiskIcon = (level: string) => {
-    switch (level) {
-      case 'high': return <XCircle className="h-5 w-5" />;
-      case 'medium': return <AlertTriangle className="h-5 w-5" />;
-      case 'low': return <CheckCircle className="h-5 w-5" />;
-      default: return <Activity className="h-5 w-5" />;
-    }
-  };
+  const totalTasks = summary.total;
+  const automateCount = summary.automate;
+  const copilotCount = summary.copilot;
+  const humanCriticalCount = summary.humanCritical;
+  
+  const automationRate = totalTasks > 0 ? Math.round((automateCount / totalTasks) * 100) : 0;
+  const copilotRate = totalTasks > 0 ? Math.round((copilotCount / totalTasks) * 100) : 0;
+  const humanCriticalRate = totalTasks > 0 ? Math.round((humanCriticalCount / totalTasks) * 100) : 0;
 
   return (
-    <div className="space-y-6">
-      {/* 메인 오버뷰 카드 */}
-      <Card className="dark-card dark-glow overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-          <CardTitle className="text-2xl font-bold flex items-center gap-3">
-            <BarChart3 className="h-8 w-8" />
-            {language === 'ko' ? '전체 진단 요약' : 'Overall Analysis Summary'}
-          </CardTitle>
-          <p className="text-blue-100">
-            {language === 'ko' 
-              ? 'JD 분석 결과를 한눈에 확인하세요' 
-              : 'Get a comprehensive view of your JD analysis results'
-            }
-          </p>
-        </CardHeader>
-        <CardContent className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* 전체 점수 */}
-            <div className="text-center">
-              <div className="relative w-32 h-32 mx-auto mb-4">
-                <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 100 100">
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="40"
-                    stroke="currentColor"
-                    strokeWidth="8"
-                    fill="none"
-                    className="text-gray-200"
-                  />
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="40"
-                    stroke="currentColor"
-                    strokeWidth="8"
-                    fill="none"
-                    strokeDasharray={`${overallScore * 2.51} 251`}
-                    className="text-blue-500 transition-all duration-1000"
-                    strokeLinecap="round"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-500">{overallScore}</div>
-                    <div className="text-sm text-gray-500">
-                      {language === 'ko' ? '점' : 'pts'}
+    <div className="mb-4">
+      {/* Main Overview Card */}
+      <Card className="mb-4 border-0" style={{background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+        <Card.Header className="bg-transparent border-0 pb-0">
+          <div className="d-flex align-items-center justify-content-between">
+            <h5 className="fw-bold mb-0" style={{color: '#ffffff'}}>
+              {language === 'ko' ? '분석 결과 요약' : 'Analysis Summary'}
+            </h5>
+            <Badge bg="primary" className="px-3 py-2">
+              {language === 'ko' ? 'AI 분석 완료' : 'AI Analysis Complete'}
+            </Badge>
+          </div>
+        </Card.Header>
+        <Card.Body className="pt-3">
+          <Row className="g-4">
+            {/* Total Score */}
+            <Col md={3}>
+              <div className="text-center">
+                <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(59, 130, 246, 0.1)'}}>
+                  <BarChart3 className="text-primary" size={32} />
+                </div>
+                <h3 className="fw-bold mb-2" style={{color: '#3b82f6'}}>
+                  {summary.averageROI.toFixed(0)}%
+                </h3>
+                <p className="mb-0" style={{color: '#ffffff'}}>
+                  {language === 'ko' ? '평균 ROI' : 'Average ROI'}
+                </p>
+              </div>
+            </Col>
+
+            {/* Automation Distribution */}
+            <Col md={9}>
+              <div className="mb-3">
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <span style={{color: '#ffffff'}}>
+                    {language === 'ko' ? '자동화 분포' : 'Automation Distribution'}
+                  </span>
+                  <span className="small" style={{color: '#9ca3af'}}>
+                    {totalTasks} {language === 'ko' ? '개 작업' : 'tasks'}
+                  </span>
+                </div>
+                <div className="d-flex gap-2">
+                  <div className="flex-fill">
+                    <div className="d-flex justify-content-between small mb-1">
+                      <span style={{color: '#10b981'}}>
+                        {language === 'ko' ? '자동화 가능' : 'Automate'}
+                      </span>
+                      <span style={{color: '#ffffff'}}>{automateCount}</span>
                     </div>
+                    <ProgressBar 
+                      variant="success" 
+                      now={automationRate} 
+                      style={{height: '8px'}}
+                    />
+                  </div>
+                  <div className="flex-fill">
+                    <div className="d-flex justify-content-between small mb-1">
+                      <span style={{color: '#3b82f6'}}>
+                        {language === 'ko' ? 'AI 협업' : 'Co-pilot'}
+                      </span>
+                      <span style={{color: '#ffffff'}}>{copilotCount}</span>
+                    </div>
+                    <ProgressBar 
+                      variant="info" 
+                      now={copilotRate} 
+                      style={{height: '8px'}}
+                    />
+                  </div>
+                  <div className="flex-fill">
+                    <div className="d-flex justify-content-between small mb-1">
+                      <span style={{color: '#ef4444'}}>
+                        {language === 'ko' ? '인간 판단' : 'Human-critical'}
+                      </span>
+                      <span style={{color: '#ffffff'}}>{humanCriticalCount}</span>
+                    </div>
+                    <ProgressBar 
+                      variant="danger" 
+                      now={humanCriticalRate} 
+                      style={{height: '8px'}}
+                    />
                   </div>
                 </div>
               </div>
-              <h3 className="text-lg font-semibold text-gradient dark-text-glow">
-                {language === 'ko' ? '전체 점수' : 'Overall Score'}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                {language === 'ko' ? '자동화 가능성 종합 평가' : 'Comprehensive automation potential'}
-              </p>
-            </div>
-
-            {/* 자동화 분포 */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gradient dark-text-glow">
-                {language === 'ko' ? '자동화 분포' : 'Automation Distribution'}
-              </h3>
-              
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span className="text-sm font-medium">
-                      {language === 'ko' ? '완전 자동화' : 'Full Automation'}
-                    </span>
-                  </div>
-                  <span className="text-sm font-semibold">{automationPotential}%</span>
-                </div>
-                <Progress value={automationPotential} className="h-2" />
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                    <span className="text-sm font-medium">
-                      {language === 'ko' ? 'AI 협업' : 'AI Co-pilot'}
-                    </span>
-                  </div>
-                  <span className="text-sm font-semibold">{copilotPotential}%</span>
-                </div>
-                <Progress value={copilotPotential} className="h-2" />
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                    <span className="text-sm font-medium">
-                      {language === 'ko' ? '인간 중심' : 'Human-Critical'}
-                    </span>
-                  </div>
-                  <span className="text-sm font-semibold">{humanCritical}%</span>
-                </div>
-                <Progress value={humanCritical} className="h-2" />
-              </div>
-            </div>
-
-            {/* 핵심 지표 */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gradient dark-text-glow">
-                {language === 'ko' ? '핵심 지표' : 'Key Metrics'}
-              </h3>
-              
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-950 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm font-medium">
-                      {language === 'ko' ? '평균 ROI' : 'Avg ROI'}
-                    </span>
-                  </div>
-                  <span className="text-lg font-bold text-blue-500">{summary.averageROI}%</span>
-                </div>
-
-                <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-green-500" />
-                    <span className="text-sm font-medium">
-                      {language === 'ko' ? '처리 시간' : 'Process Time'}
-                    </span>
-                  </div>
-                  <span className="text-lg font-bold text-green-500">
-                    {result.metadata.processingTime}ms
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-950 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    {getRiskIcon(riskLevel)}
-                    <span className="text-sm font-medium">
-                      {language === 'ko' ? '위험도' : 'Risk Level'}
-                    </span>
-                  </div>
-                  <span className={`text-lg font-bold ${getRiskColor(riskLevel)}`}>
-                    {language === 'ko' 
-                      ? (riskLevel === 'high' ? '높음' : riskLevel === 'medium' ? '보통' : '낮음')
-                      : (riskLevel === 'high' ? 'High' : riskLevel === 'medium' ? 'Medium' : 'Low')
-                    }
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
+            </Col>
+          </Row>
+        </Card.Body>
       </Card>
 
-      {/* 빠른 인사이트 카드들 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="dark-card dark-glow hover:shadow-lg transition-shadow">
-          <CardContent className="p-4 text-center">
-            <div className="w-12 h-12 mx-auto mb-3 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-              <Zap className="h-6 w-6 text-green-600" />
-            </div>
-            <div className="text-2xl font-bold text-green-600 mb-1">{summary.automate}</div>
-            <div className="text-sm text-muted-foreground">
-              {language === 'ko' ? '자동화 가능' : 'Automate'}
-            </div>
-          </CardContent>
-        </Card>
+      {/* Quick Insights */}
+      <Row className="g-3 mb-4">
+        <Col md={3}>
+          <Card className="h-100 border-0 text-center" style={{background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)'}}>
+            <Card.Body className="p-3">
+              <CheckCircle className="text-success mb-2" size={24} />
+              <h6 className="fw-bold mb-1" style={{color: '#10b981'}}>
+                {automateCount}
+              </h6>
+              <small style={{color: '#ffffff'}}>
+                {language === 'ko' ? '자동화 가능' : 'Automate'}
+              </small>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={3}>
+          <Card className="h-100 border-0 text-center" style={{background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.2)'}}>
+            <Card.Body className="p-3">
+              <Brain className="text-primary mb-2" size={24} />
+              <h6 className="fw-bold mb-1" style={{color: '#3b82f6'}}>
+                {copilotCount}
+              </h6>
+              <small style={{color: '#ffffff'}}>
+                {language === 'ko' ? 'AI 협업' : 'Co-pilot'}
+              </small>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={3}>
+          <Card className="h-100 border-0 text-center" style={{background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)'}}>
+            <Card.Body className="p-3">
+              <XCircle className="text-danger mb-2" size={24} />
+              <h6 className="fw-bold mb-1" style={{color: '#ef4444'}}>
+                {humanCriticalCount}
+              </h6>
+              <small style={{color: '#ffffff'}}>
+                {language === 'ko' ? '인간 판단' : 'Human-critical'}
+              </small>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={3}>
+          <Card className="h-100 border-0 text-center" style={{background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.2)'}}>
+            <Card.Body className="p-3">
+              <TrendingUp className="text-warning mb-2" size={24} />
+              <h6 className="fw-bold mb-1" style={{color: '#f59e0b'}}>
+                {summary.averageROI.toFixed(0)}%
+              </h6>
+              <small style={{color: '#ffffff'}}>
+                {language === 'ko' ? '평균 ROI' : 'Avg ROI'}
+              </small>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
 
-        <Card className="dark-card dark-glow hover:shadow-lg transition-shadow">
-          <CardContent className="p-4 text-center">
-            <div className="w-12 h-12 mx-auto mb-3 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-              <Brain className="h-6 w-6 text-blue-600" />
-            </div>
-            <div className="text-2xl font-bold text-blue-600 mb-1">{summary.copilot}</div>
-            <div className="text-sm text-muted-foreground">
-              {language === 'ko' ? 'AI 협업' : 'Co-pilot'}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="dark-card dark-glow hover:shadow-lg transition-shadow">
-          <CardContent className="p-4 text-center">
-            <div className="w-12 h-12 mx-auto mb-3 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center">
-              <Target className="h-6 w-6 text-orange-600" />
-            </div>
-            <div className="text-2xl font-bold text-orange-600 mb-1">{summary.humanCritical}</div>
-            <div className="text-sm text-muted-foreground">
-              {language === 'ko' ? '인간 중심' : 'Human-Critical'}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="dark-card dark-glow hover:shadow-lg transition-shadow">
-          <CardContent className="p-4 text-center">
-            <div className="w-12 h-12 mx-auto mb-3 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
-              <TrendingUp className="h-6 w-6 text-purple-600" />
-            </div>
-            <div className="text-2xl font-bold text-purple-600 mb-1">{summary.total}</div>
-            <div className="text-sm text-muted-foreground">
-              {language === 'ko' ? '총 작업' : 'Total Tasks'}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* 권장사항 카드 */}
-      <Card className="dark-card dark-glow">
-        <CardHeader>
-          <CardTitle className="text-gradient dark-text-glow flex items-center gap-2">
-            <Activity className="h-5 w-5" />
-            {language === 'ko' ? '권장사항' : 'Recommendations'}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <h4 className="font-semibold text-green-600 flex items-center gap-2">
-                <CheckCircle className="h-4 w-4" />
-                {language === 'ko' ? '즉시 실행 가능' : 'Ready to Execute'}
-              </h4>
-              <p className="text-sm text-muted-foreground">
+      {/* Recommendations */}
+      <Row className="g-3">
+        <Col md={4}>
+          <Card className="h-100 border-0" style={{background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.1)'}}>
+            <Card.Body className="p-3">
+              <div className="d-flex align-items-center mb-2">
+                <Target className="text-success me-2" size={20} />
+                <h6 className="fw-bold mb-0" style={{color: '#10b981'}}>
+                  {language === 'ko' ? '완전 자동화' : 'Full Automation'}
+                </h6>
+              </div>
+              <p className="small mb-0" style={{color: '#ffffff'}}>
                 {language === 'ko' 
-                  ? `${summary.automate}개 작업이 완전 자동화 가능합니다.`
-                  : `${summary.automate} tasks are ready for full automation.`
+                  ? `${automateCount}개 작업을 AI 에이전트로 완전 자동화할 수 있습니다.`
+                  : `${automateCount} tasks can be fully automated with AI agents.`
                 }
               </p>
-            </div>
-            
-            <div className="space-y-2">
-              <h4 className="font-semibold text-blue-600 flex items-center gap-2">
-                <Brain className="h-4 w-4" />
-                {language === 'ko' ? 'AI 협업 추천' : 'AI Co-pilot Recommended'}
-              </h4>
-              <p className="text-sm text-muted-foreground">
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4}>
+          <Card className="h-100 border-0" style={{background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.1)'}}>
+            <Card.Body className="p-3">
+              <div className="d-flex align-items-center mb-2">
+                <Brain className="text-primary me-2" size={20} />
+                <h6 className="fw-bold mb-0" style={{color: '#3b82f6'}}>
+                  {language === 'ko' ? 'AI 협업' : 'AI Collaboration'}
+                </h6>
+              </div>
+              <p className="small mb-0" style={{color: '#ffffff'}}>
                 {language === 'ko' 
-                  ? `${summary.copilot}개 작업에 AI 협업을 적용하세요.`
-                  : `Apply AI co-pilot to ${summary.copilot} tasks.`
+                  ? `${copilotCount}개 작업에 AI 어시스턴트를 활용하여 효율성을 높일 수 있습니다.`
+                  : `${copilotCount} tasks can benefit from AI assistant collaboration.`
                 }
               </p>
-            </div>
-            
-            <div className="space-y-2">
-              <h4 className="font-semibold text-orange-600 flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4" />
-                {language === 'ko' ? '주의 필요' : 'Requires Attention'}
-              </h4>
-              <p className="text-sm text-muted-foreground">
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4}>
+          <Card className="h-100 border-0" style={{background: 'rgba(239, 68, 68, 0.05)', border: '1px solid rgba(239, 68, 68, 0.1)'}}>
+            <Card.Body className="p-3">
+              <div className="d-flex align-items-center mb-2">
+                <AlertTriangle className="text-danger me-2" size={20} />
+                <h6 className="fw-bold mb-0" style={{color: '#ef4444'}}>
+                  {language === 'ko' ? '인간 판단 필요' : 'Human Judgment'}
+                </h6>
+              </div>
+              <p className="small mb-0" style={{color: '#ffffff'}}>
                 {language === 'ko' 
-                  ? `${summary.humanCritical}개 작업은 인간의 판단이 필요합니다.`
-                  : `${summary.humanCritical} tasks require human judgment.`
+                  ? `${humanCriticalCount}개 작업은 전문가의 판단과 경험이 필요합니다.`
+                  : `${humanCriticalCount} tasks require expert judgment and experience.`
                 }
               </p>
-            </div>
-            
-            <div className="space-y-2">
-              <h4 className="font-semibold text-purple-600 flex items-center gap-2">
-                <DollarSign className="h-4 w-4" />
-                {language === 'ko' ? '예상 효과' : 'Expected Impact'}
-              </h4>
-              <p className="text-sm text-muted-foreground">
-                {language === 'ko' 
-                  ? `평균 ${summary.averageROI}%의 ROI를 기대할 수 있습니다.`
-                  : `Expect an average ROI of ${summary.averageROI}%.`
-                }
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 }
