@@ -420,20 +420,20 @@ export default function HomePage() {
               }
             ].map((process, index) => (
               <Col md={6} lg={3} key={index}>
-                <Card className="card-jdx h-100 border-0 text-center position-relative" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
-                  <Card.Body className="p-5">
-                    <Badge bg={process.color} className="position-absolute top-0 start-50 translate-middle rounded-pill px-4 py-2 fw-bold" style={{fontSize: '1.1rem'}}>
+                <Card className="card-jdx border-0 text-center position-relative" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)', minHeight: '280px'}}>
+                  <Card.Body className="p-4">
+                    <Badge bg={process.color} className="position-absolute top-0 start-50 translate-middle rounded-pill px-3 py-1 fw-bold" style={{fontSize: '1rem', zIndex: 10}}>
                       {process.step}
                     </Badge>
                     
-                    <div className="mt-5 mb-4">
-                      <div className={`jdx-card p-4 rounded-circle d-inline-flex`} style={{background: `rgba(${process.color === 'primary' ? '111, 66, 193' : process.color === 'success' ? '25, 135, 84' : process.color === 'warning' ? '255, 193, 7' : '13, 202, 240'}, 0.2)`}}>
+                    <div className="mt-4 mb-3">
+                      <div className={`jdx-card p-3 rounded-circle d-inline-flex`} style={{background: `rgba(${process.color === 'primary' ? '111, 66, 193' : process.color === 'success' ? '25, 135, 84' : process.color === 'warning' ? '255, 193, 7' : '13, 202, 240'}, 0.2)`}}>
                         {process.icon}
-          </div>
-        </div>
-
-                    <h4 className="fw-bold mb-3 text-white">{process.title}</h4>
-                    <p className="text-light">{process.description}</p>
+                      </div>
+                    </div>
+                    
+                    <h5 className="fw-bold mb-2 text-white">{process.title}</h5>
+                    <p className="text-light small">{process.description}</p>
                   </Card.Body>
                 </Card>
               </Col>
