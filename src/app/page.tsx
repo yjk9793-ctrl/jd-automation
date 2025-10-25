@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Button, Navbar, Nav, NavDropdown, Badge, ProgressBar, Alert, Modal, Form, Tab, Tabs, ListGroup, Table, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Navbar, Nav, Badge, Alert, Modal, Form, Tab, Tabs, ListGroup, Table, Spinner } from 'react-bootstrap';
 import { Header } from '@/components/layout/Header';
 import { ShareBar } from '@/components/layout/ShareBar';
 import { Footer } from '@/components/layout/Footer';
@@ -28,7 +28,7 @@ import {
   XCircle,
   Download,
   FileText,
-  Users, 
+  Users,
   Settings,
   Globe,
   ChevronRight,
@@ -38,7 +38,10 @@ import {
   Shield,
   Lightbulb,
   ArrowRight,
-  Play
+  Play,
+  ArrowDown,
+  ChevronLeft,
+  ChevronRight as ChevronRightIcon
 } from 'lucide-react';
 import { AnalysisResult, TaskItem } from '@/types';
 import { useTranslation, Language } from '@/lib/i18n';
@@ -52,6 +55,7 @@ export default function HomePage() {
   const [language, setLanguage] = useState<Language>('ko');
   const [showExportDialog, setShowExportDialog] = useState(false);
   const [viewMode, setViewMode] = useState<'summary' | 'detailed'>('summary');
+  const [currentCase, setCurrentCase] = useState(0);
 
   const t = useTranslation(language);
 
@@ -121,62 +125,128 @@ export default function HomePage() {
     setLanguage(newLanguage);
   };
 
-    return (
-    <div className="min-vh-100" data-bs-theme="dark">
+  // 성공 사례 데이터
+  const successCases = [
+    {
+      company: '글로벌 IT 기업 A사',
+      industry: 'IT/소프트웨어',
+      challenge: 'HR 채용 프로세스의 반복 업무로 인한 비효율성',
+      solution: 'JDX를 통한 AI 에이전트 자동화 도입',
+      results: [
+        { metric: '400%', label: '채용 프로세스 효율성 향상' },
+        { metric: '100%', label: '자동화된 업무 비율' },
+        { metric: '50%', label: '채용 담당자 업무 시간 단축' }
+      ]
+    },
+    {
+      company: '제조업 B사',
+      industry: '제조업',
+      challenge: '복잡한 JD 분석과 매칭 프로세스의 수동 처리',
+      solution: 'JDX AI 에이전트를 활용한 스마트 매칭 시스템',
+      results: [
+        { metric: '93.5%', label: '정확한 업무 매칭률' },
+        { metric: '13,000개', label: '자동 분석된 JD 수' },
+        { metric: '30분', label: '평균 분석 시간 단축' }
+      ]
+    },
+    {
+      company: '금융 서비스 C사',
+      industry: '금융',
+      challenge: '규제 준수를 위한 복잡한 업무 프로세스 관리',
+      solution: 'JDX 기반 규제 준수 자동화 에이전트 구축',
+      results: [
+        { metric: '51.1%', label: '업무 정확도 향상' },
+        { metric: '32.7%', label: '처리 시간 단축' },
+        { metric: '100%', label: '규제 준수율' }
+      ]
+    },
+    {
+      company: '마케팅 에이전시 D사',
+      industry: '마케팅',
+      challenge: '고객사의 JD 분석과 맞춤형 솔루션 제안',
+      solution: 'JDX를 활용한 고객 맞춤형 AI 에이전트 추천',
+      results: [
+        { metric: '24,907%', label: 'ROAS 달성' },
+        { metric: '21%', label: '고객 만족도 향상' },
+        { metric: '10배', label: '제안서 작성 효율성' }
+      ]
+    },
+    {
+      company: '스타트업 E사',
+      industry: '스타트업',
+      challenge: '제한된 인력으로 다양한 업무를 효율적으로 처리',
+      solution: 'JDX AI 에이전트를 통한 업무 자동화',
+      results: [
+        { metric: '6,000+', label: '자동화된 업무 건수' },
+        { metric: '80%', label: '업무 효율성 향상' },
+        { metric: '23.5%', label: '인력 비용 절감' }
+      ]
+    }
+  ];
+
+  return (
+    <div className="min-vh-100" style={{background: '#ffffff'}}>
       {/* Header */}
       <Header language={language} onLanguageChange={handleLanguageChange} />
 
-      {/* Hero Section - Dark Remember Style */}
-      <section className="py-5 position-relative overflow-hidden" style={{background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)'}}>
-        {/* Background Pattern */}
-        <div className="position-absolute top-0 start-0 w-100 h-100 opacity-20">
-          <div className="position-absolute top-0 start-0 w-100 h-100" style={{
-            backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(111, 66, 193, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(156, 39, 176, 0.3) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(233, 30, 99, 0.3) 0%, transparent 50%)'
-          }}></div>
-        </div>
-        
-        <Container className="position-relative">
+      {/* Hero Section - Vircle Style */}
+      <section className="py-5" style={{background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)'}}>
+        <Container>
           <Row className="align-items-center min-vh-75">
-            <Col lg={8} className="text-center text-lg-start mx-auto">
+            <Col lg={6} className="text-center text-lg-start">
               <div className="fade-in">
-                {/* Main Title - Remember Style */}
-                <h1 className="display-2 fw-bold mb-4 text-white" style={{lineHeight: '1.2'}}>
-                  {language === 'ko' ? '계약을 만드는' : 'Creating Contracts with'}
+                <h1 className="display-3 fw-bold mb-4" style={{color: '#1a202c', lineHeight: '1.2'}}>
+                  {language === 'ko' ? 'JD를 넘어 AI 에이전트 자동화를 위한' : 'Beyond JD, for AI Agent Automation'}
                   <br />
-                  <span className="text-warning">
-                    {language === 'ko' ? '진짜 JD 자동화' : 'Real JD Automation'}
+                  <span style={{color: '#667eea'}}>
+                    {language === 'ko' ? '맞춤 전략을 만듭니다' : 'Custom Strategy'}
                   </span>
                 </h1>
                 
-                <p className="display-6 fw-bold text-white mb-4">
+                <p className="lead mb-4" style={{color: '#4a5568'}}>
                   {language === 'ko' 
-                    ? '원하는 업무만 골라서, 시간과 비용은 아낀다고?'
-                    : 'Choose only the work you want, while saving time and cost?'
+                    ? 'JD 뒤에 숨은 업무의 자동화 가능성을 파악해야\n기업이 성장할 수 있습니다.'
+                    : 'You need to understand the automation potential behind JD\nfor companies to grow.'
                   }
                 </p>
                 
-                <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start mb-5">
+                <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
                   <Button 
-                    variant="warning" 
+                    variant="primary" 
                     size="lg" 
-                    className="px-5 py-3 rounded-pill fw-bold text-dark"
+                    className="px-5 py-3 rounded-pill fw-bold"
                     onClick={handleDemo}
-                    style={{fontSize: '1.1rem'}}
+                    style={{background: '#667eea', border: 'none', fontSize: '1.1rem'}}
                   >
-                    <Play className="me-2" size={20} />
-                    {language === 'ko' ? '소개서 받기' : 'Get Brochure'}
+                    {language === 'ko' ? '컨설팅 신청' : 'Request Consultation'}
                   </Button>
                   
                   <Button 
-                    variant="outline-light" 
+                    variant="outline-primary" 
                     size="lg" 
                     className="px-5 py-3 rounded-pill fw-bold"
                     onClick={() => document.getElementById('jd-input')?.scrollIntoView({ behavior: 'smooth' })}
                     style={{fontSize: '1.1rem'}}
                   >
-                    <ArrowRight className="me-2" size={20} />
-                    {language === 'ko' ? '견적 문의하기' : 'Request Quote'}
+                    {language === 'ko' ? '무료 체험하기' : 'Try Free'}
                   </Button>
+                </div>
+              </div>
+            </Col>
+            
+            <Col lg={6} className="text-center">
+              <div className="position-relative">
+                <div className="p-5 rounded-4" style={{background: 'white', boxShadow: '0 20px 40px rgba(0,0,0,0.1)'}}>
+                  <Brain className="mb-4" size={80} style={{color: '#667eea'}} />
+                  <h3 className="h4 mb-3" style={{color: '#1a202c'}}>
+                    {language === 'ko' ? 'AI 에이전트 자동화' : 'AI Agent Automation'}
+                  </h3>
+                  <p style={{color: '#4a5568'}}>
+                    {language === 'ko' 
+                      ? 'JD 분석부터 맞춤형 AI 에이전트 추천까지\n원스톱 솔루션을 제공합니다'
+                      : 'From JD analysis to customized AI agent recommendations\nWe provide one-stop solutions'
+                    }
+                  </p>
                 </div>
               </div>
             </Col>
@@ -184,275 +254,196 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Pain Point Section - Dark Remember Style */}
-      <section className="py-5" style={{background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'}}>
+      {/* Success Cases Section - Vircle Style */}
+      <section className="py-5" style={{background: '#ffffff'}}>
         <Container>
           <Row className="text-center mb-5">
             <Col>
-              <h2 className="display-4 fw-bold mb-3 text-white">
-                {language === 'ko' ? 'JD 자동화의 어려움' : 'JD Automation Challenges'}
-                <br />
-                <span className="text-warning">
-                  {language === 'ko' ? 'JDX로 해결하세요' : 'Solve with JDX'}
-                </span>
+              <h2 className="display-4 fw-bold mb-3" style={{color: '#1a202c'}}>
+                {language === 'ko' ? '성공 사례' : 'Success Cases'}
               </h2>
+              <p className="lead" style={{color: '#4a5568'}}>
+                {language === 'ko' 
+                  ? 'AI 에이전트 자동화의 성장을 함께하는 JDX'
+                  : 'JDX growing together with AI agent automation'
+                }
+              </p>
             </Col>
           </Row>
           
-          <Row className="g-4 mb-5">
-            <Col md={6} lg={3}>
-              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
-                <Card.Body className="p-4">
-                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.2)'}}>
-                    <XCircle className="text-danger" size={32} />
-                  </div>
-                  <h5 className="fw-bold mb-3 text-danger">
-                    {language === 'ko' ? 'Paid 광고는 리드 전환율이 낮아' : 'Paid ads have low conversion rates'}
-                  </h5>
-                </Card.Body>
-              </Card>
-            </Col>
-            
-            <Col md={6} lg={3}>
-              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
-                <Card.Body className="p-4">
-                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.2)'}}>
-                    <Clock className="text-danger" size={32} />
-                  </div>
-                  <h5 className="fw-bold mb-3 text-danger">
-                    {language === 'ko' ? '오프라인 행사는 품이 너무 많이 들어' : 'Offline events require too much effort'}
-                  </h5>
-                </Card.Body>
-                </Card>
-            </Col>
-            
-            <Col md={6} lg={3}>
-              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
-                <Card.Body className="p-4">
-                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.2)'}}>
-                    <FileText className="text-danger" size={32} />
-            </div>
-                  <h5 className="fw-bold mb-3 text-danger">
-                    {language === 'ko' ? '콘텐츠 제작 인력 없는데, 외주 써야하나?' : 'No content team, need to outsource?'}
-                  </h5>
-                </Card.Body>
-              </Card>
-            </Col>
-            
-            <Col md={6} lg={3}>
-              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
-                <Card.Body className="p-4">
-                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.2)'}}>
-                    <DollarSign className="text-danger" size={32} />
-                  </div>
-                  <h5 className="fw-bold mb-3 text-danger">
-                    {language === 'ko' ? '비싸게 DB 구매했는데 우리 타깃과 안 맞아' : 'Expensive DB purchase but doesn\'t match our target'}
-                  </h5>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-          
-          {/* JDX Solution */}
-          <Row className="text-center">
+          <Row className="mb-4">
             <Col>
-              <Card className="card-jdx border-0" style={{background: 'linear-gradient(135deg, #6f42c1 0%, #9c27b0 50%, #e91e63 100%)'}}>
-                <Card.Body className="p-5 text-white">
-                  <h3 className="display-5 fw-bold mb-4">
-                    {language === 'ko' ? 'JDX' : 'JDX'}
-                  </h3>
-                  
-                  <Row className="g-4">
-                    <Col md={4}>
-                      <div className="text-center">
-                        <h4 className="fw-bold mb-3">
-                          {language === 'ko' ? '시간과 예산이 적어도' : 'Even with limited time and budget'}
-                        </h4>
+              <div className="d-flex justify-content-center align-items-center gap-3">
+                <Button 
+                  variant="outline-secondary" 
+                  size="sm"
+                  onClick={() => setCurrentCase(prev => prev > 0 ? prev - 1 : successCases.length - 1)}
+                  className="rounded-circle"
+                  style={{width: '40px', height: '40px'}}
+                >
+                  <ChevronLeft size={20} />
+                </Button>
+                
+                <div className="text-center" style={{minWidth: '200px'}}>
+                  <h5 className="fw-bold mb-0" style={{color: '#1a202c'}}>
+                    {successCases[currentCase].company}
+                  </h5>
+                  <small style={{color: '#4a5568'}}>
+                    {successCases[currentCase].industry}
+                  </small>
+                </div>
+                
+                <Button 
+                  variant="outline-secondary" 
+                  size="sm"
+                  onClick={() => setCurrentCase(prev => prev < successCases.length - 1 ? prev + 1 : 0)}
+                  className="rounded-circle"
+                  style={{width: '40px', height: '40px'}}
+                >
+                  <ChevronRightIcon size={20} />
+                </Button>
+              </div>
+            </Col>
+          </Row>
+          
+          <Row className="justify-content-center">
+            <Col lg={10}>
+              <Card className="border-0" style={{background: 'white', boxShadow: '0 10px 30px rgba(0,0,0,0.1)'}}>
+                <Card.Body className="p-5">
+                  <div className="row align-items-center">
+                    <Col md={6}>
+                      <h4 className="fw-bold mb-3" style={{color: '#1a202c'}}>
+                        {successCases[currentCase].challenge}
+                      </h4>
+                      <p className="mb-4" style={{color: '#4a5568'}}>
+                        {successCases[currentCase].solution}
+                      </p>
+                    </Col>
+                    <Col md={6}>
+                      <div className="row g-3">
+                        {successCases[currentCase].results.map((result, index) => (
+                          <Col key={index}>
+                            <div className="text-center p-3 rounded" style={{background: '#f7fafc'}}>
+                              <h3 className="fw-bold mb-1" style={{color: '#667eea'}}>
+                                {result.metric}
+                              </h3>
+                              <p className="small mb-0" style={{color: '#4a5568'}}>
+                                {result.label}
+                              </p>
+                            </div>
+                          </Col>
+                        ))}
                       </div>
                     </Col>
-                    <Col md={4}>
-                      <div className="text-center">
-                        <h4 className="fw-bold mb-3">
-                          {language === 'ko' ? '원하는 업무만 골라서' : 'Choose only the work you want'}
-                        </h4>
-          </div>
-                    </Col>
-                    <Col md={4}>
-                      <div className="text-center">
-                        <h4 className="fw-bold mb-3">
-                          {language === 'ko' ? 'AI로 쉽게 자동화 가능!' : 'Easily automate with AI!'}
-                        </h4>
-      </div>
-                    </Col>
-                  </Row>
+                  </div>
                 </Card.Body>
               </Card>
             </Col>
           </Row>
-        </Container>
-      </section>
-
-      {/* Performance Section - Dark Remember Style */}
-      <section className="py-5" style={{background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%)'}}>
-        <Container>
-          <Row className="text-center mb-5">
-            <Col>
-              <h2 className="display-4 fw-bold mb-3 text-white">
-                {language === 'ko' ? 'JDX의 성과,' : 'JDX Performance,'}
-            <br />
-                <span className="text-warning">
-                  {language === 'ko' ? '이미 숫자로 증명되었습니다' : 'Already Proven by Numbers'}
-                </span>
-              </h2>
-            </Col>
-          </Row>
           
-          <Row className="g-4">
-            <Col md={4}>
-              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
-                <Card.Body className="p-5">
-                  <div className="jdx-card p-4 rounded-circle d-inline-flex mb-4" style={{background: 'rgba(25, 135, 84, 0.2)'}}>
-                    <TrendingUp className="text-success" size={48} />
-          </div>
-                  <h3 className="display-3 fw-bold text-success mb-2">500</h3>
-                  <h5 className="fw-bold text-white mb-3">
-                    {language === 'ko' ? '평균 자동화 비용' : 'Average Automation Cost'}
-                  </h5>
-                  <p className="text-light mb-0">
-                    {language === 'ko' ? '절감' : 'Reduction'}
-                  </p>
-                  <small className="text-muted">
-                    {language === 'ko' ? 'HR 소프트웨어 A기업 사례' : 'HR Software A Company Case'}
-                  </small>
-                </Card.Body>
-            </Card>
-            </Col>
-            
-            <Col md={4}>
-              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
-                <Card.Body className="p-5">
-                  <div className="jdx-card p-4 rounded-circle d-inline-flex mb-4" style={{background: 'rgba(13, 202, 240, 0.2)'}}>
-                    <Target className="text-info" size={48} />
-                  </div>
-                  <h3 className="display-3 fw-bold text-info mb-2">1000</h3>
-                  <h5 className="fw-bold text-white mb-3">
-                    {language === 'ko' ? '리드 to 계약 성사율' : 'Lead to Contract Rate'}
-                  </h5>
-                  <p className="text-light mb-0">
-                    {language === 'ko' ? '개선' : 'Improvement'}
-                  </p>
-                  <small className="text-muted">
-                    {language === 'ko' ? '물류 솔루션 B기업 사례' : 'Logistics Solution B Company Case'}
-                  </small>
-                </Card.Body>
-            </Card>
-            </Col>
-            
-            <Col md={4}>
-              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
-                <Card.Body className="p-5">
-                  <div className="jdx-card p-4 rounded-circle d-inline-flex mb-4" style={{background: 'rgba(111, 66, 193, 0.2)'}}>
-                    <Users className="text-primary" size={48} />
-                  </div>
-                  <h3 className="display-3 fw-bold text-primary mb-2">300</h3>
-                  <h5 className="fw-bold text-white mb-3">
-                    {language === 'ko' ? '신규 고객 비중' : 'New Customer Ratio'}
-                  </h5>
-                  <p className="text-light mb-0">
-                    {language === 'ko' ? '증대' : 'Increase'}
-                  </p>
-                  <small className="text-muted">
-                    {language === 'ko' ? '자동차 렌탈 C기업 사례' : 'Car Rental C Company Case'}
-                  </small>
-                </Card.Body>
-            </Card>
+          <Row className="text-center mt-4">
+            <Col>
+              <Button 
+                variant="outline-primary" 
+                className="px-4 py-2 rounded-pill"
+                onClick={() => setCurrentCase(0)}
+              >
+                {language === 'ko' ? '전체 성공사례 확인' : 'View All Success Cases'}
+              </Button>
             </Col>
           </Row>
         </Container>
       </section>
 
-      {/* Process Section - Dark Remember Style */}
-      <section className="py-5" style={{background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'}}>
+      {/* Features Section - Vircle Style */}
+      <section className="py-5" style={{background: '#f8fafc'}}>
         <Container>
           <Row className="text-center mb-5">
             <Col>
-              <h2 className="display-4 fw-bold mb-3 text-white">
-                {language === 'ko' ? 'JDX, 어떻게 이용하나요?' : 'How to Use JDX?'}
+              <h2 className="display-4 fw-bold mb-3" style={{color: '#1a202c'}}>
+                {language === 'ko' ? 'JDX의 핵심 기능' : 'Core Features of JDX'}
               </h2>
-              <p className="lead text-light">
+              <p className="lead" style={{color: '#4a5568'}}>
                 {language === 'ko' 
-                  ? '원하는 업무를 고르고 AI가 분석하면 빠른 시간 내에 자동화 방안을 제시합니다'
-                  : 'Choose the work you want and AI analyzes it to quickly suggest automation solutions'
+                  ? 'JD 분석부터 AI 에이전트 추천까지, 모든 것을 한 곳에서'
+                  : 'From JD analysis to AI agent recommendations, everything in one place'
                 }
               </p>
             </Col>
           </Row>
           
           <Row className="g-4">
-            {[
-              {
-                step: '1',
-                title: language === 'ko' ? '업무 설정' : 'Task Setting',
-                description: language === 'ko' ? '자동화하고 싶은 업무를 선택합니다' : 'Select the tasks you want to automate',
-                icon: <Settings className="text-primary" size={48} />,
-                color: 'primary'
-              },
-              {
-                step: '2',
-                title: language === 'ko' ? 'AI 분석' : 'AI Analysis',
-                description: language === 'ko' ? 'AI가 업무를 분석하고 자동화 가능성을 평가합니다' : 'AI analyzes tasks and evaluates automation potential',
-                icon: <Brain className="text-success" size={48} />,
-                color: 'success'
-              },
-              {
-                step: '3',
-                title: language === 'ko' ? '방안 제시' : 'Solution Proposal',
-                description: language === 'ko' ? '최적의 자동화 방안과 구현 가이드를 제공합니다' : 'Provides optimal automation solutions and implementation guides',
-                icon: <Lightbulb className="text-warning" size={48} />,
-                color: 'warning'
-              },
-              {
-                step: '4',
-                title: language === 'ko' ? '성과 측정' : 'Performance Measurement',
-                description: language === 'ko' ? '자동화 성과를 측정하고 지속적으로 개선합니다' : 'Measures automation performance and continuously improves',
-                icon: <BarChart3 className="text-info" size={48} />,
-                color: 'info'
-              }
-            ].map((process, index) => (
-              <Col md={6} lg={3} key={index}>
-                <Card className="card-jdx border-0 text-center position-relative" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)', minHeight: '280px'}}>
-                  <Card.Body className="p-4">
-                    <Badge bg={process.color} className="position-absolute top-0 start-50 translate-middle rounded-pill px-3 py-1 fw-bold" style={{fontSize: '1rem', zIndex: 10}}>
-                      {process.step}
-                    </Badge>
-                    
-                    <div className="mt-4 mb-3">
-                      <div className={`jdx-card p-3 rounded-circle d-inline-flex`} style={{background: `rgba(${process.color === 'primary' ? '111, 66, 193' : process.color === 'success' ? '25, 135, 84' : process.color === 'warning' ? '255, 193, 7' : '13, 202, 240'}, 0.2)`}}>
-                        {process.icon}
-                      </div>
-                    </div>
-                    
-                    <h5 className="fw-bold mb-2 text-white">{process.title}</h5>
-                    <p className="text-light small">{process.description}</p>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
+            <Col md={6} lg={4}>
+              <Card className="h-100 border-0" style={{background: 'white', boxShadow: '0 5px 15px rgba(0,0,0,0.08)'}}>
+                <Card.Body className="p-4 text-center">
+                  <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: '#e6f3ff'}}>
+                    <FileText className="text-primary" size={32} />
+                  </div>
+                  <h5 className="fw-bold mb-3" style={{color: '#1a202c'}}>
+                    {language === 'ko' ? 'JD 자동 분석' : 'Automatic JD Analysis'}
+                  </h5>
+                  <p style={{color: '#4a5568'}}>
+                    {language === 'ko' 
+                      ? 'JD를 입력하면 AI가 자동으로 분석하여 자동화 가능성을 판단합니다'
+                      : 'AI automatically analyzes JD and determines automation potential'
+                    }
+                  </p>
+                </Card.Body>
+              </Card>
+            </Col>
+            
+            <Col md={6} lg={4}>
+              <Card className="h-100 border-0" style={{background: 'white', boxShadow: '0 5px 15px rgba(0,0,0,0.08)'}}>
+                <Card.Body className="p-4 text-center">
+                  <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: '#f0f9ff'}}>
+                    <Brain className="text-info" size={32} />
+                  </div>
+                  <h5 className="fw-bold mb-3" style={{color: '#1a202c'}}>
+                    {language === 'ko' ? 'AI 에이전트 추천' : 'AI Agent Recommendation'}
+                  </h5>
+                  <p style={{color: '#4a5568'}}>
+                    {language === 'ko' 
+                      ? '표준직무DB를 분석하여 최적의 AI 에이전트를 추천합니다'
+                      : 'Analyzes standard job database to recommend optimal AI agents'
+                    }
+                  </p>
+                </Card.Body>
+              </Card>
+            </Col>
+            
+            <Col md={6} lg={4}>
+              <Card className="h-100 border-0" style={{background: 'white', boxShadow: '0 5px 15px rgba(0,0,0,0.08)'}}>
+                <Card.Body className="p-4 text-center">
+                  <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: '#f0fdf4'}}>
+                    <Target className="text-success" size={32} />
+                  </div>
+                  <h5 className="fw-bold mb-3" style={{color: '#1a202c'}}>
+                    {language === 'ko' ? '맞춤형 솔루션' : 'Customized Solutions'}
+                  </h5>
+                  <p style={{color: '#4a5568'}}>
+                    {language === 'ko' 
+                      ? '개별 기업에 맞춤화된 AI 에이전트를 추천합니다'
+                      : 'Recommends customized AI agents for individual companies'
+                    }
+                  </p>
+                </Card.Body>
+              </Card>
+            </Col>
           </Row>
         </Container>
       </section>
 
       {/* JD Input Section */}
-      <section id="jd-input" className="py-5" style={{background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%)'}}>
+      <section id="jd-input" className="py-5" style={{background: '#ffffff'}}>
         <Container>
           <Row className="justify-content-center">
             <Col lg={8}>
-              <Card className="card-jdx border-0" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
+              <Card className="border-0" style={{background: 'white', boxShadow: '0 10px 30px rgba(0,0,0,0.1)'}}>
                 <Card.Header className="bg-transparent border-0 text-center py-4">
-                  <h2 className="h3 fw-bold mb-2 text-white">
+                  <h2 className="h3 fw-bold mb-2" style={{color: '#1a202c'}}>
                     {language === 'ko' ? 'JD 분석 시작하기' : 'Start JD Analysis'}
                   </h2>
-                  <p className="text-light mb-0">
+                  <p style={{color: '#4a5568'}}>
                     {language === 'ko' 
                       ? '분석하고 싶은 Job Description을 입력하거나 파일을 업로드하세요'
                       : 'Enter the Job Description you want to analyze or upload a file'
@@ -471,12 +462,12 @@ export default function HomePage() {
 
       {/* Analysis Results */}
       {analysisResult && (
-        <section className="py-5">
+        <section className="py-5" style={{background: '#f8fafc'}}>
           <Container>
             <Row className="mb-4">
               <Col>
                 <div className="d-flex justify-content-between align-items-center">
-                  <h2 className="h3 fw-bold mb-0 jdx-gradient">
+                  <h2 className="h3 fw-bold mb-0" style={{color: '#1a202c'}}>
                     {language === 'ko' ? '분석 결과' : 'Analysis Results'}
                   </h2>
                   
@@ -507,8 +498,8 @@ export default function HomePage() {
                       <Download className="me-1" size={16} />
                       {t.common.export} PDF
                     </Button>
-          </div>
-        </div>
+                  </div>
+                </div>
               </Col>
             </Row>
 
@@ -542,13 +533,13 @@ export default function HomePage() {
                         language={language}
                       />
                     ) : (
-                      <Card className="card-jdx h-100 border-0 d-flex align-items-center justify-content-center">
+                      <Card className="h-100 border-0 d-flex align-items-center justify-content-center" style={{background: 'white', boxShadow: '0 5px 15px rgba(0,0,0,0.08)'}}>
                         <Card.Body className="text-center py-5">
-                          <Target className="text-muted mb-3" size={48} />
-                          <h5 className="fw-bold mb-2 jdx-gradient">
+                          <Target className="mb-3" size={48} style={{color: '#a0aec0'}} />
+                          <h5 className="fw-bold mb-2" style={{color: '#1a202c'}}>
                             {t.analysis.selectTask}
                           </h5>
-                          <p className="text-muted">
+                          <p style={{color: '#4a5568'}}>
                             {t.analysis.noTaskSelected}
                           </p>
                         </Card.Body>
@@ -579,10 +570,10 @@ export default function HomePage() {
             {showDemo && (
               <Row className="mt-4">
                 <Col>
-                  <Alert variant="info" className="alert-jdx">
+                  <Alert variant="info" className="border-0" style={{background: '#e6f3ff', color: '#1a365d'}}>
                     <div className="d-flex align-items-center">
                       <Lightbulb className="me-2" size={20} />
-            <div>
+                      <div>
                         <strong>{language === 'ko' ? '데모 모드' : 'Demo Mode'}</strong>
                         <p className="mb-0 mt-1">
                           {language === 'ko' 
@@ -590,8 +581,8 @@ export default function HomePage() {
                             : 'Currently showing analysis results with demo data. Enter a real JD to analyze.'
                           }
                         </p>
-            </div>
-          </div>
+                      </div>
+                    </div>
                   </Alert>
                 </Col>
               </Row>

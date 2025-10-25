@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Container, Row, Col, Nav, Navbar } from 'react-bootstrap';
+import { Container, Row, Col, Nav } from 'react-bootstrap';
 import { Language } from '@/lib/i18n';
 import { useTranslation } from '@/lib/i18n';
 
@@ -13,19 +13,24 @@ export function Footer({ language }: FooterProps) {
   const t = useTranslation(language);
 
   return (
-    <footer className="bg-dark text-light py-5 mt-5">
+    <footer className="py-5" style={{background: '#f8fafc', borderTop: '1px solid #e2e8f0'}}>
       <Container>
         <Row className="g-4">
           {/* Logo and Description */}
           <Col lg={4}>
             <div className="mb-4">
               <div className="d-flex align-items-center mb-3">
-                <div className="jdx-logo d-flex align-items-center justify-content-center me-3" style={{width: '40px', height: '40px'}}>
-                  <span className="text-white fw-bold fs-5">JD</span>
+                <div className="d-flex align-items-center justify-content-center rounded me-3" style={{
+                  width: '40px', 
+                  height: '40px', 
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  color: 'white'
+                }}>
+                  <span className="fw-bold fs-5">JD</span>
                 </div>
-                <h5 className="fw-bold mb-0 jdx-gradient">JDX</h5>
+                <h5 className="fw-bold mb-0" style={{color: '#1a202c'}}>JDX</h5>
               </div>
-              <p className="text-muted mb-3">
+              <p className="text-muted mb-3" style={{color: '#4a5568'}}>
                 {language === 'ko' 
                   ? 'AI 기반 Job Description 분석 플랫폼으로 업무 자동화의 새로운 가능성을 발견하세요.'
                   : 'Discover new possibilities for work automation with our AI-based Job Description analysis platform.'
@@ -45,102 +50,107 @@ export function Footer({ language }: FooterProps) {
             </div>
           </Col>
 
-          {/* Product */}
+          {/* Services */}
           <Col lg={2}>
-            <h6 className="fw-bold mb-3">{language === 'ko' ? '제품' : 'Product'}</h6>
+            <h6 className="fw-bold mb-3" style={{color: '#1a202c'}}>
+              {language === 'ko' ? '서비스' : 'Services'}
+            </h6>
             <Nav className="flex-column">
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
                 {language === 'ko' ? 'JD 분석기' : 'JD Analyzer'}
               </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
-                {language === 'ko' ? '자동화 도구' : 'Automation Tools'}
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
+                {language === 'ko' ? 'AI 에이전트 추천' : 'AI Agent Recommendation'}
               </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
-                {language === 'ko' ? 'AI 에이전트' : 'AI Agents'}
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
+                {language === 'ko' ? '맞춤형 솔루션' : 'Customized Solutions'}
               </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
                 {language === 'ko' ? 'API' : 'API'}
               </Nav.Link>
             </Nav>
           </Col>
 
-          {/* Solution */}
+          {/* Success Cases */}
           <Col lg={2}>
-            <h6 className="fw-bold mb-3">{language === 'ko' ? '솔루션' : 'Solution'}</h6>
+            <h6 className="fw-bold mb-3" style={{color: '#1a202c'}}>
+              {language === 'ko' ? '성공사례' : 'Success Cases'}
+            </h6>
             <Nav className="flex-column">
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
-                {language === 'ko' ? 'HR 부서' : 'HR Department'}
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
+                {language === 'ko' ? 'IT 기업' : 'IT Companies'}
               </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
+                {language === 'ko' ? '제조업' : 'Manufacturing'}
+              </Nav.Link>
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
+                {language === 'ko' ? '금융 서비스' : 'Financial Services'}
+              </Nav.Link>
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
                 {language === 'ko' ? '마케팅' : 'Marketing'}
               </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
-                {language === 'ko' ? '영업' : 'Sales'}
+            </Nav>
+          </Col>
+
+          {/* Resources */}
+          <Col lg={2}>
+            <h6 className="fw-bold mb-3" style={{color: '#1a202c'}}>
+              {language === 'ko' ? '리소스' : 'Resources'}
+            </h6>
+            <Nav className="flex-column">
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
+                {language === 'ko' ? '서비스 소개서' : 'Service Brochure'}
               </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
-                {language === 'ko' ? '개발팀' : 'Development'}
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
+                {language === 'ko' ? '이용가이드' : 'User Guide'}
+              </Nav.Link>
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
+                {language === 'ko' ? '업데이트 소식' : 'Updates'}
+              </Nav.Link>
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
+                {language === 'ko' ? '뉴스룸' : 'Newsroom'}
               </Nav.Link>
             </Nav>
           </Col>
 
-          {/* Resource */}
+          {/* Experience */}
           <Col lg={2}>
-            <h6 className="fw-bold mb-3">{language === 'ko' ? '리소스' : 'Resources'}</h6>
+            <h6 className="fw-bold mb-3" style={{color: '#1a202c'}}>
+              {language === 'ko' ? '체험' : 'Experience'}
+            </h6>
             <Nav className="flex-column">
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
-                {language === 'ko' ? '문서' : 'Documentation'}
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
+                {language === 'ko' ? '브랜드 카드 발급체험' : 'Brand Card Experience'}
               </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
-                {language === 'ko' ? '가이드' : 'Guides'}
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
+                {language === 'ko' ? 'JD 분석 진단평가' : 'JD Analysis Assessment'}
               </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
-                {language === 'ko' ? 'API 레퍼런스' : 'API Reference'}
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
+                {language === 'ko' ? '블로그' : 'Blog'}
               </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
-                {language === 'ko' ? '지원' : 'Support'}
-              </Nav.Link>
-            </Nav>
-          </Col>
-
-          {/* Blog */}
-          <Col lg={2}>
-            <h6 className="fw-bold mb-3">{language === 'ko' ? '블로그' : 'Blog'}</h6>
-            <Nav className="flex-column">
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
-                {language === 'ko' ? '최신 소식' : 'Latest News'}
-              </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
-                {language === 'ko' ? '사용 사례' : 'Case Studies'}
-              </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
-                {language === 'ko' ? '기술 블로그' : 'Tech Blog'}
-              </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 mb-2">
-                {language === 'ko' ? '뉴스레터' : 'Newsletter'}
+              <Nav.Link href="#" className="p-0 mb-2" style={{color: '#4a5568'}}>
+                {language === 'ko' ? '팀 JDX' : 'Team JDX'}
               </Nav.Link>
             </Nav>
           </Col>
         </Row>
 
-        <hr className="my-4" />
+        <hr className="my-4" style={{borderColor: '#e2e8f0'}} />
 
         {/* Bottom Section */}
         <Row className="align-items-center">
           <Col md={6}>
-            <p className="text-muted mb-0 small">
+            <p className="text-muted mb-0 small" style={{color: '#4a5568'}}>
               © 2024 JDX. {language === 'ko' ? '모든 권리 보유.' : 'All rights reserved.'}
             </p>
           </Col>
           <Col md={6}>
             <Nav className="justify-content-md-end">
-              <Nav.Link href="#" className="text-muted p-0 me-3 small">
+              <Nav.Link href="#" className="p-0 me-3 small" style={{color: '#4a5568'}}>
+                {language === 'ko' ? '서비스이용약관' : 'Terms of Service'}
+              </Nav.Link>
+              <Nav.Link href="#" className="p-0 me-3 small" style={{color: '#4a5568'}}>
                 {language === 'ko' ? '개인정보처리방침' : 'Privacy Policy'}
-              </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 me-3 small">
-                {language === 'ko' ? '이용약관' : 'Terms of Service'}
-              </Nav.Link>
-              <Nav.Link href="#" className="text-muted p-0 small">
-                {language === 'ko' ? '쿠키 정책' : 'Cookie Policy'}
               </Nav.Link>
             </Nav>
           </Col>

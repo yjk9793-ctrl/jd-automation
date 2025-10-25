@@ -71,7 +71,7 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
           {/* Text Input */}
           <Col md={6}>
             <Form.Group>
-              <Form.Label className="fw-bold mb-3">
+              <Form.Label className="fw-bold mb-3" style={{color: '#1a202c'}}>
                 <FileText className="me-2" size={20} />
                 {language === 'ko' ? 'JD 텍스트 입력' : 'JD Text Input'}
               </Form.Label>
@@ -84,8 +84,25 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
                   ? '분석하고 싶은 Job Description을 입력하세요...'
                   : 'Enter the Job Description you want to analyze...'
                 }
-                className="form-control-jdx"
+                className="border-0"
+                style={{
+                  background: '#f8fafc',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  fontSize: '14px',
+                  color: '#1a202c',
+                  border: '2px solid #e2e8f0',
+                  transition: 'all 0.3s ease'
+                }}
                 disabled={isAnalyzing}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#667eea';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#e2e8f0';
+                  e.target.style.boxShadow = 'none';
+                }}
               />
             </Form.Group>
           </Col>
@@ -93,26 +110,34 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
           {/* File Upload */}
           <Col md={6}>
             <Form.Group>
-              <Form.Label className="fw-bold mb-3">
+              <Form.Label className="fw-bold mb-3" style={{color: '#1a202c'}}>
                 <Upload className="me-2" size={20} />
                 {language === 'ko' ? '파일 업로드' : 'File Upload'}
               </Form.Label>
               
               <div
                 {...getRootProps()}
-                className={`jdx-card p-4 text-center border-2 border-dashed rounded-3 cursor-pointer transition-all ${
-                  isDragActive ? 'border-primary bg-primary bg-opacity-10' : 'border-secondary'
+                className={`text-center border-2 border-dashed rounded-3 cursor-pointer transition-all ${
+                  isDragActive ? 'border-primary' : 'border-secondary'
                 } ${isAnalyzing ? 'opacity-50' : ''}`}
-                style={{ minHeight: '200px' }}
+                style={{ 
+                  minHeight: '200px',
+                  background: isDragActive ? '#f0f4ff' : '#f8fafc',
+                  borderColor: isDragActive ? '#667eea' : '#e2e8f0',
+                  padding: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
               >
                 <input {...getInputProps()} disabled={isAnalyzing} />
                 
                 {uploadedFile ? (
                   <div>
-                    <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3">
+                    <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: '#e6f3ff'}}>
                       <FileText className="text-primary" size={32} />
                     </div>
-                    <h6 className="fw-bold mb-2">{uploadedFile.name}</h6>
+                    <h6 className="fw-bold mb-2" style={{color: '#1a202c'}}>{uploadedFile.name}</h6>
                     <p className="text-muted small mb-3">
                       {(uploadedFile.size / 1024).toFixed(1)} KB
                     </p>
@@ -124,6 +149,7 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
                         removeFile();
                       }}
                       disabled={isAnalyzing}
+                      className="px-3 py-1"
                     >
                       <X className="me-1" size={16} />
                       {language === 'ko' ? '제거' : 'Remove'}
@@ -131,10 +157,10 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
                   </div>
                 ) : (
                   <div>
-                    <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3 jdx-glow">
+                    <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: '#e6f3ff'}}>
                       <Upload className="text-primary" size={32} />
                     </div>
-                    <h6 className="fw-bold mb-2">
+                    <h6 className="fw-bold mb-2" style={{color: '#1a202c'}}>
                       {isDragActive 
                         ? (language === 'ko' ? '파일을 여기에 놓으세요' : 'Drop file here')
                         : (language === 'ko' ? '파일을 드래그하거나 클릭하세요' : 'Drag & drop or click to select')
@@ -155,7 +181,7 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
 
         {/* Error Message */}
         {error && (
-          <Alert variant="danger" className="alert-jdx mt-3">
+          <Alert variant="danger" className="border-0 mt-3" style={{background: '#fed7d7', color: '#c53030'}}>
             <AlertTriangle className="me-2" size={16} />
             {error}
           </Alert>
@@ -167,8 +193,14 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
             type="submit"
             variant="primary"
             size="lg"
-            className="btn-jdx px-5 py-3 rounded-pill"
+            className="px-5 py-3 rounded-pill fw-bold"
             disabled={isAnalyzing || (!jd.trim() && !uploadedFile)}
+            style={{
+              background: '#667eea',
+              border: 'none',
+              fontSize: '1.1rem',
+              minWidth: '200px'
+            }}
           >
             {isAnalyzing ? (
               <>
@@ -185,14 +217,14 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
         </div>
 
         {/* Help Text */}
-        <div className="jdx-card p-4 rounded-3 mt-4">
+        <div className="p-4 rounded-3 mt-4" style={{background: '#f8fafc', border: '1px solid #e2e8f0'}}>
           <div className="d-flex align-items-start">
-            <HelpCircle className="text-info me-3 mt-1" size={20} />
+            <HelpCircle className="text-primary me-3 mt-1" size={20} />
             <div>
-              <h6 className="fw-bold mb-2">
+              <h6 className="fw-bold mb-2" style={{color: '#1a202c'}}>
                 {language === 'ko' ? '분석 도움말' : 'Analysis Help'}
               </h6>
-              <ul className="text-muted small mb-0">
+              <ul className="text-muted small mb-0" style={{color: '#4a5568'}}>
                 <li>
                   {language === 'ko' 
                     ? 'JD에는 직무명, 주요 업무, 자격요건, 우대사항 등이 포함되어야 합니다'
