@@ -28,7 +28,7 @@ import {
   XCircle,
   Download,
   FileText,
-  Users,
+  Users, 
   Settings,
   Globe,
   ChevronRight,
@@ -121,17 +121,17 @@ export default function HomePage() {
     setLanguage(newLanguage);
   };
 
-  return (
+    return (
     <div className="min-vh-100" data-bs-theme="dark">
       {/* Header */}
       <Header language={language} onLanguageChange={handleLanguageChange} />
 
-      {/* Hero Section - Remember Style */}
-      <section className="py-5 position-relative overflow-hidden" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+      {/* Hero Section - Dark Remember Style */}
+      <section className="py-5 position-relative overflow-hidden" style={{background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)'}}>
         {/* Background Pattern */}
-        <div className="position-absolute top-0 start-0 w-100 h-100 opacity-10">
+        <div className="position-absolute top-0 start-0 w-100 h-100 opacity-20">
           <div className="position-absolute top-0 start-0 w-100 h-100" style={{
-            backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)'
+            backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(111, 66, 193, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(156, 39, 176, 0.3) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(233, 30, 99, 0.3) 0%, transparent 50%)'
           }}></div>
         </div>
         
@@ -184,15 +184,15 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Pain Point Section - Remember Style */}
-      <section className="py-5 bg-light" data-bs-theme="light">
+      {/* Pain Point Section - Dark Remember Style */}
+      <section className="py-5" style={{background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'}}>
         <Container>
           <Row className="text-center mb-5">
             <Col>
-              <h2 className="display-4 fw-bold mb-3 text-dark">
+              <h2 className="display-4 fw-bold mb-3 text-white">
                 {language === 'ko' ? 'JD 자동화의 어려움' : 'JD Automation Challenges'}
                 <br />
-                <span className="text-primary">
+                <span className="text-warning">
                   {language === 'ko' ? 'JDX로 해결하세요' : 'Solve with JDX'}
                 </span>
               </h2>
@@ -201,9 +201,9 @@ export default function HomePage() {
           
           <Row className="g-4 mb-5">
             <Col md={6} lg={3}>
-              <Card className="card-jdx h-100 border-0 text-center">
+              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
                 <Card.Body className="p-4">
-                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.1)'}}>
+                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.2)'}}>
                     <XCircle className="text-danger" size={32} />
                   </div>
                   <h5 className="fw-bold mb-3 text-danger">
@@ -214,24 +214,24 @@ export default function HomePage() {
             </Col>
             
             <Col md={6} lg={3}>
-              <Card className="card-jdx h-100 border-0 text-center">
+              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
                 <Card.Body className="p-4">
-                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.1)'}}>
+                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.2)'}}>
                     <Clock className="text-danger" size={32} />
                   </div>
                   <h5 className="fw-bold mb-3 text-danger">
                     {language === 'ko' ? '오프라인 행사는 품이 너무 많이 들어' : 'Offline events require too much effort'}
                   </h5>
                 </Card.Body>
-              </Card>
+                </Card>
             </Col>
             
             <Col md={6} lg={3}>
-              <Card className="card-jdx h-100 border-0 text-center">
+              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
                 <Card.Body className="p-4">
-                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.1)'}}>
+                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.2)'}}>
                     <FileText className="text-danger" size={32} />
-                  </div>
+            </div>
                   <h5 className="fw-bold mb-3 text-danger">
                     {language === 'ko' ? '콘텐츠 제작 인력 없는데, 외주 써야하나?' : 'No content team, need to outsource?'}
                   </h5>
@@ -240,9 +240,9 @@ export default function HomePage() {
             </Col>
             
             <Col md={6} lg={3}>
-              <Card className="card-jdx h-100 border-0 text-center">
+              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
                 <Card.Body className="p-4">
-                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.1)'}}>
+                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.2)'}}>
                     <DollarSign className="text-danger" size={32} />
                   </div>
                   <h5 className="fw-bold mb-3 text-danger">
@@ -256,7 +256,7 @@ export default function HomePage() {
           {/* JDX Solution */}
           <Row className="text-center">
             <Col>
-              <Card className="card-jdx border-0" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+              <Card className="card-jdx border-0" style={{background: 'linear-gradient(135deg, #6f42c1 0%, #9c27b0 50%, #e91e63 100%)'}}>
                 <Card.Body className="p-5 text-white">
                   <h3 className="display-5 fw-bold mb-4">
                     {language === 'ko' ? 'JDX' : 'JDX'}
@@ -275,14 +275,14 @@ export default function HomePage() {
                         <h4 className="fw-bold mb-3">
                           {language === 'ko' ? '원하는 업무만 골라서' : 'Choose only the work you want'}
                         </h4>
-                      </div>
+          </div>
                     </Col>
                     <Col md={4}>
                       <div className="text-center">
                         <h4 className="fw-bold mb-3">
                           {language === 'ko' ? 'AI로 쉽게 자동화 가능!' : 'Easily automate with AI!'}
                         </h4>
-                      </div>
+      </div>
                     </Col>
                   </Row>
                 </Card.Body>
@@ -292,15 +292,15 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Performance Section - Remember Style */}
-      <section className="py-5">
+      {/* Performance Section - Dark Remember Style */}
+      <section className="py-5" style={{background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%)'}}>
         <Container>
           <Row className="text-center mb-5">
             <Col>
-              <h2 className="display-4 fw-bold mb-3 text-dark">
+              <h2 className="display-4 fw-bold mb-3 text-white">
                 {language === 'ko' ? 'JDX의 성과,' : 'JDX Performance,'}
-                <br />
-                <span className="text-primary">
+            <br />
+                <span className="text-warning">
                   {language === 'ko' ? '이미 숫자로 증명되었습니다' : 'Already Proven by Numbers'}
                 </span>
               </h2>
@@ -309,77 +309,77 @@ export default function HomePage() {
           
           <Row className="g-4">
             <Col md={4}>
-              <Card className="card-jdx h-100 border-0 text-center">
+              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
                 <Card.Body className="p-5">
-                  <div className="jdx-card p-4 rounded-circle d-inline-flex mb-4" style={{background: 'rgba(25, 135, 84, 0.1)'}}>
+                  <div className="jdx-card p-4 rounded-circle d-inline-flex mb-4" style={{background: 'rgba(25, 135, 84, 0.2)'}}>
                     <TrendingUp className="text-success" size={48} />
-                  </div>
+          </div>
                   <h3 className="display-3 fw-bold text-success mb-2">500</h3>
-                  <h5 className="fw-bold text-dark mb-3">
+                  <h5 className="fw-bold text-white mb-3">
                     {language === 'ko' ? '평균 자동화 비용' : 'Average Automation Cost'}
                   </h5>
-                  <p className="text-muted mb-0">
+                  <p className="text-light mb-0">
                     {language === 'ko' ? '절감' : 'Reduction'}
                   </p>
                   <small className="text-muted">
                     {language === 'ko' ? 'HR 소프트웨어 A기업 사례' : 'HR Software A Company Case'}
                   </small>
                 </Card.Body>
-              </Card>
+            </Card>
             </Col>
             
             <Col md={4}>
-              <Card className="card-jdx h-100 border-0 text-center">
+              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
                 <Card.Body className="p-5">
-                  <div className="jdx-card p-4 rounded-circle d-inline-flex mb-4" style={{background: 'rgba(13, 202, 240, 0.1)'}}>
+                  <div className="jdx-card p-4 rounded-circle d-inline-flex mb-4" style={{background: 'rgba(13, 202, 240, 0.2)'}}>
                     <Target className="text-info" size={48} />
                   </div>
                   <h3 className="display-3 fw-bold text-info mb-2">1000</h3>
-                  <h5 className="fw-bold text-dark mb-3">
+                  <h5 className="fw-bold text-white mb-3">
                     {language === 'ko' ? '리드 to 계약 성사율' : 'Lead to Contract Rate'}
                   </h5>
-                  <p className="text-muted mb-0">
+                  <p className="text-light mb-0">
                     {language === 'ko' ? '개선' : 'Improvement'}
                   </p>
                   <small className="text-muted">
                     {language === 'ko' ? '물류 솔루션 B기업 사례' : 'Logistics Solution B Company Case'}
                   </small>
                 </Card.Body>
-              </Card>
+            </Card>
             </Col>
             
             <Col md={4}>
-              <Card className="card-jdx h-100 border-0 text-center">
+              <Card className="card-jdx h-100 border-0 text-center" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
                 <Card.Body className="p-5">
-                  <div className="jdx-card p-4 rounded-circle d-inline-flex mb-4" style={{background: 'rgba(111, 66, 193, 0.1)'}}>
+                  <div className="jdx-card p-4 rounded-circle d-inline-flex mb-4" style={{background: 'rgba(111, 66, 193, 0.2)'}}>
                     <Users className="text-primary" size={48} />
                   </div>
                   <h3 className="display-3 fw-bold text-primary mb-2">300</h3>
-                  <h5 className="fw-bold text-dark mb-3">
+                  <h5 className="fw-bold text-white mb-3">
                     {language === 'ko' ? '신규 고객 비중' : 'New Customer Ratio'}
                   </h5>
-                  <p className="text-muted mb-0">
+                  <p className="text-light mb-0">
                     {language === 'ko' ? '증대' : 'Increase'}
                   </p>
                   <small className="text-muted">
                     {language === 'ko' ? '자동차 렌탈 C기업 사례' : 'Car Rental C Company Case'}
                   </small>
                 </Card.Body>
-              </Card>
+            </Card>
             </Col>
           </Row>
         </Container>
       </section>
 
-      {/* Process Section - Remember Style */}
-      <section className="py-5 bg-light" data-bs-theme="light">
+      {/* Process Section - Dark Remember Style */}
+      <section className="py-5" style={{background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'}}>
         <Container>
           <Row className="text-center mb-5">
             <Col>
-              <h2 className="display-4 fw-bold mb-3 text-dark">
+              <h2 className="display-4 fw-bold mb-3 text-white">
                 {language === 'ko' ? 'JDX, 어떻게 이용하나요?' : 'How to Use JDX?'}
               </h2>
-              <p className="lead text-muted">
+              <p className="lead text-light">
                 {language === 'ko' 
                   ? '원하는 업무를 고르고 AI가 분석하면 빠른 시간 내에 자동화 방안을 제시합니다'
                   : 'Choose the work you want and AI analyzes it to quickly suggest automation solutions'
@@ -420,20 +420,20 @@ export default function HomePage() {
               }
             ].map((process, index) => (
               <Col md={6} lg={3} key={index}>
-                <Card className="card-jdx h-100 border-0 text-center position-relative">
+                <Card className="card-jdx h-100 border-0 text-center position-relative" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
                   <Card.Body className="p-5">
                     <Badge bg={process.color} className="position-absolute top-0 start-50 translate-middle rounded-pill px-4 py-2 fw-bold" style={{fontSize: '1.1rem'}}>
                       {process.step}
                     </Badge>
                     
                     <div className="mt-5 mb-4">
-                      <div className={`jdx-card p-4 rounded-circle d-inline-flex`} style={{background: `rgba(${process.color === 'primary' ? '111, 66, 193' : process.color === 'success' ? '25, 135, 84' : process.color === 'warning' ? '255, 193, 7' : '13, 202, 240'}, 0.1)`}}>
+                      <div className={`jdx-card p-4 rounded-circle d-inline-flex`} style={{background: `rgba(${process.color === 'primary' ? '111, 66, 193' : process.color === 'success' ? '25, 135, 84' : process.color === 'warning' ? '255, 193, 7' : '13, 202, 240'}, 0.2)`}}>
                         {process.icon}
-                      </div>
-                    </div>
-                    
-                    <h4 className="fw-bold mb-3 text-dark">{process.title}</h4>
-                    <p className="text-muted">{process.description}</p>
+          </div>
+        </div>
+
+                    <h4 className="fw-bold mb-3 text-white">{process.title}</h4>
+                    <p className="text-light">{process.description}</p>
                   </Card.Body>
                 </Card>
               </Col>
@@ -443,16 +443,16 @@ export default function HomePage() {
       </section>
 
       {/* JD Input Section */}
-      <section id="jd-input" className="py-5">
+      <section id="jd-input" className="py-5" style={{background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%)'}}>
         <Container>
           <Row className="justify-content-center">
             <Col lg={8}>
-              <Card className="card-jdx border-0">
+              <Card className="card-jdx border-0" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)'}}>
                 <Card.Header className="bg-transparent border-0 text-center py-4">
-                  <h2 className="h3 fw-bold mb-2 jdx-gradient">
+                  <h2 className="h3 fw-bold mb-2 text-white">
                     {language === 'ko' ? 'JD 분석 시작하기' : 'Start JD Analysis'}
                   </h2>
-                  <p className="text-muted mb-0">
+                  <p className="text-light mb-0">
                     {language === 'ko' 
                       ? '분석하고 싶은 Job Description을 입력하거나 파일을 업로드하세요'
                       : 'Enter the Job Description you want to analyze or upload a file'
@@ -507,8 +507,8 @@ export default function HomePage() {
                       <Download className="me-1" size={16} />
                       {t.common.export} PDF
                     </Button>
-                  </div>
-                </div>
+          </div>
+        </div>
               </Col>
             </Row>
 
@@ -582,7 +582,7 @@ export default function HomePage() {
                   <Alert variant="info" className="alert-jdx">
                     <div className="d-flex align-items-center">
                       <Lightbulb className="me-2" size={20} />
-                      <div>
+            <div>
                         <strong>{language === 'ko' ? '데모 모드' : 'Demo Mode'}</strong>
                         <p className="mb-0 mt-1">
                           {language === 'ko' 
@@ -590,8 +590,8 @@ export default function HomePage() {
                             : 'Currently showing analysis results with demo data. Enter a real JD to analyze.'
                           }
                         </p>
-                      </div>
-                    </div>
+            </div>
+          </div>
                   </Alert>
                 </Col>
               </Row>
