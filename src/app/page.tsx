@@ -75,13 +75,21 @@ export default function HomePage() {
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error('분석 중 오류가 발생했습니다.');
-      }
-
       const result = await response.json();
-      setAnalysisResult(result);
-      setShowDemo(false);
+      
+      if (!response.ok) {
+        if (result.error && result.error.includes('데모 모드')) {
+          // 데모 모드로 실행
+          const demoResult = getDemoResult('hr');
+          setAnalysisResult(demoResult);
+          setShowDemo(true);
+        } else {
+          throw new Error(result.error || '분석 중 오류가 발생했습니다.');
+        }
+      } else {
+        setAnalysisResult(result);
+        setShowDemo(false);
+      }
       
       // 분석 결과 섹션으로 스크롤
       setTimeout(() => {
@@ -95,7 +103,7 @@ export default function HomePage() {
       }, 100);
     } catch (error) {
       console.error('Analysis error:', error);
-      alert('분석 중 오류가 발생했습니다.');
+      alert(`분석 중 오류가 발생했습니다: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
     } finally {
       setIsAnalyzing(false);
     }

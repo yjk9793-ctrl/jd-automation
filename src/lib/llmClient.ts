@@ -28,7 +28,10 @@ export class LLMClient {
 
   async extractTasks(jdText: string): Promise<TaskExtraction[]> {
     // 데모 모드 또는 API 키가 없는 경우 샘플 데이터 반환
-    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.includes('your_')) {
+    if (!process.env.OPENAI_API_KEY || 
+        process.env.OPENAI_API_KEY.includes('your_') || 
+        process.env.OPENAI_API_KEY === '') {
+      console.log('API 키가 없어 데모 모드로 실행됩니다.');
       return this.getDemoTaskExtractions();
     }
 
@@ -106,7 +109,10 @@ JSON 배열로만 응답하세요.`;
     difficulty: 1 | 2 | 3 | 4 | 5;
   }> {
     // 데모 모드 또는 API 키가 없는 경우 샘플 데이터 반환
-    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.includes('your_')) {
+    if (!process.env.OPENAI_API_KEY || 
+        process.env.OPENAI_API_KEY.includes('your_') || 
+        process.env.OPENAI_API_KEY === '') {
+      console.log('API 키가 없어 데모 모드로 실행됩니다.');
       return this.getDemoEvaluation(task);
     }
 

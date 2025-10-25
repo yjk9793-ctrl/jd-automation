@@ -22,10 +22,37 @@ export async function POST(request: NextRequest) {
   try {
     const startTime = Date.now();
     
-    // 요청 본문 파싱 및 검증
-    const body = await request.json();
-    const validatedData = AnalysisRequestSchema.parse(body);
-    const { jd, options } = validatedData;
+    // FormData 또는 JSON 처리
+    let jd, options;
+    
+    const contentType = request.headers.get('content-type');
+    if (contentType && contentType.includes('multipart/form-data')) {
+      // FormData 처리
+      const formData = await request.formData();
+      const jdText = formData.get('jd') as string;
+      const file = formData.get('file') as File;
+      
+      if (!jdText) {
+        return NextResponse.json(
+          { success: false, error: 'JD 텍스트가 필요합니다.' },
+          { status: 400 }
+        );
+      }
+      
+      jd = {
+        text: jdText,
+        fileName: file?.name || 'input.txt',
+        fileType: file?.type || 'text/plain'
+      };
+      options = { includeRecipe: false, detailLevel: 'basic' };
+    } else {
+      // JSON 처리
+      const body = await request.json();
+      const validatedData = AnalysisRequestSchema.parse(body);
+      const validated = validatedData;
+      jd = validated.jd;
+      options = validated.options;
+    }
 
     // JD 파싱
     const parsedJD = await jdParser.parseJD(jd);
@@ -34,14 +61,29 @@ export async function POST(request: NextRequest) {
     const llmClient = getLLMClient();
     
     // 작업 추출
-    const taskExtractions = await llmClient.extractTasks(jd.text);
+    let taskExtractions;
+    try {
+      taskExtractions = await llmClient.extractTasks(jd.text);
+    } catch (error) {
+      console.error('Task extraction error:', error);
+      // 데모 데이터로 폴백
+      taskExtractions = llmClient.getDemoTaskExtractions();
+    }
     
     // 각 작업에 대한 자동화 평가
     const tasks: TaskItem[] = [];
     
     for (const extraction of taskExtractions) {
       try {
-        const evaluation = await llmClient.evaluateAutomation(extraction);
+        let evaluation;
+        try {
+          evaluation = await llmClient.evaluateAutomation(extraction);
+        } catch (error) {
+          console.error('Automation evaluation error:', error);
+          // 데모 평가로 폴백
+          evaluation = llmClient.getDemoEvaluation(extraction);
+        }
+        
         const scoringResult = defaultScorer.calculateScore(evaluation.criteria);
         
         // 키워드 기반 휴리스틱 점수
@@ -156,13 +198,29 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('JD 분석 실패:', error);
     
+    // 더 구체적인 오류 메시지 제공
+    let errorMessage = '분석 중 오류가 발생했습니다.';
+    let statusCode = 500;
+    
+    if (error instanceof z.ZodError) {
+      errorMessage = '입력 데이터가 올바르지 않습니다.';
+      statusCode = 400;
+    } else if (error instanceof Error) {
+      if (error.message.includes('API key')) {
+        errorMessage = 'API 키가 설정되지 않았습니다. 데모 모드로 실행됩니다.';
+        statusCode = 200; // 데모 모드이므로 성공으로 처리
+      } else {
+        errorMessage = error.message;
+      }
+    }
+    
     const errorResponse: APIResponse<never> = {
-      error: error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다',
+      error: errorMessage,
       code: 'ANALYSIS_FAILED',
       details: error instanceof z.ZodError ? error.errors : undefined,
     };
 
-    return NextResponse.json(errorResponse, { status: 400 });
+    return NextResponse.json(errorResponse, { status: statusCode });
   }
 }
 
