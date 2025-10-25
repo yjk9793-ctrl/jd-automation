@@ -21,7 +21,7 @@ const EmailRequestSchema = z.object({
       id: z.string(),
       title: z.string(),
       sourceText: z.string(),
-      category: z.string(),
+      category: z.enum(['Automate', 'AI-Copilot', 'Human-Critical']),
       score: z.number(),
       roiEstimate: z.number(),
       difficulty: z.number(),
