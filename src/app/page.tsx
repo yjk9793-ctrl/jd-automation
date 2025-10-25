@@ -28,7 +28,7 @@ import {
   XCircle,
   Download,
   FileText,
-  Users,
+  Users, 
   Settings,
   Globe,
   ChevronRight,
@@ -184,7 +184,7 @@ export default function HomePage() {
     }
   ];
 
-  return (
+    return (
     <div className="min-vh-100" style={{background: '#ffffff'}}>
       {/* Header */}
       <Header language={language} onLanguageChange={handleLanguageChange} />
@@ -203,7 +203,7 @@ export default function HomePage() {
                   </span>
                 </h1>
                 
-                <p className="lead mb-4" style={{color: '#4a5568'}}>
+                <p className="lead mb-5" style={{color: '#4a5568', lineHeight: '1.6'}}>
                   {language === 'ko' 
                     ? 'JD 뒤에 숨은 업무의 자동화 가능성을 파악해야\n기업이 성장할 수 있습니다.'
                     : 'You need to understand the automation potential behind JD\nfor companies to grow.'
@@ -231,7 +231,7 @@ export default function HomePage() {
                     {language === 'ko' ? '무료 체험하기' : 'Try Free'}
                   </Button>
                 </div>
-              </div>
+            </div>
             </Col>
             
             <Col lg={6} className="text-center">
@@ -247,8 +247,8 @@ export default function HomePage() {
                       : 'From JD analysis to customized AI agent recommendations\nWe provide one-stop solutions'
                     }
                   </p>
-                </div>
-              </div>
+          </div>
+      </div>
             </Col>
           </Row>
         </Container>
@@ -257,12 +257,12 @@ export default function HomePage() {
       {/* Success Cases Section - Vircle Style */}
       <section className="py-5" style={{background: '#ffffff'}}>
         <Container>
-          <Row className="text-center mb-5">
+          <Row className="text-center mb-6">
             <Col>
-              <h2 className="display-4 fw-bold mb-3" style={{color: '#1a202c'}}>
+              <h2 className="display-4 fw-bold mb-4" style={{color: '#1a202c', lineHeight: '1.2'}}>
                 {language === 'ko' ? '성공 사례' : 'Success Cases'}
               </h2>
-              <p className="lead" style={{color: '#4a5568'}}>
+              <p className="lead" style={{color: '#4a5568', lineHeight: '1.6'}}>
                 {language === 'ko' 
                   ? 'AI 에이전트 자동화의 성장을 함께하는 JDX'
                   : 'JDX growing together with AI agent automation'
@@ -274,7 +274,7 @@ export default function HomePage() {
           <Row className="mb-4">
             <Col>
               <div className="d-flex justify-content-center align-items-center gap-3">
-                <Button 
+            <Button 
                   variant="outline-secondary" 
                   size="sm"
                   onClick={() => setCurrentCase(prev => prev > 0 ? prev - 1 : successCases.length - 1)}
@@ -282,7 +282,7 @@ export default function HomePage() {
                   style={{width: '40px', height: '40px'}}
                 >
                   <ChevronLeft size={20} />
-                </Button>
+            </Button>
                 
                 <div className="text-center" style={{minWidth: '200px'}}>
                   <h5 className="fw-bold mb-0" style={{color: '#1a202c'}}>
@@ -293,7 +293,7 @@ export default function HomePage() {
                   </small>
                 </div>
                 
-                <Button 
+            <Button 
                   variant="outline-secondary" 
                   size="sm"
                   onClick={() => setCurrentCase(prev => prev < successCases.length - 1 ? prev + 1 : 0)}
@@ -301,8 +301,8 @@ export default function HomePage() {
                   style={{width: '40px', height: '40px'}}
                 >
                   <ChevronRightIcon size={20} />
-                </Button>
-              </div>
+            </Button>
+          </div>
             </Col>
           </Row>
           
@@ -358,12 +358,12 @@ export default function HomePage() {
       {/* Features Section - Vircle Style */}
       <section className="py-5" style={{background: '#f8fafc'}}>
         <Container>
-          <Row className="text-center mb-5">
+          <Row className="text-center mb-6">
             <Col>
-              <h2 className="display-4 fw-bold mb-3" style={{color: '#1a202c'}}>
+              <h2 className="display-4 fw-bold mb-4" style={{color: '#1a202c', lineHeight: '1.2'}}>
                 {language === 'ko' ? 'JDX의 핵심 기능' : 'Core Features of JDX'}
               </h2>
-              <p className="lead" style={{color: '#4a5568'}}>
+              <p className="lead" style={{color: '#4a5568', lineHeight: '1.6'}}>
                 {language === 'ko' 
                   ? 'JD 분석부터 AI 에이전트 추천까지, 모든 것을 한 곳에서'
                   : 'From JD analysis to AI agent recommendations, everything in one place'
@@ -379,17 +379,17 @@ export default function HomePage() {
                   <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: '#e6f3ff'}}>
                     <FileText className="text-primary" size={32} />
                   </div>
-                  <h5 className="fw-bold mb-3" style={{color: '#1a202c'}}>
+                  <h5 className="fw-bold mb-4" style={{color: '#1a202c', lineHeight: '1.3'}}>
                     {language === 'ko' ? 'JD 자동 분석' : 'Automatic JD Analysis'}
                   </h5>
-                  <p style={{color: '#4a5568'}}>
+                  <p style={{color: '#4a5568', lineHeight: '1.6'}}>
                     {language === 'ko' 
                       ? 'JD를 입력하면 AI가 자동으로 분석하여 자동화 가능성을 판단합니다'
                       : 'AI automatically analyzes JD and determines automation potential'
                     }
                   </p>
                 </Card.Body>
-              </Card>
+            </Card>
             </Col>
             
             <Col md={6} lg={4}>
@@ -398,17 +398,17 @@ export default function HomePage() {
                   <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: '#f0f9ff'}}>
                     <Brain className="text-info" size={32} />
                   </div>
-                  <h5 className="fw-bold mb-3" style={{color: '#1a202c'}}>
+                  <h5 className="fw-bold mb-4" style={{color: '#1a202c', lineHeight: '1.3'}}>
                     {language === 'ko' ? 'AI 에이전트 추천' : 'AI Agent Recommendation'}
                   </h5>
-                  <p style={{color: '#4a5568'}}>
+                  <p style={{color: '#4a5568', lineHeight: '1.6'}}>
                     {language === 'ko' 
                       ? '표준직무DB를 분석하여 최적의 AI 에이전트를 추천합니다'
                       : 'Analyzes standard job database to recommend optimal AI agents'
                     }
                   </p>
                 </Card.Body>
-              </Card>
+            </Card>
             </Col>
             
             <Col md={6} lg={4}>
@@ -417,10 +417,10 @@ export default function HomePage() {
                   <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: '#f0fdf4'}}>
                     <Target className="text-success" size={32} />
                   </div>
-                  <h5 className="fw-bold mb-3" style={{color: '#1a202c'}}>
+                  <h5 className="fw-bold mb-4" style={{color: '#1a202c', lineHeight: '1.3'}}>
                     {language === 'ko' ? '맞춤형 솔루션' : 'Customized Solutions'}
                   </h5>
-                  <p style={{color: '#4a5568'}}>
+                  <p style={{color: '#4a5568', lineHeight: '1.6'}}>
                     {language === 'ko' 
                       ? '개별 기업에 맞춤화된 AI 에이전트를 추천합니다'
                       : 'Recommends customized AI agents for individual companies'
@@ -439,11 +439,11 @@ export default function HomePage() {
           <Row className="justify-content-center">
             <Col lg={8}>
               <Card className="border-0" style={{background: 'white', boxShadow: '0 10px 30px rgba(0,0,0,0.1)'}}>
-                <Card.Header className="bg-transparent border-0 text-center py-4">
-                  <h2 className="h3 fw-bold mb-2" style={{color: '#1a202c'}}>
+                <Card.Header className="bg-transparent border-0 text-center py-5">
+                  <h2 className="h3 fw-bold mb-3" style={{color: '#1a202c', lineHeight: '1.3'}}>
                     {language === 'ko' ? 'JD 분석 시작하기' : 'Start JD Analysis'}
                   </h2>
-                  <p style={{color: '#4a5568'}}>
+                  <p style={{color: '#4a5568', lineHeight: '1.6'}}>
                     {language === 'ko' 
                       ? '분석하고 싶은 Job Description을 입력하거나 파일을 업로드하세요'
                       : 'Enter the Job Description you want to analyze or upload a file'
@@ -454,7 +454,7 @@ export default function HomePage() {
                 <Card.Body className="p-4">
                   <JDInput onAnalyze={handleAnalyze} isAnalyzing={isAnalyzing} language={language} />
                 </Card.Body>
-              </Card>
+            </Card>
             </Col>
           </Row>
         </Container>
@@ -498,8 +498,8 @@ export default function HomePage() {
                       <Download className="me-1" size={16} />
                       {t.common.export} PDF
                     </Button>
-                  </div>
-                </div>
+          </div>
+        </div>
               </Col>
             </Row>
 
@@ -573,7 +573,7 @@ export default function HomePage() {
                   <Alert variant="info" className="border-0" style={{background: '#e6f3ff', color: '#1a365d'}}>
                     <div className="d-flex align-items-center">
                       <Lightbulb className="me-2" size={20} />
-                      <div>
+            <div>
                         <strong>{language === 'ko' ? '데모 모드' : 'Demo Mode'}</strong>
                         <p className="mb-0 mt-1">
                           {language === 'ko' 
@@ -581,8 +581,8 @@ export default function HomePage() {
                             : 'Currently showing analysis results with demo data. Enter a real JD to analyze.'
                           }
                         </p>
-                      </div>
-                    </div>
+            </div>
+          </div>
                   </Alert>
                 </Col>
               </Row>
