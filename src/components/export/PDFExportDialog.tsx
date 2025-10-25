@@ -5,16 +5,18 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { AnalysisResult } from '@/types';
+import { Language } from '@/lib/i18n';
 import { Mail, Download, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface PDFExportDialogProps {
-  result: AnalysisResult;
+  analysisResult: AnalysisResult | null;
   isOpen: boolean;
   onClose: () => void;
+  language: Language;
 }
 
-export function PDFExportDialog({ result, isOpen, onClose }: PDFExportDialogProps) {
+export function PDFExportDialog({ analysisResult, isOpen, onClose, language }: PDFExportDialogProps) {
   const [email, setEmail] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [isSent, setIsSent] = useState(false);
@@ -24,7 +26,7 @@ export function PDFExportDialog({ result, isOpen, onClose }: PDFExportDialogProp
     includeCode: true,
   });
 
-  if (!isOpen) return null;
+  if (!isOpen || !analysisResult) return null;
 
   const handleSend = async () => {
     if (!email || !email.includes('@')) {
@@ -41,7 +43,7 @@ export function PDFExportDialog({ result, isOpen, onClose }: PDFExportDialogProp
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          result,
+          analysisResult,
           email,
           options,
         }),
