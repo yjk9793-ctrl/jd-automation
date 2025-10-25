@@ -461,7 +461,7 @@ export function TaskDetail({ task, onGenerateRecipe, isGeneratingRecipe = false,
             <Card.Header className="bg-transparent border-0">
               <div className="d-flex align-items-center justify-content-between">
                 <h6 className="fw-bold mb-0" style={{color: '#ffffff'}}>
-                  {sample.title}
+                  {sample.label}
                 </h6>
                 <div className="d-flex gap-2">
                   <Badge bg="secondary" className="px-2 py-1">
