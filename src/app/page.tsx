@@ -32,12 +32,15 @@ import {
   Award,
   Globe,
   Menu,
-  X
+  X,
+  Eye,
+  Calendar
 } from 'lucide-react';
 import { Language, AnalysisType, IndustryFeedback, ProcessStep, ContactForm, AnalysisResult } from '@/types';
 import { useTranslation } from '@/lib/i18n';
 import { AnalysisForm } from '@/components/AnalysisForm';
 import { AnalysisResults } from '@/components/AnalysisResults';
+import { AnalysisDetailPage } from '@/components/AnalysisDetailPage';
 
 export default function HomePage() {
   const [language, setLanguage] = useState<Language>('ko');
@@ -45,6 +48,7 @@ export default function HomePage() {
   const [activeTab, setActiveTab] = useState<'enterprise' | 'personal'>('enterprise');
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showDetailPage, setShowDetailPage] = useState(false);
   const [contactForm, setContactForm] = useState<ContactForm>({
     name: '',
     department: '',
@@ -129,6 +133,25 @@ export default function HomePage() {
     }
     setIsMenuOpen(false);
   };
+
+  const handleViewDetails = () => {
+    setShowDetailPage(true);
+  };
+
+  const handleBackToMain = () => {
+    setShowDetailPage(false);
+  };
+
+  // Show detail page if analysis result exists and user wants to view details
+  if (showDetailPage && analysisResult) {
+    return (
+      <AnalysisDetailPage
+        result={analysisResult}
+        language={language}
+        onBack={handleBackToMain}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-dark-900 text-white">
@@ -427,11 +450,116 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Analysis Results */}
+      {/* Analysis Results Summary */}
       {analysisResult && (
         <section id="analysis-results" className="section-padding">
           <div className="container-custom">
-            <AnalysisResults result={analysisResult} language={language} />
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-8"
+            >
+              <div className="w-20 h-20 bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Award className="w-10 h-10 text-white" />
+              </div>
+              <h2 className="text-4xl font-bold mb-4 gradient-text">
+                분석 완료!
+              </h2>
+              <p className="text-xl text-gray-300">
+                {analysisResult.type === 'enterprise' ? '기업 직무 분석' : '개인 역량 분석'} 결과가 준비되었습니다.
+              </p>
+            </motion.div>
+
+            {/* Quick Summary */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              <div className="card-hover text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Target className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-3xl font-bold text-blue-500 mb-2">{analysisResult.summary.total}</div>
+                <div className="text-gray-400">총 분석 작업</div>
+              </div>
+
+              <div className="card-hover text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Zap className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-3xl font-bold text-green-500 mb-2">{analysisResult.summary.automate}</div>
+                <div className="text-gray-400">완전 자동화 가능</div>
+              </div>
+
+              <div className="card-hover text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Brain className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-3xl font-bold text-yellow-500 mb-2">{analysisResult.summary.copilot}</div>
+                <div className="text-gray-400">AI 협업 가능</div>
+              </div>
+
+              <div className="card-hover text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-3xl font-bold text-purple-500 mb-2">{analysisResult.summary.automationPotential}%</div>
+                <div className="text-gray-400">자동화 잠재력</div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button 
+                onClick={handleViewDetails}
+                className="btn-primary flex items-center space-x-2"
+              >
+                <Eye className="w-5 h-5" />
+                <span>상세 결과 보기</span>
+                <ArrowRight className="w-5 h-5" />
+              </button>
+              <button className="btn-secondary flex items-center space-x-2">
+                <Download className="w-5 h-5" />
+                <span>PDF 다운로드</span>
+              </button>
+              <button className="btn-secondary flex items-center space-x-2">
+                <Mail className="w-5 h-5" />
+                <span>이메일 재발송</span>
+              </button>
+            </div>
+
+            {/* Quick Insights */}
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="card">
+                <h3 className="text-xl font-semibold mb-4 flex items-center space-x-2">
+                  <Lightbulb className="w-5 h-5 text-yellow-500" />
+                  <span>주요 권장사항</span>
+                </h3>
+                <div className="space-y-3">
+                  {analysisResult.recommendations.slice(0, 3).map((rec, index) => (
+                    <div key={index} className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-primary-500 rounded-full mt-2 flex-shrink-0" />
+                      <span className="text-gray-300 text-sm">{rec}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="card">
+                <h3 className="text-xl font-semibold mb-4 flex items-center space-x-2">
+                  <Rocket className="w-5 h-5 text-green-500" />
+                  <span>다음 단계</span>
+                </h3>
+                <div className="space-y-3">
+                  {analysisResult.nextSteps.slice(0, 3).map((step, index) => (
+                    <div key={index} className="flex items-start space-x-3">
+                      <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs font-bold text-white">{index + 1}</span>
+                      </div>
+                      <span className="text-gray-300 text-sm">{step}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       )}
