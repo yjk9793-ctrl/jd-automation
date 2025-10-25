@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     const { email, analysisResult } = validatedData;
 
     // Generate email content
-    const emailContent = generateEmailContent(analysisResult);
+    const emailContent = generateEmailContent(analysisResult as AnalysisResult);
 
     // Send email (mock implementation)
     await sendEmail(email, emailContent);
