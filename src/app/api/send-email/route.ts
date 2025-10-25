@@ -7,6 +7,7 @@ const EmailRequestSchema = z.object({
   analysisResult: z.object({
     id: z.string(),
     type: z.enum(['enterprise', 'personal']),
+    jobRole: z.string().optional(),
     summary: z.object({
       total: z.number(),
       automate: z.number(),
@@ -19,15 +20,24 @@ const EmailRequestSchema = z.object({
     tasks: z.array(z.object({
       id: z.string(),
       title: z.string(),
+      sourceText: z.string(),
       category: z.string(),
       score: z.number(),
       roiEstimate: z.number(),
       difficulty: z.number(),
+      risks: z.array(z.string()),
+      safeguards: z.array(z.string()),
+      tools: z.array(z.object({
+        name: z.string(),
+        purpose: z.string(),
+        alternatives: z.array(z.string()),
+      })),
       reasoning: z.string(),
       estimatedTime: z.string(),
     })),
     recommendations: z.array(z.string()),
     nextSteps: z.array(z.string()),
+    createdAt: z.string(),
   }),
 });
 
