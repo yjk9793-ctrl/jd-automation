@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { Card, Form, Button, Alert, Spinner, Row, Col } from 'react-bootstrap';
 import { useDropzone } from 'react-dropzone';
-import { Upload, FileText, X, HelpCircle, AlertTriangle, Brain } from 'lucide-react';
+import { Upload, FileText, X, HelpCircle, AlertTriangle, Brain, ArrowUpRight } from 'lucide-react';
 import { Language } from '@/lib/i18n';
 import { useTranslation } from '@/lib/i18n';
 
@@ -71,7 +71,7 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
           {/* Text Input */}
           <Col md={6}>
             <Form.Group>
-              <Form.Label className="fw-bold mb-3" style={{color: '#1a202c'}}>
+              <Form.Label className="fw-bold mb-3" style={{color: '#ffffff'}}>
                 <FileText className="me-2" size={20} />
                 {language === 'ko' ? 'JD 텍스트 입력' : 'JD Text Input'}
               </Form.Label>
@@ -86,21 +86,21 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
                 }
                 className="border-0"
                 style={{
-                  background: '#f8fafc',
+                  background: 'rgba(255, 255, 255, 0.05)',
                   borderRadius: '12px',
                   padding: '16px',
                   fontSize: '14px',
-                  color: '#1a202c',
-                  border: '2px solid #e2e8f0',
+                  color: '#ffffff',
+                  border: '2px solid rgba(59, 130, 246, 0.3)',
                   transition: 'all 0.3s ease'
                 }}
                 disabled={isAnalyzing}
                 onFocus={(e) => {
-                  e.target.style.borderColor = '#667eea';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)';
+                  e.target.style.borderColor = '#3b82f6';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
                 }}
                 onBlur={(e) => {
-                  e.target.style.borderColor = '#e2e8f0';
+                  e.target.style.borderColor = 'rgba(59, 130, 246, 0.3)';
                   e.target.style.boxShadow = 'none';
                 }}
               />
@@ -110,7 +110,7 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
           {/* File Upload */}
           <Col md={6}>
             <Form.Group>
-              <Form.Label className="fw-bold mb-3" style={{color: '#1a202c'}}>
+              <Form.Label className="fw-bold mb-3" style={{color: '#ffffff'}}>
                 <Upload className="me-2" size={20} />
                 {language === 'ko' ? '파일 업로드' : 'File Upload'}
               </Form.Label>
@@ -122,8 +122,8 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
                 } ${isAnalyzing ? 'opacity-50' : ''}`}
                 style={{ 
                   minHeight: '200px',
-                  background: isDragActive ? '#f0f4ff' : '#f8fafc',
-                  borderColor: isDragActive ? '#667eea' : '#e2e8f0',
+                  background: isDragActive ? 'rgba(59, 130, 246, 0.1)' : 'rgba(255, 255, 255, 0.05)',
+                  borderColor: isDragActive ? '#3b82f6' : 'rgba(59, 130, 246, 0.3)',
                   padding: '20px',
                   display: 'flex',
                   alignItems: 'center',
@@ -134,11 +134,11 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
                 
                 {uploadedFile ? (
                   <div>
-                    <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: '#e6f3ff'}}>
+                    <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(59, 130, 246, 0.2)'}}>
                       <FileText className="text-primary" size={32} />
                     </div>
-                    <h6 className="fw-bold mb-2" style={{color: '#1a202c'}}>{uploadedFile.name}</h6>
-                    <p className="text-muted small mb-3">
+                    <h6 className="fw-bold mb-2" style={{color: '#ffffff'}}>{uploadedFile.name}</h6>
+                    <p className="text-muted small mb-3" style={{color: '#ffffff'}}>
                       {(uploadedFile.size / 1024).toFixed(1)} KB
                     </p>
                     <Button
@@ -157,16 +157,16 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
                   </div>
                 ) : (
                   <div>
-                    <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: '#e6f3ff'}}>
+                    <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(59, 130, 246, 0.2)'}}>
                       <Upload className="text-primary" size={32} />
                     </div>
-                    <h6 className="fw-bold mb-2" style={{color: '#1a202c'}}>
+                    <h6 className="fw-bold mb-2" style={{color: '#ffffff'}}>
                       {isDragActive 
                         ? (language === 'ko' ? '파일을 여기에 놓으세요' : 'Drop file here')
                         : (language === 'ko' ? '파일을 드래그하거나 클릭하세요' : 'Drag & drop or click to select')
                       }
                     </h6>
-                    <p className="text-muted small mb-0">
+                    <p className="text-muted small mb-0" style={{color: '#ffffff'}}>
                       {language === 'ko' 
                         ? 'TXT, PDF, DOCX 파일 지원'
                         : 'Supports TXT, PDF, DOCX files'
@@ -181,7 +181,7 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
 
         {/* Error Message */}
         {error && (
-          <Alert variant="danger" className="border-0 mt-3" style={{background: '#fed7d7', color: '#c53030'}}>
+          <Alert variant="danger" className="border-0 mt-3" style={{background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)'}}>
             <AlertTriangle className="me-2" size={16} />
             {error}
           </Alert>
@@ -192,13 +192,12 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
           <Button
             type="submit"
             variant="primary"
-            size="lg"
-            className="px-5 py-3 rounded-pill fw-bold"
+            className="px-6 py-3 rounded-pill fw-bold d-flex align-items-center mx-auto"
             disabled={isAnalyzing || (!jd.trim() && !uploadedFile)}
             style={{
-              background: '#667eea',
+              background: '#3b82f6',
               border: 'none',
-              fontSize: '1.1rem',
+              fontSize: '1rem',
               minWidth: '200px'
             }}
           >
@@ -210,21 +209,22 @@ export function JDInput({ onAnalyze, isAnalyzing, language }: JDInputProps) {
             ) : (
               <>
                 <Brain className="me-2" size={20} />
-                {language === 'ko' ? 'JD 분석 시작' : 'Start JD Analysis'}
+                {language === 'ko' ? 'AI 분석 시작' : 'Start AI Analysis'}
+                <ArrowUpRight className="ms-2" size={16} />
               </>
             )}
           </Button>
         </div>
 
         {/* Help Text */}
-        <div className="p-4 rounded-3 mt-4" style={{background: '#f8fafc', border: '1px solid #e2e8f0'}}>
+        <div className="p-4 rounded-3 mt-4" style={{background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.1)'}}>
           <div className="d-flex align-items-start">
             <HelpCircle className="text-primary me-3 mt-1" size={20} />
             <div>
-              <h6 className="fw-bold mb-2" style={{color: '#1a202c'}}>
+              <h6 className="fw-bold mb-2" style={{color: '#ffffff'}}>
                 {language === 'ko' ? '분석 도움말' : 'Analysis Help'}
               </h6>
-              <ul className="text-muted small mb-0" style={{color: '#4a5568'}}>
+              <ul className="text-muted small mb-0" style={{color: '#ffffff'}}>
                 <li>
                   {language === 'ko' 
                     ? 'JD에는 직무명, 주요 업무, 자격요건, 우대사항 등이 포함되어야 합니다'

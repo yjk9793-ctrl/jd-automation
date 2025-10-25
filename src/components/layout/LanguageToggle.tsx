@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { ButtonGroup, Button } from 'react-bootstrap';
-import { Globe } from 'lucide-react';
 import { Language } from '@/lib/i18n';
 
 interface LanguageToggleProps {
@@ -19,27 +18,27 @@ export function LanguageToggle({ currentLanguage, onLanguageChange }: LanguageTo
   return (
     <ButtonGroup size="sm">
       <Button
-        variant={currentLanguage === 'ko' ? 'primary' : 'outline-secondary'}
+        variant={currentLanguage === 'ko' ? 'primary' : 'outline-light'}
         onClick={() => handleLanguageClick('ko')}
         className="px-3 py-2"
         style={{
-          background: currentLanguage === 'ko' ? '#667eea' : 'transparent',
-          borderColor: '#e2e8f0',
-          color: currentLanguage === 'ko' ? 'white' : '#4a5568',
-          border: '1px solid #e2e8f0'
+          background: currentLanguage === 'ko' ? '#3b82f6' : 'transparent',
+          borderColor: '#6b7280',
+          color: currentLanguage === 'ko' ? 'white' : '#ffffff',
+          border: '1px solid #6b7280'
         }}
       >
         🇰🇷 KO
       </Button>
       <Button
-        variant={currentLanguage === 'en' ? 'primary' : 'outline-secondary'}
+        variant={currentLanguage === 'en' ? 'primary' : 'outline-light'}
         onClick={() => handleLanguageClick('en')}
         className="px-3 py-2"
         style={{
-          background: currentLanguage === 'en' ? '#667eea' : 'transparent',
-          borderColor: '#e2e8f0',
-          color: currentLanguage === 'en' ? 'white' : '#4a5568',
-          border: '1px solid #e2e8f0'
+          background: currentLanguage === 'en' ? '#3b82f6' : 'transparent',
+          borderColor: '#6b7280',
+          color: currentLanguage === 'en' ? 'white' : '#ffffff',
+          border: '1px solid #6b7280'
         }}
       >
         🇺🇸 EN

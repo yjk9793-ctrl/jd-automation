@@ -41,7 +41,9 @@ import {
   Play,
   ArrowDown,
   ChevronLeft,
-  ChevronRight as ChevronRightIcon
+  ChevronRight as ChevronRightIcon,
+  Sparkles,
+  ArrowUpRight
 } from 'lucide-react';
 import { AnalysisResult, TaskItem } from '@/types';
 import { useTranslation, Language } from '@/lib/i18n';
@@ -80,6 +82,17 @@ export default function HomePage() {
       const result = await response.json();
       setAnalysisResult(result);
       setShowDemo(false);
+      
+      // 분석 결과 섹션으로 스크롤
+      setTimeout(() => {
+        const resultsSection = document.getElementById('analysis-results');
+        if (resultsSection) {
+          resultsSection.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }
+      }, 100);
     } catch (error) {
       console.error('Analysis error:', error);
       alert('분석 중 오류가 발생했습니다.');
@@ -92,6 +105,17 @@ export default function HomePage() {
     const demoResult = getDemoResult('hr');
     setAnalysisResult(demoResult);
     setShowDemo(true);
+    
+    // 분석 결과 섹션으로 스크롤
+    setTimeout(() => {
+      const resultsSection = document.getElementById('analysis-results');
+      if (resultsSection) {
+        resultsSection.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }
+    }, 100);
   };
 
   const handleTaskSelect = (task: TaskItem) => {
@@ -125,333 +149,353 @@ export default function HomePage() {
     setLanguage(newLanguage);
   };
 
-  // 성공 사례 데이터
-  const successCases = [
+  // ImpactFlow 스타일 통계 데이터
+  const stats = [
+    { value: '500+', label: language === 'ko' ? '분석된 JD' : 'Analyzed JDs' },
+    { value: '95%', label: language === 'ko' ? '정확도' : 'Accuracy' },
+    { value: '300%', label: language === 'ko' ? '효율성 향상' : 'Efficiency Gain' },
+    { value: '24/7', label: language === 'ko' ? '실시간 분석' : 'Real-time Analysis' }
+  ];
+
+  // ImpactFlow 스타일 기능 데이터
+  const features = [
     {
-      company: '글로벌 IT 기업 A사',
+      icon: <Brain className="text-primary" size={24} />,
+      title: language === 'ko' ? 'AI 기반 분석' : 'AI-Powered Analysis',
+      description: language === 'ko' 
+        ? '고급 AI 알고리즘으로 JD를 정확하게 분석하고 자동화 가능성을 평가합니다'
+        : 'Advanced AI algorithms accurately analyze JDs and evaluate automation potential'
+    },
+    {
+      icon: <Target className="text-success" size={24} />,
+      title: language === 'ko' ? '맞춤형 솔루션' : 'Customized Solutions',
+      description: language === 'ko' 
+        ? '기업의 특성에 맞는 개별화된 AI 에이전트를 추천합니다'
+        : 'Recommends personalized AI agents tailored to your company\'s characteristics'
+    },
+    {
+      icon: <BarChart3 className="text-info" size={24} />,
+      title: language === 'ko' ? '실시간 대시보드' : 'Real-time Dashboard',
+      description: language === 'ko' 
+        ? '분석 결과를 실시간으로 모니터링하고 성과를 추적합니다'
+        : 'Monitor analysis results in real-time and track performance metrics'
+    },
+    {
+      icon: <Shield className="text-warning" size={24} />,
+      title: language === 'ko' ? '보안 및 규정준수' : 'Security & Compliance',
+      description: language === 'ko' 
+        ? '엔터프라이즈급 보안과 데이터 보호 정책을 준수합니다'
+        : 'Enterprise-grade security and data protection compliance'
+    }
+  ];
+
+  // ImpactFlow 스타일 성공 사례
+  const successStories = [
+    {
+      company: '글로벌 IT 기업',
       industry: 'IT/소프트웨어',
-      challenge: 'HR 채용 프로세스의 반복 업무로 인한 비효율성',
-      solution: 'JDX를 통한 AI 에이전트 자동화 도입',
+      challenge: language === 'ko' ? '복잡한 채용 프로세스의 비효율성' : 'Inefficient complex hiring process',
+      solution: language === 'ko' ? 'JDX AI 에이전트 도입' : 'JDX AI Agent Implementation',
       results: [
-        { metric: '400%', label: '채용 프로세스 효율성 향상' },
-        { metric: '100%', label: '자동화된 업무 비율' },
-        { metric: '50%', label: '채용 담당자 업무 시간 단축' }
-      ]
+        { metric: '400%', label: language === 'ko' ? '채용 효율성 향상' : 'Hiring Efficiency' },
+        { metric: '50%', label: language === 'ko' ? '시간 단축' : 'Time Reduction' },
+        { metric: '95%', label: language === 'ko' ? '정확도' : 'Accuracy' }
+      ],
+      logo: '🏢'
     },
     {
-      company: '제조업 B사',
+      company: '제조업 리더',
       industry: '제조업',
-      challenge: '복잡한 JD 분석과 매칭 프로세스의 수동 처리',
-      solution: 'JDX AI 에이전트를 활용한 스마트 매칭 시스템',
+      challenge: language === 'ko' ? '업무 프로세스 자동화 필요' : 'Need for process automation',
+      solution: language === 'ko' ? 'JDX 맞춤형 솔루션' : 'JDX Custom Solution',
       results: [
-        { metric: '93.5%', label: '정확한 업무 매칭률' },
-        { metric: '13,000개', label: '자동 분석된 JD 수' },
-        { metric: '30분', label: '평균 분석 시간 단축' }
-      ]
+        { metric: '300%', label: language === 'ko' ? '생산성 향상' : 'Productivity Gain' },
+        { metric: '60%', label: language === 'ko' ? '비용 절감' : 'Cost Reduction' },
+        { metric: '100%', label: language === 'ko' ? '자동화율' : 'Automation Rate' }
+      ],
+      logo: '🏭'
     },
     {
-      company: '금융 서비스 C사',
+      company: '금융 서비스',
       industry: '금융',
-      challenge: '규제 준수를 위한 복잡한 업무 프로세스 관리',
-      solution: 'JDX 기반 규제 준수 자동화 에이전트 구축',
+      challenge: language === 'ko' ? '규제 준수 업무 자동화' : 'Compliance task automation',
+      solution: language === 'ko' ? 'JDX 규정준수 솔루션' : 'JDX Compliance Solution',
       results: [
-        { metric: '51.1%', label: '업무 정확도 향상' },
-        { metric: '32.7%', label: '처리 시간 단축' },
-        { metric: '100%', label: '규제 준수율' }
-      ]
-    },
-    {
-      company: '마케팅 에이전시 D사',
-      industry: '마케팅',
-      challenge: '고객사의 JD 분석과 맞춤형 솔루션 제안',
-      solution: 'JDX를 활용한 고객 맞춤형 AI 에이전트 추천',
-      results: [
-        { metric: '24,907%', label: 'ROAS 달성' },
-        { metric: '21%', label: '고객 만족도 향상' },
-        { metric: '10배', label: '제안서 작성 효율성' }
-      ]
-    },
-    {
-      company: '스타트업 E사',
-      industry: '스타트업',
-      challenge: '제한된 인력으로 다양한 업무를 효율적으로 처리',
-      solution: 'JDX AI 에이전트를 통한 업무 자동화',
-      results: [
-        { metric: '6,000+', label: '자동화된 업무 건수' },
-        { metric: '80%', label: '업무 효율성 향상' },
-        { metric: '23.5%', label: '인력 비용 절감' }
-      ]
+        { metric: '200%', label: language === 'ko' ? '처리 속도' : 'Processing Speed' },
+        { metric: '99.9%', label: language === 'ko' ? '정확도' : 'Accuracy' },
+        { metric: '0', label: language === 'ko' ? '규정 위반' : 'Compliance Violations' }
+      ],
+      logo: '🏦'
     }
   ];
 
     return (
-    <div className="min-vh-100" style={{background: '#ffffff'}}>
+    <div className="min-vh-100" style={{background: '#0a0a0a'}}>
       {/* Header */}
       <Header language={language} onLanguageChange={handleLanguageChange} />
 
-      {/* Hero Section - Vircle Style */}
-      <section className="py-5" style={{background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)'}}>
+      {/* Hero Section - ImpactFlow Style */}
+      <section className="py-6" style={{background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%)'}}>
         <Container>
           <Row className="align-items-center min-vh-75">
             <Col lg={6} className="text-center text-lg-start">
               <div className="fade-in">
-                <h1 className="display-3 fw-bold mb-4" style={{color: '#1a202c', lineHeight: '1.2'}}>
-                  {language === 'ko' ? 'JD를 넘어 AI 에이전트 자동화를 위한' : 'Beyond JD, for AI Agent Automation'}
+                {/* Badge */}
+                <div className="d-inline-flex align-items-center px-3 py-2 rounded-pill mb-3" style={{background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.2)'}}>
+                  <Sparkles className="me-2" size={16} style={{color: '#3b82f6'}} />
+                  <span className="small fw-bold" style={{color: '#3b82f6'}}>
+                    {language === 'ko' ? 'AI 기반 JD 분석 플랫폼' : 'AI-Powered JD Analysis Platform'}
+                  </span>
+                </div>
+
+                <h1 className="display-4 fw-bold mb-5" style={{color: '#ffffff', lineHeight: '1.2'}}>
+                  {language === 'ko' ? 'JD를 AI 에이전트로' : 'Transform JD into AI Agents'}
                   <br />
-                  <span style={{color: '#667eea'}}>
-                    {language === 'ko' ? '맞춤 전략을 만듭니다' : 'Custom Strategy'}
+                  <span style={{color: '#3b82f6'}}>
+                    {language === 'ko' ? '자동화하세요' : 'Automate Everything'}
                   </span>
                 </h1>
                 
-                <p className="lead mb-5" style={{color: '#4a5568', lineHeight: '1.6'}}>
+                <p className="lead mb-5" style={{color: '#ffffff', fontSize: '1.1rem', lineHeight: '1.6'}}>
                   {language === 'ko' 
-                    ? 'JD 뒤에 숨은 업무의 자동화 가능성을 파악해야\n기업이 성장할 수 있습니다.'
-                    : 'You need to understand the automation potential behind JD\nfor companies to grow.'
+                    ? 'Job Description을 분석하여 AI 에이전트로 자동화 가능한 업무를 찾아내고,\n맞춤형 솔루션을 제공하는 혁신적인 플랫폼입니다.'
+                    : 'An innovative platform that analyzes Job Descriptions to identify automatable tasks\nand provides customized AI agent solutions.'
                   }
                 </p>
                 
-                <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+                <div className="d-flex justify-content-center justify-content-lg-start mb-4">
                   <Button 
                     variant="primary" 
-                    size="lg" 
-                    className="px-5 py-3 rounded-pill fw-bold"
-                    onClick={handleDemo}
-                    style={{background: '#667eea', border: 'none', fontSize: '1.1rem'}}
-                  >
-                    {language === 'ko' ? '컨설팅 신청' : 'Request Consultation'}
-                  </Button>
-                  
-                  <Button 
-                    variant="outline-primary" 
-                    size="lg" 
-                    className="px-5 py-3 rounded-pill fw-bold"
+                    className="px-5 py-3 rounded-pill fw-bold d-flex align-items-center"
                     onClick={() => document.getElementById('jd-input')?.scrollIntoView({ behavior: 'smooth' })}
-                    style={{fontSize: '1.1rem'}}
+                    style={{background: '#3b82f6', border: 'none', fontSize: '1rem'}}
                   >
-                    {language === 'ko' ? '무료 체험하기' : 'Try Free'}
+                    <FileText className="me-2" size={20} />
+                    {language === 'ko' ? '테스트해보기' : 'Test Now'}
+                    <ArrowUpRight className="ms-2" size={16} />
                   </Button>
-                </div>
             </div>
+
+                {/* Trust Indicators */}
+                <div className="d-flex flex-wrap align-items-center gap-4 text-muted small">
+                  <div className="d-flex align-items-center">
+                    <CheckCircle className="me-1" size={16} style={{color: '#10b981'}} />
+                    {language === 'ko' ? '무료 체험' : 'Free Trial'}
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <CheckCircle className="me-1" size={16} style={{color: '#10b981'}} />
+                    {language === 'ko' ? '설치 불필요' : 'No Installation'}
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <CheckCircle className="me-1" size={16} style={{color: '#10b981'}} />
+                    {language === 'ko' ? '즉시 시작' : 'Start Immediately'}
+                  </div>
+                </div>
+              </div>
             </Col>
             
             <Col lg={6} className="text-center">
               <div className="position-relative">
-                <div className="p-5 rounded-4" style={{background: 'white', boxShadow: '0 20px 40px rgba(0,0,0,0.1)'}}>
-                  <Brain className="mb-4" size={80} style={{color: '#667eea'}} />
-                  <h3 className="h4 mb-3" style={{color: '#1a202c'}}>
-                    {language === 'ko' ? 'AI 에이전트 자동화' : 'AI Agent Automation'}
-                  </h3>
-                  <p style={{color: '#4a5568'}}>
-                    {language === 'ko' 
-                      ? 'JD 분석부터 맞춤형 AI 에이전트 추천까지\n원스톱 솔루션을 제공합니다'
-                      : 'From JD analysis to customized AI agent recommendations\nWe provide one-stop solutions'
-                    }
-                  </p>
-          </div>
-      </div>
-            </Col>
-          </Row>
-        </Container>
-      </section>
-
-      {/* Success Cases Section - Vircle Style */}
-      <section className="py-5" style={{background: '#ffffff'}}>
-        <Container>
-          <Row className="text-center mb-6">
-            <Col>
-              <h2 className="display-4 fw-bold mb-4" style={{color: '#1a202c', lineHeight: '1.2'}}>
-                {language === 'ko' ? '성공 사례' : 'Success Cases'}
-              </h2>
-              <p className="lead" style={{color: '#4a5568', lineHeight: '1.6'}}>
-                {language === 'ko' 
-                  ? 'AI 에이전트 자동화의 성장을 함께하는 JDX'
-                  : 'JDX growing together with AI agent automation'
-                }
-              </p>
-            </Col>
-          </Row>
-          
-          <Row className="mb-4">
-            <Col>
-              <div className="d-flex justify-content-center align-items-center gap-3">
-            <Button 
-                  variant="outline-secondary" 
-                  size="sm"
-                  onClick={() => setCurrentCase(prev => prev > 0 ? prev - 1 : successCases.length - 1)}
-                  className="rounded-circle"
-                  style={{width: '40px', height: '40px'}}
-                >
-                  <ChevronLeft size={20} />
-            </Button>
-                
-                <div className="text-center" style={{minWidth: '200px'}}>
-                  <h5 className="fw-bold mb-0" style={{color: '#1a202c'}}>
-                    {successCases[currentCase].company}
-                  </h5>
-                  <small style={{color: '#4a5568'}}>
-                    {successCases[currentCase].industry}
-                  </small>
-                </div>
-                
-            <Button 
-                  variant="outline-secondary" 
-                  size="sm"
-                  onClick={() => setCurrentCase(prev => prev < successCases.length - 1 ? prev + 1 : 0)}
-                  className="rounded-circle"
-                  style={{width: '40px', height: '40px'}}
-                >
-                  <ChevronRightIcon size={20} />
-            </Button>
-          </div>
-            </Col>
-          </Row>
-          
-          <Row className="justify-content-center">
-            <Col lg={10}>
-              <Card className="border-0" style={{background: 'white', boxShadow: '0 10px 30px rgba(0,0,0,0.1)'}}>
-                <Card.Body className="p-5">
-                  <div className="row align-items-center">
-                    <Col md={6}>
-                      <h4 className="fw-bold mb-3" style={{color: '#1a202c'}}>
-                        {successCases[currentCase].challenge}
-                      </h4>
-                      <p className="mb-4" style={{color: '#4a5568'}}>
-                        {successCases[currentCase].solution}
-                      </p>
-                    </Col>
-                    <Col md={6}>
-                      <div className="row g-3">
-                        {successCases[currentCase].results.map((result, index) => (
-                          <Col key={index}>
-                            <div className="text-center p-3 rounded" style={{background: '#f7fafc'}}>
-                              <h3 className="fw-bold mb-1" style={{color: '#667eea'}}>
-                                {result.metric}
-                              </h3>
-                              <p className="small mb-0" style={{color: '#4a5568'}}>
-                                {result.label}
-                              </p>
-                            </div>
-                          </Col>
-                        ))}
+                {/* Main Dashboard Preview */}
+                <div className="p-4 rounded-3" style={{background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+                  <div className="d-flex align-items-center justify-content-between mb-3">
+                    <div className="d-flex align-items-center">
+                      <div className="p-2 rounded me-2" style={{background: '#3b82f6'}}>
+                        <Brain size={20} style={{color: 'white'}} />
+                      </div>
+                      <div>
+                        <h6 className="mb-0" style={{color: '#ffffff'}}>JDX Analytics</h6>
+                        <small style={{color: '#9ca3af'}}>AI Analysis Dashboard</small>
+                      </div>
+                    </div>
+                    <Badge bg="success" className="px-2 py-1">Live</Badge>
+                  </div>
+                  
+                  {/* Mini Charts */}
+                  <Row className="g-3">
+                    <Col>
+                      <div className="p-3 rounded" style={{background: 'rgba(59, 130, 246, 0.1)'}}>
+                        <div className="d-flex align-items-center justify-content-between mb-2">
+                          <span className="small" style={{color: '#9ca3af'}}>자동화 가능</span>
+                          <span className="fw-bold" style={{color: '#3b82f6'}}>85%</span>
+                        </div>
+                        <div className="progress" style={{height: '4px'}}>
+                          <div className="progress-bar" style={{width: '85%', background: '#3b82f6'}}></div>
+                        </div>
                       </div>
                     </Col>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-          
-          <Row className="text-center mt-4">
-            <Col>
-              <Button 
-                variant="outline-primary" 
-                className="px-4 py-2 rounded-pill"
-                onClick={() => setCurrentCase(0)}
-              >
-                {language === 'ko' ? '전체 성공사례 확인' : 'View All Success Cases'}
-              </Button>
+                    <Col>
+                      <div className="p-3 rounded" style={{background: 'rgba(16, 185, 129, 0.1)'}}>
+                        <div className="d-flex align-items-center justify-content-between mb-2">
+                          <span className="small" style={{color: '#9ca3af'}}>효율성</span>
+                          <span className="fw-bold" style={{color: '#10b981'}}>300%</span>
+                        </div>
+                        <div className="progress" style={{height: '4px'}}>
+                          <div className="progress-bar" style={{width: '100%', background: '#10b981'}}></div>
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
+              </div>
             </Col>
           </Row>
         </Container>
       </section>
 
-      {/* Features Section - Vircle Style */}
-      <section className="py-5" style={{background: '#f8fafc'}}>
+      {/* Stats Section - ImpactFlow Style */}
+      <section className="py-6" style={{background: 'linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%)'}}>
         <Container>
           <Row className="text-center mb-6">
             <Col>
-              <h2 className="display-4 fw-bold mb-4" style={{color: '#1a202c', lineHeight: '1.2'}}>
-                {language === 'ko' ? 'JDX의 핵심 기능' : 'Core Features of JDX'}
+              <h2 className="h3 fw-bold mb-4" style={{color: '#ffffff'}}>
+                {language === 'ko' ? '신뢰받는 AI 분석 플랫폼' : 'Trusted AI Analysis Platform'}
               </h2>
-              <p className="lead" style={{color: '#4a5568', lineHeight: '1.6'}}>
+              <p className="text-muted" style={{color: '#ffffff'}}>
                 {language === 'ko' 
-                  ? 'JD 분석부터 AI 에이전트 추천까지, 모든 것을 한 곳에서'
-                  : 'From JD analysis to AI agent recommendations, everything in one place'
+                  ? '전 세계 기업들이 선택한 JDX의 성과를 확인하세요'
+                  : 'See the results that global companies have achieved with JDX'
                 }
               </p>
             </Col>
           </Row>
           
           <Row className="g-4">
-            <Col md={6} lg={4}>
-              <Card className="h-100 border-0" style={{background: 'white', boxShadow: '0 5px 15px rgba(0,0,0,0.08)'}}>
-                <Card.Body className="p-4 text-center">
-                  <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: '#e6f3ff'}}>
-                    <FileText className="text-primary" size={32} />
-                  </div>
-                  <h5 className="fw-bold mb-4" style={{color: '#1a202c', lineHeight: '1.3'}}>
-                    {language === 'ko' ? 'JD 자동 분석' : 'Automatic JD Analysis'}
-                  </h5>
-                  <p style={{color: '#4a5568', lineHeight: '1.6'}}>
-                    {language === 'ko' 
-                      ? 'JD를 입력하면 AI가 자동으로 분석하여 자동화 가능성을 판단합니다'
-                      : 'AI automatically analyzes JD and determines automation potential'
-                    }
+            {stats.map((stat, index) => (
+              <Col md={3} key={index}>
+                <div className="text-center p-4 rounded-3" style={{background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+                  <h3 className="display-6 fw-bold mb-2" style={{color: '#3b82f6'}}>
+                    {stat.value}
+                  </h3>
+                  <p className="mb-0" style={{color: '#ffffff'}}>
+                    {stat.label}
                   </p>
-                </Card.Body>
-            </Card>
-            </Col>
-            
-            <Col md={6} lg={4}>
-              <Card className="h-100 border-0" style={{background: 'white', boxShadow: '0 5px 15px rgba(0,0,0,0.08)'}}>
-                <Card.Body className="p-4 text-center">
-                  <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: '#f0f9ff'}}>
-                    <Brain className="text-info" size={32} />
-                  </div>
-                  <h5 className="fw-bold mb-4" style={{color: '#1a202c', lineHeight: '1.3'}}>
-                    {language === 'ko' ? 'AI 에이전트 추천' : 'AI Agent Recommendation'}
-                  </h5>
-                  <p style={{color: '#4a5568', lineHeight: '1.6'}}>
-                    {language === 'ko' 
-                      ? '표준직무DB를 분석하여 최적의 AI 에이전트를 추천합니다'
-                      : 'Analyzes standard job database to recommend optimal AI agents'
-                    }
-                  </p>
-                </Card.Body>
-            </Card>
-            </Col>
-            
-            <Col md={6} lg={4}>
-              <Card className="h-100 border-0" style={{background: 'white', boxShadow: '0 5px 15px rgba(0,0,0,0.08)'}}>
-                <Card.Body className="p-4 text-center">
-                  <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: '#f0fdf4'}}>
-                    <Target className="text-success" size={32} />
-                  </div>
-                  <h5 className="fw-bold mb-4" style={{color: '#1a202c', lineHeight: '1.3'}}>
-                    {language === 'ko' ? '맞춤형 솔루션' : 'Customized Solutions'}
-                  </h5>
-                  <p style={{color: '#4a5568', lineHeight: '1.6'}}>
-                    {language === 'ko' 
-                      ? '개별 기업에 맞춤화된 AI 에이전트를 추천합니다'
-                      : 'Recommends customized AI agents for individual companies'
-                    }
-                  </p>
-                </Card.Body>
-              </Card>
-            </Col>
+          </div>
+              </Col>
+            ))}
           </Row>
         </Container>
       </section>
 
-      {/* JD Input Section */}
-      <section id="jd-input" className="py-5" style={{background: '#ffffff'}}>
+      {/* Features Section - ImpactFlow Style */}
+      <section className="py-6" style={{background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)'}}>
+        <Container>
+          <Row className="text-center mb-6">
+            <Col lg={8} className="mx-auto">
+              <h2 className="display-5 fw-bold mb-4" style={{color: '#ffffff'}}>
+                {language === 'ko' ? '왜 JDX를 선택해야 할까요?' : 'Why Choose JDX?'}
+              </h2>
+              <p className="lead" style={{color: '#ffffff'}}>
+                {language === 'ko' 
+                  ? 'AI 기반의 혁신적인 기술로 업무 자동화의 새로운 패러다임을 제시합니다'
+                  : 'We present a new paradigm for work automation with innovative AI-based technology'
+                }
+              </p>
+            </Col>
+          </Row>
+          
+          <Row className="g-4">
+            {features.map((feature, index) => (
+              <Col md={6} lg={3} key={index}>
+                <Card className="h-100 border-0" style={{background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+                  <Card.Body className="p-4 text-center">
+                    <div className="p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(59, 130, 246, 0.1)'}}>
+                      {feature.icon}
+                    </div>
+                    <h5 className="fw-bold mb-3" style={{color: '#ffffff'}}>
+                      {feature.title}
+                    </h5>
+                    <p className="text-muted" style={{color: '#ffffff'}}>
+                      {feature.description}
+                    </p>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </section>
+
+      {/* Success Stories - ImpactFlow Style */}
+      <section className="py-6" style={{background: 'linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%)'}}>
+        <Container>
+          <Row className="text-center mb-6">
+            <Col>
+              <h2 className="display-5 fw-bold mb-4" style={{color: '#ffffff'}}>
+                {language === 'ko' ? '성공 사례' : 'Success Stories'}
+              </h2>
+              <p className="lead" style={{color: '#ffffff'}}>
+                {language === 'ko' 
+                  ? '전 세계 기업들이 JDX로 달성한 놀라운 성과를 확인하세요'
+                  : 'Discover the amazing results achieved by global companies with JDX'
+                }
+              </p>
+            </Col>
+          </Row>
+          
+          <Row className="g-4">
+            {successStories.map((story, index) => (
+              <Col lg={4} key={index}>
+                <Card className="h-100 border-0" style={{background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+                  <Card.Body className="p-4">
+                    <div className="d-flex align-items-center mb-3">
+                      <div className="p-2 rounded me-3" style={{background: 'rgba(59, 130, 246, 0.1)'}}>
+                        <span className="fs-4">{story.logo}</span>
+                      </div>
+                      <div>
+                        <h6 className="fw-bold mb-0" style={{color: '#ffffff'}}>{story.company}</h6>
+                        <small style={{color: '#ffffff'}}>{story.industry}</small>
+                      </div>
+          </div>
+
+                    <h6 className="fw-bold mb-2" style={{color: '#ffffff'}}>
+                      {story.challenge}
+                    </h6>
+                    <p className="text-muted small mb-3" style={{color: '#ffffff'}}>
+                      {story.solution}
+                    </p>
+                    
+                    <div className="row g-2">
+                      {story.results.map((result, resultIndex) => (
+                        <Col key={resultIndex}>
+                          <div className="text-center p-2 rounded" style={{background: 'rgba(59, 130, 246, 0.1)'}}>
+                            <h6 className="fw-bold mb-1" style={{color: '#3b82f6'}}>
+                              {result.metric}
+                            </h6>
+                            <small style={{color: '#ffffff'}}>
+                              {result.label}
+                            </small>
+                          </div>
+                        </Col>
+                      ))}
+                    </div>
+                  </Card.Body>
+            </Card>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </section>
+
+      {/* JD Input Section - ImpactFlow Style */}
+      <section id="jd-input" className="py-6" style={{background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)'}}>
         <Container>
           <Row className="justify-content-center">
             <Col lg={8}>
-              <Card className="border-0" style={{background: 'white', boxShadow: '0 10px 30px rgba(0,0,0,0.1)'}}>
-                <Card.Header className="bg-transparent border-0 text-center py-5">
-                  <h2 className="h3 fw-bold mb-3" style={{color: '#1a202c', lineHeight: '1.3'}}>
-                    {language === 'ko' ? 'JD 분석 시작하기' : 'Start JD Analysis'}
-                  </h2>
-                  <p style={{color: '#4a5568', lineHeight: '1.6'}}>
-                    {language === 'ko' 
-                      ? '분석하고 싶은 Job Description을 입력하거나 파일을 업로드하세요'
-                      : 'Enter the Job Description you want to analyze or upload a file'
-                    }
-                  </p>
-                </Card.Header>
-                
-                <Card.Body className="p-4">
+              <div className="text-center mb-6">
+                <h2 className="display-5 fw-bold mb-4" style={{color: '#ffffff'}}>
+                  {language === 'ko' ? '지금 바로 시작하세요' : 'Get Started Now'}
+                </h2>
+                <p className="lead" style={{color: '#ffffff'}}>
+                  {language === 'ko' 
+                    ? 'JD를 업로드하고 AI 분석 결과를 확인해보세요'
+                    : 'Upload your JD and see the AI analysis results'
+                  }
+                </p>
+              </div>
+              
+              <Card className="border-0" style={{background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+                <Card.Body className="p-5">
                   <JDInput onAnalyze={handleAnalyze} isAnalyzing={isAnalyzing} language={language} />
                 </Card.Body>
             </Card>
@@ -460,42 +504,66 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Analysis Results */}
+      {/* Analysis Results - ImpactFlow Style */}
       {analysisResult && (
-        <section className="py-5" style={{background: '#f8fafc'}}>
+        <section id="analysis-results" className="py-6" style={{background: 'linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%)', borderTop: '3px solid #3b82f6'}}>
           <Container>
+            {/* Analysis Results Header */}
             <Row className="mb-4">
               <Col>
-                <div className="d-flex justify-content-between align-items-center">
-                  <h2 className="h3 fw-bold mb-0" style={{color: '#1a202c'}}>
-                    {language === 'ko' ? '분석 결과' : 'Analysis Results'}
-                  </h2>
-                  
+                <div className="text-center p-4 rounded-3 mb-4" style={{background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.2)'}}>
+                  <div className="d-flex align-items-center justify-content-center mb-3">
+                    <div className="p-3 rounded-circle me-3" style={{background: 'rgba(59, 130, 246, 0.2)'}}>
+                      <BarChart3 size={32} style={{color: '#3b82f6'}} />
+                    </div>
+                    <div className="text-start">
+                      <h3 className="fw-bold mb-1" style={{color: '#ffffff'}}>
+                        {language === 'ko' ? 'AI 분석 완료!' : 'AI Analysis Complete!'}
+                      </h3>
+                      <p className="mb-0" style={{color: '#9ca3af'}}>
+                        {language === 'ko' 
+                          ? 'JD 분석이 완료되었습니다. 아래 결과를 확인해보세요.'
+                          : 'JD analysis is complete. Check the results below.'
+                        }
+                      </p>
+                    </div>
+          </div>
+        </div>
+              </Col>
+            </Row>
+
+            {/* Controls */}
+            <Row className="mb-4">
+              <Col>
+                <div className="d-flex justify-content-end">
                   <div className="d-flex gap-2">
                     <Button
-                      variant={viewMode === 'summary' ? 'primary' : 'outline-primary'}
+                      variant={viewMode === 'summary' ? 'primary' : 'outline-light'}
                       size="sm"
                       onClick={() => setViewMode('summary')}
+                      style={viewMode === 'summary' ? {background: '#3b82f6', border: 'none'} : {borderColor: '#6b7280', color: '#ffffff'}}
                     >
-                      <BarChart3 className="me-1" size={16} />
+                      <BarChart3 className="me-1" size={14} />
                       {language === 'ko' ? '요약' : 'Summary'}
                     </Button>
                     
                     <Button
-                      variant={viewMode === 'detailed' ? 'primary' : 'outline-primary'}
+                      variant={viewMode === 'detailed' ? 'primary' : 'outline-light'}
                       size="sm"
                       onClick={() => setViewMode('detailed')}
+                      style={viewMode === 'detailed' ? {background: '#3b82f6', border: 'none'} : {borderColor: '#6b7280', color: '#ffffff'}}
                     >
-                      <FileText className="me-1" size={16} />
+                      <FileText className="me-1" size={14} />
                       {language === 'ko' ? '상세' : 'Detailed'}
                     </Button>
                     
                     <Button
-                      variant="success"
+                      variant="outline-success"
                       size="sm"
                       onClick={() => setShowExportDialog(true)}
+                      style={{borderColor: '#10b981', color: '#10b981'}}
                     >
-                      <Download className="me-1" size={16} />
+                      <Download className="me-1" size={14} />
                       {t.common.export} PDF
                     </Button>
           </div>
@@ -533,13 +601,13 @@ export default function HomePage() {
                         language={language}
                       />
                     ) : (
-                      <Card className="h-100 border-0 d-flex align-items-center justify-content-center" style={{background: 'white', boxShadow: '0 5px 15px rgba(0,0,0,0.08)'}}>
+                      <Card className="h-100 border-0 d-flex align-items-center justify-content-center" style={{background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
                         <Card.Body className="text-center py-5">
-                          <Target className="mb-3" size={48} style={{color: '#a0aec0'}} />
-                          <h5 className="fw-bold mb-2" style={{color: '#1a202c'}}>
+                          <Target className="mb-3" size={48} style={{color: '#6b7280'}} />
+                          <h5 className="fw-bold mb-2" style={{color: '#ffffff'}}>
                             {t.analysis.selectTask}
                           </h5>
-                          <p style={{color: '#4a5568'}}>
+                          <p style={{color: '#ffffff'}}>
                             {t.analysis.noTaskSelected}
                           </p>
                         </Card.Body>
@@ -568,14 +636,14 @@ export default function HomePage() {
 
             {/* Demo Mode Alert */}
             {showDemo && (
-              <Row className="mt-4">
+              <Row className="mb-4">
                 <Col>
-                  <Alert variant="info" className="border-0" style={{background: '#e6f3ff', color: '#1a365d'}}>
+                  <Alert variant="info" className="border-0" style={{background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', border: '1px solid rgba(245, 158, 11, 0.2)'}}>
                     <div className="d-flex align-items-center">
-                      <Lightbulb className="me-2" size={20} />
+                      <Lightbulb className="me-2" size={18} />
             <div>
-                        <strong>{language === 'ko' ? '데모 모드' : 'Demo Mode'}</strong>
-                        <p className="mb-0 mt-1">
+                        <strong className="small">{language === 'ko' ? '데모 모드' : 'Demo Mode'}</strong>
+                        <p className="mb-0 mt-1 small" style={{color: '#f59e0b'}}>
                           {language === 'ko' 
                             ? '현재 데모 데이터로 분석 결과를 보여드리고 있습니다. 실제 JD를 입력하여 분석해보세요.'
                             : 'Currently showing analysis results with demo data. Enter a real JD to analyze.'
