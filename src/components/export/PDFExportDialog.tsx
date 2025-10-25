@@ -72,7 +72,7 @@ export function PDFExportDialog({ analysisResult, isOpen, onClose, language }: P
 
   const handleDownload = () => {
     // Create a simple text version for download
-    const content = generatePDFContent(result, options);
+    const content = generatePDFContent(analysisResult, options);
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
