@@ -126,177 +126,263 @@ export default function HomePage() {
       {/* Header */}
       <Header language={language} onLanguageChange={handleLanguageChange} />
 
-      {/* Hero Section */}
-      <section className="py-5 bg-gradient" style={{background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)'}}>
-        <Container>
+      {/* Hero Section - Remember Style */}
+      <section className="py-5 position-relative overflow-hidden" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+        {/* Background Pattern */}
+        <div className="position-absolute top-0 start-0 w-100 h-100 opacity-10">
+          <div className="position-absolute top-0 start-0 w-100 h-100" style={{
+            backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)'
+          }}></div>
+        </div>
+        
+        <Container className="position-relative">
           <Row className="align-items-center min-vh-75">
-            <Col lg={6} className="text-center text-lg-start">
+            <Col lg={8} className="text-center text-lg-start mx-auto">
               <div className="fade-in">
-                <Badge bg="primary" className="mb-3 px-3 py-2 rounded-pill jdx-pulse">
-                  <Rocket className="me-2" size={16} />
-                  {language === 'ko' ? 'AI 에이전트 자동화 플랫폼' : 'AI Agent Automation Platform'}
-                </Badge>
-                
-                <h1 className="display-4 fw-bold mb-4 jdx-gradient">
-                  {t.hero.title}
+                {/* Main Title - Remember Style */}
+                <h1 className="display-2 fw-bold mb-4 text-white" style={{lineHeight: '1.2'}}>
+                  {language === 'ko' ? '계약을 만드는' : 'Creating Contracts with'}
+                  <br />
+                  <span className="text-warning">
+                    {language === 'ko' ? '진짜 JD 자동화' : 'Real JD Automation'}
+                  </span>
                 </h1>
                 
-                <p className="lead mb-4 text-light">
-                  {t.hero.subtitle}
+                <p className="display-6 fw-bold text-white mb-4">
+                  {language === 'ko' 
+                    ? '원하는 업무만 골라서, 시간과 비용은 아낀다고?'
+                    : 'Choose only the work you want, while saving time and cost?'
+                  }
                 </p>
                 
-                <p className="text-muted mb-5">
-                  {t.hero.description}
-                </p>
-                
-                <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+                <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start mb-5">
                   <Button 
-                    variant="primary" 
+                    variant="warning" 
                     size="lg" 
-                    className="btn-jdx px-4 py-3 rounded-pill"
+                    className="px-5 py-3 rounded-pill fw-bold text-dark"
                     onClick={handleDemo}
+                    style={{fontSize: '1.1rem'}}
                   >
                     <Play className="me-2" size={20} />
-                    {t.hero.demoButton}
+                    {language === 'ko' ? '소개서 받기' : 'Get Brochure'}
                   </Button>
                   
                   <Button 
                     variant="outline-light" 
                     size="lg" 
-                    className="btn-jdx-outline px-4 py-3 rounded-pill"
+                    className="px-5 py-3 rounded-pill fw-bold"
                     onClick={() => document.getElementById('jd-input')?.scrollIntoView({ behavior: 'smooth' })}
+                    style={{fontSize: '1.1rem'}}
                   >
                     <ArrowRight className="me-2" size={20} />
-                    {t.hero.startButton}
+                    {language === 'ko' ? '견적 문의하기' : 'Request Quote'}
                   </Button>
                 </div>
               </div>
             </Col>
-            
-            <Col lg={6} className="text-center">
-              <div className="position-relative">
-                <div className="jdx-card p-5 rounded-4">
-                  <Brain className="text-primary mb-4" size={80} />
-                  <h3 className="h4 mb-3">{language === 'ko' ? 'AI 분석 엔진' : 'AI Analysis Engine'}</h3>
-                  <p className="text-muted">
-                    {language === 'ko' 
-                      ? '최신 AI 기술로 JD를 분석하여 자동화 가능성을 찾아드립니다'
-                      : 'Analyze JDs with latest AI technology to find automation opportunities'
-                    }
-                  </p>
-                </div>
-                
-                {/* Floating elements */}
-                <div className="position-absolute top-0 start-0 translate-middle">
-                  <div className="jdx-card p-3 rounded-circle jdx-glow">
-                    <Zap className="text-warning" size={24} />
-                  </div>
-                </div>
-                
-                <div className="position-absolute top-0 end-0 translate-middle">
-                  <div className="jdx-card p-3 rounded-circle jdx-glow" style={{animationDelay: '1s'}}>
-                    <Target className="text-success" size={24} />
-                  </div>
-                </div>
-                
-                <div className="position-absolute bottom-0 start-50 translate-middle">
-                  <div className="jdx-card p-3 rounded-circle jdx-glow" style={{animationDelay: '2s'}}>
-                    <TrendingUp className="text-info" size={24} />
-                  </div>
-                </div>
-              </div>
-            </Col>
           </Row>
         </Container>
       </section>
 
-      {/* Features Section */}
-      <section className="py-5">
-        <Container>
-          <Row className="text-center mb-5">
-            <Col>
-              <h2 className="display-5 fw-bold mb-3 jdx-gradient">
-                {language === 'ko' ? '주요 기능' : 'Key Features'}
-              </h2>
-              <p className="lead text-muted">
-                {language === 'ko' 
-                  ? 'JDX가 제공하는 강력한 AI 분석 기능들을 확인해보세요'
-                  : 'Discover the powerful AI analysis features that JDX provides'
-                }
-              </p>
-            </Col>
-          </Row>
-          
-          <Row className="g-4">
-            {Object.values(t.hero.features).map((feature, index) => (
-              <Col md={6} lg={4} key={index}>
-                <Card className="card-jdx h-100 border-0">
-                  <Card.Body className="p-4 text-center">
-                    <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3 jdx-glow">
-                      {index === 0 && <Brain className="text-primary" size={32} />}
-                      {index === 1 && <Zap className="text-warning" size={32} />}
-                      {index === 2 && <Target className="text-success" size={32} />}
-                    </div>
-                    <h5 className="fw-bold mb-3">{feature.title}</h5>
-                    <p className="text-muted">{feature.description}</p>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        </Container>
-      </section>
-
-      {/* Statistics Section */}
+      {/* Pain Point Section - Remember Style */}
       <section className="py-5 bg-light" data-bs-theme="light">
         <Container>
           <Row className="text-center mb-5">
             <Col>
-              <h2 className="display-5 fw-bold mb-3">
-                {language === 'ko' ? '1500+개 기업이 선택한' : 'Trusted by 1500+ Companies'}
+              <h2 className="display-4 fw-bold mb-3 text-dark">
+                {language === 'ko' ? 'JD 자동화의 어려움' : 'JD Automation Challenges'}
+                <br />
+                <span className="text-primary">
+                  {language === 'ko' ? 'JDX로 해결하세요' : 'Solve with JDX'}
+                </span>
               </h2>
-              <p className="lead text-muted">
-                {language === 'ko' 
-                  ? '쉽고 빠른 글로벌 원스톱 AI 플랫폼'
-                  : 'Easy and Fast Global One-Stop AI Platform'
-                }
-              </p>
             </Col>
           </Row>
           
-          <Row className="g-4">
-            {[
-              { icon: <Zap className="text-warning" size={40} />, value: '10배', label: language === 'ko' ? '더 빠른 실행' : 'Faster Execution' },
-              { icon: <TrendingUp className="text-success" size={40} />, value: '2배', label: language === 'ko' ? '더 높은 성과' : 'Higher Performance' },
-              { icon: <Award className="text-primary" size={40} />, value: '95%', label: language === 'ko' ? '정확도' : 'Accuracy' },
-              { icon: <Clock className="text-info" size={40} />, value: '24/7', label: language === 'ko' ? '실시간 분석' : 'Real-time Analysis' }
-            ].map((stat, index) => (
-              <Col md={6} lg={3} key={index}>
-                <Card className="card-jdx h-100 border-0 text-center">
-                  <Card.Body className="p-4">
-                    <div className="mb-3">{stat.icon}</div>
-                    <h3 className="display-6 fw-bold text-primary mb-2">{stat.value}</h3>
-                    <p className="text-muted mb-0">{stat.label}</p>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
+          <Row className="g-4 mb-5">
+            <Col md={6} lg={3}>
+              <Card className="card-jdx h-100 border-0 text-center">
+                <Card.Body className="p-4">
+                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.1)'}}>
+                    <XCircle className="text-danger" size={32} />
+                  </div>
+                  <h5 className="fw-bold mb-3 text-danger">
+                    {language === 'ko' ? 'Paid 광고는 리드 전환율이 낮아' : 'Paid ads have low conversion rates'}
+                  </h5>
+                </Card.Body>
+              </Card>
+            </Col>
+            
+            <Col md={6} lg={3}>
+              <Card className="card-jdx h-100 border-0 text-center">
+                <Card.Body className="p-4">
+                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.1)'}}>
+                    <Clock className="text-danger" size={32} />
+                  </div>
+                  <h5 className="fw-bold mb-3 text-danger">
+                    {language === 'ko' ? '오프라인 행사는 품이 너무 많이 들어' : 'Offline events require too much effort'}
+                  </h5>
+                </Card.Body>
+              </Card>
+            </Col>
+            
+            <Col md={6} lg={3}>
+              <Card className="card-jdx h-100 border-0 text-center">
+                <Card.Body className="p-4">
+                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.1)'}}>
+                    <FileText className="text-danger" size={32} />
+                  </div>
+                  <h5 className="fw-bold mb-3 text-danger">
+                    {language === 'ko' ? '콘텐츠 제작 인력 없는데, 외주 써야하나?' : 'No content team, need to outsource?'}
+                  </h5>
+                </Card.Body>
+              </Card>
+            </Col>
+            
+            <Col md={6} lg={3}>
+              <Card className="card-jdx h-100 border-0 text-center">
+                <Card.Body className="p-4">
+                  <div className="jdx-card p-3 rounded-circle d-inline-flex mb-3" style={{background: 'rgba(220, 53, 69, 0.1)'}}>
+                    <DollarSign className="text-danger" size={32} />
+                  </div>
+                  <h5 className="fw-bold mb-3 text-danger">
+                    {language === 'ko' ? '비싸게 DB 구매했는데 우리 타깃과 안 맞아' : 'Expensive DB purchase but doesn\'t match our target'}
+                  </h5>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+          
+          {/* JDX Solution */}
+          <Row className="text-center">
+            <Col>
+              <Card className="card-jdx border-0" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+                <Card.Body className="p-5 text-white">
+                  <h3 className="display-5 fw-bold mb-4">
+                    {language === 'ko' ? 'JDX' : 'JDX'}
+                  </h3>
+                  
+                  <Row className="g-4">
+                    <Col md={4}>
+                      <div className="text-center">
+                        <h4 className="fw-bold mb-3">
+                          {language === 'ko' ? '시간과 예산이 적어도' : 'Even with limited time and budget'}
+                        </h4>
+                      </div>
+                    </Col>
+                    <Col md={4}>
+                      <div className="text-center">
+                        <h4 className="fw-bold mb-3">
+                          {language === 'ko' ? '원하는 업무만 골라서' : 'Choose only the work you want'}
+                        </h4>
+                      </div>
+                    </Col>
+                    <Col md={4}>
+                      <div className="text-center">
+                        <h4 className="fw-bold mb-3">
+                          {language === 'ko' ? 'AI로 쉽게 자동화 가능!' : 'Easily automate with AI!'}
+                        </h4>
+                      </div>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Col>
           </Row>
         </Container>
       </section>
 
-      {/* Process Section */}
+      {/* Performance Section - Remember Style */}
       <section className="py-5">
         <Container>
           <Row className="text-center mb-5">
             <Col>
-              <h2 className="display-5 fw-bold mb-3 jdx-gradient">
-                {language === 'ko' ? '작동 원리' : 'How It Works'}
+              <h2 className="display-4 fw-bold mb-3 text-dark">
+                {language === 'ko' ? 'JDX의 성과,' : 'JDX Performance,'}
+                <br />
+                <span className="text-primary">
+                  {language === 'ko' ? '이미 숫자로 증명되었습니다' : 'Already Proven by Numbers'}
+                </span>
+              </h2>
+            </Col>
+          </Row>
+          
+          <Row className="g-4">
+            <Col md={4}>
+              <Card className="card-jdx h-100 border-0 text-center">
+                <Card.Body className="p-5">
+                  <div className="jdx-card p-4 rounded-circle d-inline-flex mb-4" style={{background: 'rgba(25, 135, 84, 0.1)'}}>
+                    <TrendingUp className="text-success" size={48} />
+                  </div>
+                  <h3 className="display-3 fw-bold text-success mb-2">500</h3>
+                  <h5 className="fw-bold text-dark mb-3">
+                    {language === 'ko' ? '평균 자동화 비용' : 'Average Automation Cost'}
+                  </h5>
+                  <p className="text-muted mb-0">
+                    {language === 'ko' ? '절감' : 'Reduction'}
+                  </p>
+                  <small className="text-muted">
+                    {language === 'ko' ? 'HR 소프트웨어 A기업 사례' : 'HR Software A Company Case'}
+                  </small>
+                </Card.Body>
+              </Card>
+            </Col>
+            
+            <Col md={4}>
+              <Card className="card-jdx h-100 border-0 text-center">
+                <Card.Body className="p-5">
+                  <div className="jdx-card p-4 rounded-circle d-inline-flex mb-4" style={{background: 'rgba(13, 202, 240, 0.1)'}}>
+                    <Target className="text-info" size={48} />
+                  </div>
+                  <h3 className="display-3 fw-bold text-info mb-2">1000</h3>
+                  <h5 className="fw-bold text-dark mb-3">
+                    {language === 'ko' ? '리드 to 계약 성사율' : 'Lead to Contract Rate'}
+                  </h5>
+                  <p className="text-muted mb-0">
+                    {language === 'ko' ? '개선' : 'Improvement'}
+                  </p>
+                  <small className="text-muted">
+                    {language === 'ko' ? '물류 솔루션 B기업 사례' : 'Logistics Solution B Company Case'}
+                  </small>
+                </Card.Body>
+              </Card>
+            </Col>
+            
+            <Col md={4}>
+              <Card className="card-jdx h-100 border-0 text-center">
+                <Card.Body className="p-5">
+                  <div className="jdx-card p-4 rounded-circle d-inline-flex mb-4" style={{background: 'rgba(111, 66, 193, 0.1)'}}>
+                    <Users className="text-primary" size={48} />
+                  </div>
+                  <h3 className="display-3 fw-bold text-primary mb-2">300</h3>
+                  <h5 className="fw-bold text-dark mb-3">
+                    {language === 'ko' ? '신규 고객 비중' : 'New Customer Ratio'}
+                  </h5>
+                  <p className="text-muted mb-0">
+                    {language === 'ko' ? '증대' : 'Increase'}
+                  </p>
+                  <small className="text-muted">
+                    {language === 'ko' ? '자동차 렌탈 C기업 사례' : 'Car Rental C Company Case'}
+                  </small>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      {/* Process Section - Remember Style */}
+      <section className="py-5 bg-light" data-bs-theme="light">
+        <Container>
+          <Row className="text-center mb-5">
+            <Col>
+              <h2 className="display-4 fw-bold mb-3 text-dark">
+                {language === 'ko' ? 'JDX, 어떻게 이용하나요?' : 'How to Use JDX?'}
               </h2>
               <p className="lead text-muted">
                 {language === 'ko' 
-                  ? '4단계로 간단하게 JD를 분석하고 자동화 방안을 제시합니다'
-                  : 'Analyze JDs and suggest automation solutions in 4 simple steps'
+                  ? '원하는 업무를 고르고 AI가 분석하면 빠른 시간 내에 자동화 방안을 제시합니다'
+                  : 'Choose the work you want and AI analyzes it to quickly suggest automation solutions'
                 }
               </p>
             </Col>
@@ -305,48 +391,48 @@ export default function HomePage() {
           <Row className="g-4">
             {[
               {
-                step: '01',
-                title: language === 'ko' ? '수집' : 'Collect',
-                description: language === 'ko' ? 'JD 데이터를 수집하고 전처리합니다' : 'Collect and preprocess JD data',
-                icon: <FileText className="text-primary" size={48} />,
+                step: '1',
+                title: language === 'ko' ? '업무 설정' : 'Task Setting',
+                description: language === 'ko' ? '자동화하고 싶은 업무를 선택합니다' : 'Select the tasks you want to automate',
+                icon: <Settings className="text-primary" size={48} />,
                 color: 'primary'
               },
               {
-                step: '02',
-                title: language === 'ko' ? '분석' : 'Analyze',
+                step: '2',
+                title: language === 'ko' ? 'AI 분석' : 'AI Analysis',
                 description: language === 'ko' ? 'AI가 업무를 분석하고 자동화 가능성을 평가합니다' : 'AI analyzes tasks and evaluates automation potential',
                 icon: <Brain className="text-success" size={48} />,
                 color: 'success'
               },
               {
-                step: '03',
-                title: language === 'ko' ? '실행' : 'Execute',
-                description: language === 'ko' ? '자동화 방안을 실행하고 모니터링합니다' : 'Execute automation solutions and monitor',
-                icon: <Rocket className="text-warning" size={48} />,
+                step: '3',
+                title: language === 'ko' ? '방안 제시' : 'Solution Proposal',
+                description: language === 'ko' ? '최적의 자동화 방안과 구현 가이드를 제공합니다' : 'Provides optimal automation solutions and implementation guides',
+                icon: <Lightbulb className="text-warning" size={48} />,
                 color: 'warning'
               },
               {
-                step: '04',
-                title: language === 'ko' ? '개선' : 'Improve',
-                description: language === 'ko' ? '성과를 측정하고 지속적으로 개선합니다' : 'Measure performance and continuously improve',
-                icon: <TrendingUp className="text-info" size={48} />,
+                step: '4',
+                title: language === 'ko' ? '성과 측정' : 'Performance Measurement',
+                description: language === 'ko' ? '자동화 성과를 측정하고 지속적으로 개선합니다' : 'Measures automation performance and continuously improves',
+                icon: <BarChart3 className="text-info" size={48} />,
                 color: 'info'
               }
             ].map((process, index) => (
               <Col md={6} lg={3} key={index}>
                 <Card className="card-jdx h-100 border-0 text-center position-relative">
-                  <Card.Body className="p-4">
-                    <Badge bg={process.color} className="position-absolute top-0 start-50 translate-middle rounded-pill px-3 py-2">
+                  <Card.Body className="p-5">
+                    <Badge bg={process.color} className="position-absolute top-0 start-50 translate-middle rounded-pill px-4 py-2 fw-bold" style={{fontSize: '1.1rem'}}>
                       {process.step}
                     </Badge>
                     
-                    <div className="mt-4 mb-3">
-                      <div className={`jdx-card p-4 rounded-circle d-inline-flex jdx-glow`}>
+                    <div className="mt-5 mb-4">
+                      <div className={`jdx-card p-4 rounded-circle d-inline-flex`} style={{background: `rgba(${process.color === 'primary' ? '111, 66, 193' : process.color === 'success' ? '25, 135, 84' : process.color === 'warning' ? '255, 193, 7' : '13, 202, 240'}, 0.1)`}}>
                         {process.icon}
                       </div>
                     </div>
                     
-                    <h5 className="fw-bold mb-3">{process.title}</h5>
+                    <h4 className="fw-bold mb-3 text-dark">{process.title}</h4>
                     <p className="text-muted">{process.description}</p>
                   </Card.Body>
                 </Card>
