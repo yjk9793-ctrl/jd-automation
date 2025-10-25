@@ -398,31 +398,37 @@ export function TaskDetail({ task, onGenerateRecipe, isGeneratingRecipe = false,
           </Card.Header>
           <Card.Body>
             <ListGroup variant="flush">
-              {task.recipe.steps.map((step, index) => (
-                <ListGroup.Item 
-                  key={index} 
-                  className="border-0 px-0 py-3" 
-                  style={{background: 'transparent', color: '#ffffff'}}
-                >
-                  <div className="d-flex">
-                    <Badge 
-                      bg="primary" 
-                      className="me-3 d-flex align-items-center justify-content-center" 
-                      style={{width: '24px', height: '24px', minWidth: '24px'}}
-                    >
-                      {index + 1}
-                    </Badge>
-                    <div className="flex-grow-1">
-                      <h6 className="fw-bold mb-1" style={{color: '#ffffff'}}>
-                        {step.title}
-                      </h6>
-                      <p className="mb-0" style={{color: '#ffffff'}}>
-                        {step.description}
-                      </p>
+              {task.recipe.steps.map((step, index) => {
+                // step이 문자열인 경우와 객체인 경우 모두 처리
+                const stepTitle = typeof step === 'string' ? `Step ${index + 1}` : step.title;
+                const stepDescription = typeof step === 'string' ? step : step.description;
+                
+                return (
+                  <ListGroup.Item 
+                    key={index} 
+                    className="border-0 px-0 py-3" 
+                    style={{background: 'transparent', color: '#ffffff'}}
+                  >
+                    <div className="d-flex">
+                      <Badge 
+                        bg="primary" 
+                        className="me-3 d-flex align-items-center justify-content-center" 
+                        style={{width: '24px', height: '24px', minWidth: '24px'}}
+                      >
+                        {index + 1}
+                      </Badge>
+                      <div className="flex-grow-1">
+                        <h6 className="fw-bold mb-1" style={{color: '#ffffff'}}>
+                          {stepTitle}
+                        </h6>
+                        <p className="mb-0" style={{color: '#ffffff'}}>
+                          {stepDescription}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </ListGroup.Item>
-              ))}
+                  </ListGroup.Item>
+                );
+              })}
             </ListGroup>
           </Card.Body>
         </Card>

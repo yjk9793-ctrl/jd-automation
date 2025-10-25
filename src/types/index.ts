@@ -23,11 +23,16 @@ export interface CodeSample {
   code: string;
 }
 
+export interface RecipeStep {
+  title: string;
+  description: string;
+}
+
 export interface TaskRecipe {
   inputs: InputOutput[];
   outputs: InputOutput[];
   flowMermaid: string;
-  steps: string[];
+  steps: RecipeStep[];
   codeSamples: CodeSample[];
   tests: string[];
   monitoring: string[];

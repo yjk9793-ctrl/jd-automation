@@ -306,7 +306,11 @@ JSON으로만 응답하세요.`;
     {"name": "출력명", "type": "데이터타입", "target": "대상"}
   ],
   "flowMermaid": "mermaid 플로우차트 코드",
-  "steps": ["단계1", "단계2", "단계3"],
+  "steps": [
+    {"title": "단계1", "description": "첫 번째 구현 단계"},
+    {"title": "단계2", "description": "두 번째 구현 단계"},
+    {"title": "단계3", "description": "세 번째 구현 단계"}
+  ],
   "codeSamples": [
     {
       "lang": "ts",
@@ -358,12 +362,12 @@ JSON으로만 응답하세요.`;
     H --> J[인간 검토 큐]
     I --> K[결과 저장]`,
         steps: [
-          "이력서 문서를 텍스트로 변환",
-          "자격 요건 키워드 추출",
-          "이력서 내용과 키워드 매칭",
-          "가중치 기반 점수 계산",
-          "임계값 기준으로 합격/불합격 결정",
-          "결과를 ATS 시스템에 저장"
+          { title: "문서 변환", description: "이력서 문서를 텍스트로 변환" },
+          { title: "키워드 추출", description: "자격 요건 키워드 추출" },
+          { title: "내용 매칭", description: "이력서 내용과 키워드 매칭" },
+          { title: "점수 계산", description: "가중치 기반 점수 계산" },
+          { title: "합격 판정", description: "임계값 기준으로 합격/불합격 결정" },
+          { title: "결과 저장", description: "결과를 ATS 시스템에 저장" }
         ],
         codeSamples: [
           {
@@ -436,10 +440,10 @@ def screen_resume(resume_text: str, requirements: List[str]) -> Dict:
     C --> D[결과 출력]
     D --> E[완료]`,
       steps: [
-        "데이터 준비",
-        "처리 로직 실행",
-        "결과 검증",
-        "출력 생성"
+        { title: "데이터 준비", description: "입력 데이터를 처리 가능한 형태로 준비" },
+        { title: "처리 로직 실행", description: "핵심 비즈니스 로직을 실행" },
+        { title: "결과 검증", description: "처리 결과의 유효성을 검증" },
+        { title: "출력 생성", description: "최종 결과를 생성하고 반환" }
       ],
       codeSamples: [
         {
