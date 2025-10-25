@@ -245,9 +245,9 @@ export function TaskList({ tasks, selectedTask, onTaskSelect, language = 'ko' }:
                           </span>
                         </Badge>
                         <Badge 
-                          bg={getDifficultyColor(task.difficulty)} 
-                          variant="outline"
-                          className="small"
+                          bg={getDifficultyColor(task.difficulty)}
+                          className="small border"
+                          style={{borderColor: 'rgba(255, 255, 255, 0.3)'}}
                         >
                           {getDifficultyText(task.difficulty)}
                         </Badge>

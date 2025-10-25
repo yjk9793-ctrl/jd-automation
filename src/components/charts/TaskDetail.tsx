@@ -103,8 +103,9 @@ export function TaskDetail({ task, onGenerateRecipe, isGeneratingRecipe = false,
             </span>
           </Badge>
           <Badge 
-            bg={getDifficultyColor(task.difficulty)} 
-            variant="outline"
+            bg={getDifficultyColor(task.difficulty)}
+            className="border"
+            style={{borderColor: 'rgba(255, 255, 255, 0.3)'}}
           >
             {getDifficultyText(task.difficulty)}
           </Badge>
