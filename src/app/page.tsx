@@ -80,9 +80,14 @@ export default function HomePage() {
       if (!response.ok) {
         if (result.error && result.error.includes('데모 모드')) {
           // 데모 모드로 실행
-          const demoResult = getDemoResult('hr');
-          setAnalysisResult(demoResult);
-          setShowDemo(true);
+          try {
+            const demoResult = getDemoResult('hr');
+            setAnalysisResult(demoResult);
+            setShowDemo(true);
+          } catch (demoError) {
+            console.error('Demo data error:', demoError);
+            throw new Error('데모 데이터 로드 중 오류가 발생했습니다.');
+          }
         } else {
           throw new Error(result.error || '분석 중 오류가 발생했습니다.');
         }
@@ -110,20 +115,25 @@ export default function HomePage() {
   };
 
   const handleDemo = () => {
-    const demoResult = getDemoResult('hr');
-    setAnalysisResult(demoResult);
-    setShowDemo(true);
-    
-    // 분석 결과 섹션으로 스크롤
-    setTimeout(() => {
-      const resultsSection = document.getElementById('analysis-results');
-      if (resultsSection) {
-        resultsSection.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start' 
-        });
-      }
-    }, 100);
+    try {
+      const demoResult = getDemoResult('hr');
+      setAnalysisResult(demoResult);
+      setShowDemo(true);
+      
+      // 분석 결과 섹션으로 스크롤
+      setTimeout(() => {
+        const resultsSection = document.getElementById('analysis-results');
+        if (resultsSection) {
+          resultsSection.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }
+      }, 100);
+    } catch (error) {
+      console.error('Demo data error:', error);
+      alert('데모 데이터 로드 중 오류가 발생했습니다.');
+    }
   };
 
   const handleTaskSelect = (task: TaskItem) => {
@@ -582,64 +592,72 @@ export default function HomePage() {
             {viewMode === 'summary' ? (
               <>
                 {/* Overview Summary */}
-                <Row className="mb-4">
-                  <Col>
-                    <OverviewSummary result={analysisResult} language={language} />
-                  </Col>
-                </Row>
+                {analysisResult && (
+                  <Row className="mb-4">
+                    <Col>
+                      <OverviewSummary result={analysisResult} language={language} />
+                    </Col>
+                  </Row>
+                )}
 
                 {/* Main Content - 3 Column Grid */}
-                <Row className="g-4">
-                  {/* Task List - 1 Column */}
-                  <Col xl={4}>
-                    <TaskList
-                      tasks={analysisResult.tasks}
-                      selectedTask={selectedTask}
-                      onTaskSelect={handleTaskSelect}
-                      language={language}
-                    />
-                  </Col>
-
-                  {/* Task Detail - 2 Columns */}
-                  <Col xl={8}>
-                    {selectedTask ? (
-                      <TaskDetail
-                        task={selectedTask}
-                        onGenerateRecipe={handleGenerateRecipe}
+                {analysisResult && (
+                  <Row className="g-4">
+                    {/* Task List - 1 Column */}
+                    <Col xl={4}>
+                      <TaskList
+                        tasks={analysisResult.tasks}
+                        selectedTask={selectedTask}
+                        onTaskSelect={handleTaskSelect}
                         language={language}
                       />
-                    ) : (
-                      <Card className="h-100 border-0 d-flex align-items-center justify-content-center" style={{background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
-                        <Card.Body className="text-center py-5">
-                          <Target className="mb-3" size={48} style={{color: '#6b7280'}} />
-                          <h5 className="fw-bold mb-2" style={{color: '#ffffff'}}>
-                            {t.analysis.selectTask}
-                          </h5>
-                          <p style={{color: '#ffffff'}}>
-                            {t.analysis.noTaskSelected}
-                          </p>
-                        </Card.Body>
-                      </Card>
-                    )}
-                  </Col>
-                </Row>
+                    </Col>
+
+                    {/* Task Detail - 2 Columns */}
+                    <Col xl={8}>
+                      {selectedTask ? (
+                        <TaskDetail
+                          task={selectedTask}
+                          onGenerateRecipe={handleGenerateRecipe}
+                          language={language}
+                        />
+                      ) : (
+                        <Card className="h-100 border-0 d-flex align-items-center justify-content-center" style={{background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.1)'}}>
+                          <Card.Body className="text-center py-5">
+                            <Target className="mb-3" size={48} style={{color: '#6b7280'}} />
+                            <h5 className="fw-bold mb-2" style={{color: '#ffffff'}}>
+                              {t.analysis.selectTask}
+                            </h5>
+                            <p style={{color: '#ffffff'}}>
+                              {t.analysis.noTaskSelected}
+                            </p>
+                          </Card.Body>
+                        </Card>
+                      )}
+                    </Col>
+                  </Row>
+                )}
 
                 {/* Agent Advice */}
-                <Row className="mt-4">
-                  <Col>
-                    <AgentAdvice 
-                      language={language} 
-                      jobRole={analysisResult.jobRole || 'General'} 
-                    />
-                  </Col>
-                </Row>
+                {analysisResult && (
+                  <Row className="mt-4">
+                    <Col>
+                      <AgentAdvice 
+                        language={language} 
+                        jobRole={analysisResult.jobRole || 'General'} 
+                      />
+                    </Col>
+                  </Row>
+                )}
               </>
             ) : (
-              <Row>
-                <Col>
-                  <DetailedReport result={analysisResult} selectedTasks={selectedTask ? [selectedTask] : []} />
-                </Col>
-              </Row>
+              analysisResult && (
+                <Row>
+                  <Col>
+                    <DetailedReport result={analysisResult} selectedTasks={selectedTask ? [selectedTask] : []} />
+                  </Col>
+                </Row>
+              )
             )}
 
             {/* Demo Mode Alert */}
