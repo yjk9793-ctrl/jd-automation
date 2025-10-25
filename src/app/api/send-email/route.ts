@@ -24,7 +24,7 @@ const EmailRequestSchema = z.object({
       category: z.enum(['Automate', 'AI-Copilot', 'Human-Critical']),
       score: z.number(),
       roiEstimate: z.number(),
-      difficulty: z.number(),
+      difficulty: z.number().min(1).max(5),
       risks: z.array(z.string()),
       safeguards: z.array(z.string()),
       tools: z.array(z.object({
