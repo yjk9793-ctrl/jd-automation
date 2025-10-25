@@ -62,7 +62,7 @@ JSON 배열로만 응답하세요.`;
     }
   }
 
-  private getDemoTaskExtractions(): TaskExtraction[] {
+  public getDemoTaskExtractions(): TaskExtraction[] {
     return [
       {
         title: "지원자 서류 스크리닝",
@@ -170,7 +170,7 @@ JSON으로만 응답하세요.`;
     }
   }
 
-  private getDemoEvaluation(task: TaskExtraction): {
+  public getDemoEvaluation(task: TaskExtraction): {
     category: 'Automate' | 'Co-pilot' | 'Human-critical';
     score: number;
     criteria: AutomationCriteria;
