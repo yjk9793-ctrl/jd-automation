@@ -349,7 +349,7 @@ export function TaskDetail({ task, onGenerateRecipe, isGeneratingRecipe = false,
                         </Badge>
                       </div>
                       <small className="text-muted" style={{color: '#9ca3af'}}>
-                        {input.description}
+                        {input.description || `${language === 'ko' ? '입력 데이터' : 'Input data'}: ${input.type}`}
                       </small>
                     </ListGroup.Item>
                   ))}

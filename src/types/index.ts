@@ -14,6 +14,7 @@ export interface InputOutput {
   name: string;
   type: string;
   source: string;
+  description?: string;
 }
 
 export interface CodeSample {
