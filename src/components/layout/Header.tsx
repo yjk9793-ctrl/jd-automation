@@ -36,7 +36,7 @@ export function Header({ language, onLanguageChange }: HeaderProps) {
                 JDX <span className="fs-6 fw-normal text-primary">(Transformation)</span>
               </h1>
               <p className="small text-muted mb-0">
-                {t.subtitle}
+                {t.hero.subtitle}
               </p>
             </div>
           </div>
