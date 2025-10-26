@@ -313,13 +313,13 @@ export default function HomePage() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: 'url(/hero-background.png)',
-            opacity: 0.15,
-            filter: 'blur(1px) brightness(0.3)'
+            opacity: 0.4,
+            filter: 'blur(0.5px) brightness(0.6)'
           }}
         />
         
         {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/40" />
         
         <motion.div
           style={{ y }}
