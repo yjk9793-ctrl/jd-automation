@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
       recommendations: analysisResult.recommendations,
       nextSteps: analysisResult.nextSteps,
       createdAt: new Date().toISOString(),
+      aiSummary: analysisResult.aiSummary, // Add aiSummary from analysis result
     };
 
     // Send email with results
@@ -155,6 +156,7 @@ function getMockAnalysisResults() {
     tasks,
     recommendations,
     nextSteps,
+    aiSummary: '이 직무는 문서 처리, 고객 상담 등 3개 작업을 AI로 자동화할 수 있으며, 2개 작업은 AI와 인간의 협업이 적합합니다. 예상 ROI는 200%로 높은 자동화 잠재력을 보입니다.',
   };
 }
 
