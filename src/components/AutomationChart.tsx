@@ -143,7 +143,6 @@ export function AutomationChart({ result }: AutomationChartProps) {
               <Tooltip content={<CustomTooltip />} />
               <Bar 
                 dataKey="count" 
-                fill={(entry) => entry.color}
                 radius={[4, 4, 0, 0]}
               >
                 {barData.map((entry, index) => (
