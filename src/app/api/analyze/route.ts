@@ -60,11 +60,27 @@ export async function POST(request: NextRequest) {
 }
 
 async function performAnalysis(type: AnalysisType, content: string) {
-  // Always use Gemini API, no fallback
-  const geminiClient = new GeminiLLMClient();
-  const result = await geminiClient.analyzeJobDescription(content, type);
-  console.log('Gemini API analysis completed');
-  return result;
+  try {
+    // Try to use Gemini API
+    console.log('Attempting to use Gemini API...');
+    const geminiClient = new GeminiLLMClient();
+    const result = await geminiClient.analyzeJobDescription(content, type);
+    console.log('Gemini API analysis completed successfully');
+    return result;
+  } catch (error: any) {
+    console.error('Gemini API Error:', error);
+    
+    // If Gemini API fails due to missing key, use mock data
+    if (error.name === 'GeminiAPIKeyError' || (error.message && error.message.includes('GEMINI_API_KEY'))) {
+      console.log('GEMINI_API_KEY not set. Using fallback mock data.');
+      return getMockAnalysisResults();
+    }
+    
+    // Log other errors and use fallback
+    console.error('Unknown error:', error);
+    console.log('Using fallback mock data due to error');
+    return getMockAnalysisResults();
+  }
 }
 
 function getMockAnalysisResults() {

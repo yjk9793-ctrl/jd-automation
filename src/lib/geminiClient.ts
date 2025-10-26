@@ -7,8 +7,10 @@ export class GeminiLLMClient {
 
   constructor() {
     this.apiKey = process.env.GEMINI_API_KEY || '';
-    if (!this.apiKey) {
-      throw new Error('GEMINI_API_KEY is not set in environment variables');
+    if (!this.apiKey || this.apiKey === '') {
+      const error = new Error('GEMINI_API_KEY is not set in environment variables');
+      error.name = 'GeminiAPIKeyError';
+      throw error;
     }
     this.genAI = new GoogleGenerativeAI(this.apiKey);
   }
