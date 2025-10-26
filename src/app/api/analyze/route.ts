@@ -60,17 +60,11 @@ export async function POST(request: NextRequest) {
 }
 
 async function performAnalysis(type: AnalysisType, content: string) {
-  try {
-    // Try to use Gemini API if available
-    const geminiClient = new GeminiLLMClient();
-    const result = await geminiClient.analyzeJobDescription(content, type);
-    console.log('Gemini API analysis completed');
-    return result;
-  } catch (error) {
-    console.error('Gemini API failed, using fallback:', error);
-    // Fallback to mock data if API fails
-    return getMockAnalysisResults();
-  }
+  // Always use Gemini API, no fallback
+  const geminiClient = new GeminiLLMClient();
+  const result = await geminiClient.analyzeJobDescription(content, type);
+  console.log('Gemini API analysis completed');
+  return result;
 }
 
 function getMockAnalysisResults() {
