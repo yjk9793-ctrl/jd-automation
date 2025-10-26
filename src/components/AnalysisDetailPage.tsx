@@ -38,6 +38,7 @@ import {
 } from 'lucide-react';
 import { AnalysisResult, TaskItem, Language } from '@/types';
 import { useTranslation } from '@/lib/i18n';
+import { AutomationChart } from './AutomationChart';
 
 interface AnalysisDetailPageProps {
   result: AnalysisResult;
@@ -226,60 +227,9 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
             transition={{ duration: 0.5 }}
             className="grid grid-cols-1 lg:grid-cols-3 gap-8"
           >
-            {/* Chart Placeholder */}
+            {/* Chart Area */}
             <div className="lg:col-span-2">
-              <div className="card">
-                <h3 className="text-xl font-semibold mb-6">자동화 가능성 분포</h3>
-                <div className="h-64 bg-dark-700 rounded-lg flex items-center justify-center mb-6">
-                  <div className="text-center">
-                    <BarChart3 className="w-16 h-16 text-gray-500 mx-auto mb-4" />
-                    <p className="text-gray-400">차트 영역</p>
-                    <p className="text-sm text-gray-500">실제 구현 시 Recharts 라이브러리 사용</p>
-                  </div>
-                </div>
-                
-                {/* Progress Bars */}
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium">완전 자동화</span>
-                      <span className="text-sm text-green-500">{result.summary.automate}개</span>
-                    </div>
-                    <div className="w-full bg-dark-700 rounded-full h-2">
-                      <div 
-                        className="bg-green-500 h-2 rounded-full transition-all duration-1000"
-                        style={{ width: `${(result.summary.automate / result.summary.total) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium">AI 협업</span>
-                      <span className="text-sm text-yellow-500">{result.summary.copilot}개</span>
-                    </div>
-                    <div className="w-full bg-dark-700 rounded-full h-2">
-                      <div 
-                        className="bg-yellow-500 h-2 rounded-full transition-all duration-1000"
-                        style={{ width: `${(result.summary.copilot / result.summary.total) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium">인간 중심</span>
-                      <span className="text-sm text-red-500">{result.summary.humanCritical}개</span>
-                    </div>
-                    <div className="w-full bg-dark-700 rounded-full h-2">
-                      <div 
-                        className="bg-red-500 h-2 rounded-full transition-all duration-1000"
-                        style={{ width: `${(result.summary.humanCritical / result.summary.total) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <AutomationChart result={result} />
             </div>
 
             {/* Key Metrics */}
