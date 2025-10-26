@@ -6,7 +6,14 @@ export class GeminiLLMClient {
   private apiKey: string;
 
   constructor() {
-    this.apiKey = process.env.GEMINI_API_KEY || '';
+    // Try multiple sources for API key
+    this.apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'gen-lang-client-0285771016';
+    
+    console.log('GeminiLLMClient constructor called');
+    console.log('process.env.GEMINI_API_KEY:', process.env.GEMINI_API_KEY);
+    console.log('process.env.NEXT_PUBLIC_GEMINI_API_KEY:', process.env.NEXT_PUBLIC_GEMINI_API_KEY);
+    console.log('Final apiKey:', this.apiKey.substring(0, 20) + '...');
+    
     if (!this.apiKey || this.apiKey === '') {
       const error = new Error('GEMINI_API_KEY is not set in environment variables');
       error.name = 'GeminiAPIKeyError';
