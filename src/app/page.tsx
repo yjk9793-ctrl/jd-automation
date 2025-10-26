@@ -315,10 +315,23 @@ export default function HomePage() {
         
         <div className="container-custom px-4 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
+            {/* JDX (Transformation) Brand */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-8"
+            >
+              <h2 className="text-2xl md:text-3xl font-bold text-blue-400 mb-2">
+                JDX <span className="text-white">(Transformation)</span>
+              </h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
+            </motion.div>
+
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
               className="text-5xl md:text-7xl font-bold mb-6 text-shadow-lg"
             >
               <span className="gradient-text">{t.hero.title}</span>
@@ -327,7 +340,7 @@ export default function HomePage() {
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
               className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed"
             >
               {t.hero.subtitle}
@@ -336,7 +349,7 @@ export default function HomePage() {
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
               className="text-lg text-gray-400 mb-12 max-w-3xl mx-auto"
             >
               {t.hero.description}
@@ -345,7 +358,7 @@ export default function HomePage() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               <button 
