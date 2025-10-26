@@ -40,27 +40,42 @@ export class GeminiLLMClient {
     try {
       const model = this.genAI.getGenerativeModel({ model: 'gemini-pro' });
       
-      const prompt = `다음은 분석된 직무 설명입니다. 100자 이내로 핵심 내용을 요약해주세요.
+      const prompt = `다음은 분석된 직무 설명입니다. 500자 이내로 상세한 분석 내용을 요약해주세요.
 
 원본 내용:
-${originalContent.substring(0, 200)}...
+${originalContent.substring(0, 500)}...
 
 분석 결과 요약:
-- 자동화 가능: ${analysisData.summary.automate}개
-- AI 협업: ${analysisData.summary.copilot}개
-- 인간 중심: ${analysisData.summary.humanCritical}개
-- 평균 점수: ${analysisData.summary.averageScore}
+- 총 작업 수: ${analysisData.summary.total}개
+- 완전 자동화 가능: ${analysisData.summary.automate}개
+- AI 협업 가능: ${analysisData.summary.copilot}개
+- 인간 중심 필수: ${analysisData.summary.humanCritical}개
+- 평균 자동화 점수: ${analysisData.summary.averageScore}/100
 - 예상 ROI: ${analysisData.summary.estimatedROI}%
+- 자동화 잠재력: ${analysisData.summary.automationPotential}%
 
-100자 이내로 핵심 인사이트를 요약해주세요:`;
+작업별 상세 정보:
+${analysisData.tasks.map((task: any, i: number) => 
+  `${i+1}. ${task.title} (${task.category}) - 점수: ${task.score}/100, ROI: ${task.roiEstimate}%, 난이도: ${task.difficulty}/5`
+).join('\n')}
+
+다음 내용을 포함하여 500자 이내로 상세히 요약해주세요:
+1. 이 직무의 자동화 가능성 전체 평가
+2. 주요 자동화 가능 작업들의 특징과 이점
+3. AI 협업이 필요한 작업들과 그 이유
+4. 인간 중심 작업들과 보유해야 할 영역
+5. 구체적인 자동화 전략과 예상 효과
+6. ROI와 생산성 향상에 대한 인사이트
+
+상세하고 전문적인 톤으로 작성해주세요:`;
 
       const result = await model.generateContent(prompt);
       const response = result.response;
       let summary = response.text().trim();
       
-      // 100자 제한
-      if (summary.length > 100) {
-        summary = summary.substring(0, 100) + '...';
+      // 500자 제한
+      if (summary.length > 500) {
+        summary = summary.substring(0, 500) + '...';
       }
       
       return summary;
