@@ -308,9 +308,22 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(/hero-background.png)',
+            opacity: 0.15,
+            filter: 'blur(1px) brightness(0.3)'
+          }}
+        />
+        
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/60" />
+        
         <motion.div
           style={{ y }}
-          className="absolute inset-0 bg-hero-pattern opacity-20"
+          className="absolute inset-0 bg-hero-pattern opacity-10"
         />
         
         <div className="container-custom px-4 relative z-10">
