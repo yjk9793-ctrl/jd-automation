@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { AnalysisType, AnalysisResult, TaskItem, TaskCategory, DifficultyLevel } from '@/types';
+import { GeminiLLMClient } from '@/lib/geminiClient';
 
 const AnalysisRequestSchema = z.object({
   type: z.enum(['enterprise', 'personal']),
@@ -58,10 +59,20 @@ export async function POST(request: NextRequest) {
 }
 
 async function performAnalysis(type: AnalysisType, content: string) {
-  // Simulate AI analysis delay
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  try {
+    // Try to use Gemini API if available
+    const geminiClient = new GeminiLLMClient();
+    const result = await geminiClient.analyzeJobDescription(content, type);
+    console.log('Gemini API analysis completed');
+    return result;
+  } catch (error) {
+    console.error('Gemini API failed, using fallback:', error);
+    // Fallback to mock data if API fails
+    return getMockAnalysisResults();
+  }
+}
 
-  // Mock analysis results
+function getMockAnalysisResults() {
   const tasks: TaskItem[] = [
     {
       id: 'task-1',
