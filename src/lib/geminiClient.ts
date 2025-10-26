@@ -23,10 +23,50 @@ export class GeminiLLMClient {
       const response = result.response;
       const text = response.text();
 
-      return this.parseAnalysisResponse(text);
+      const parsedData = this.parseAnalysisResponse(text);
+      
+      // Generate summary
+      const summaryText = await this.generateSummary(content, parsedData);
+      parsedData.aiSummary = summaryText;
+      
+      return parsedData;
     } catch (error) {
       console.error('Gemini API error:', error);
       throw new Error('Failed to analyze with Gemini API');
+    }
+  }
+
+  private async generateSummary(originalContent: string, analysisData: any): Promise<string> {
+    try {
+      const model = this.genAI.getGenerativeModel({ model: 'gemini-pro' });
+      
+      const prompt = `다음은 분석된 직무 설명입니다. 100자 이내로 핵심 내용을 요약해주세요.
+
+원본 내용:
+${originalContent.substring(0, 200)}...
+
+분석 결과 요약:
+- 자동화 가능: ${analysisData.summary.automate}개
+- AI 협업: ${analysisData.summary.copilot}개
+- 인간 중심: ${analysisData.summary.humanCritical}개
+- 평균 점수: ${analysisData.summary.averageScore}
+- 예상 ROI: ${analysisData.summary.estimatedROI}%
+
+100자 이내로 핵심 인사이트를 요약해주세요:`;
+
+      const result = await model.generateContent(prompt);
+      const response = result.response;
+      let summary = response.text().trim();
+      
+      // 100자 제한
+      if (summary.length > 100) {
+        summary = summary.substring(0, 100) + '...';
+      }
+      
+      return summary;
+    } catch (error) {
+      console.error('Summary generation error:', error);
+      return 'AI 분석을 통해 자동화 가능성을 평가했습니다.';
     }
   }
 

@@ -165,6 +165,37 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
 
       {/* Main Content */}
       <div className="container-custom px-4 py-8">
+        {/* AI Summary Section */}
+        {result.aiSummary && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-8"
+          >
+            <div className="card bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30">
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                    <Brain className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <h3 className="text-lg font-semibold text-white">Gemini AI 요약</h3>
+                    <span className="px-2 py-1 text-xs font-medium bg-blue-500/20 text-blue-400 rounded-full">
+                      AI 분석
+                    </span>
+                  </div>
+                  <p className="text-gray-300 leading-relaxed">
+                    {result.aiSummary}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Summary Cards */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

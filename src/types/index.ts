@@ -76,6 +76,7 @@ export interface AnalysisResult {
   recommendations: string[];
   nextSteps: string[];
   createdAt: string;
+  aiSummary?: string;
 }
 
 export interface IndustryFeedback {
