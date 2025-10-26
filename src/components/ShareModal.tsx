@@ -60,8 +60,8 @@ export function ShareModal({ isOpen, onClose, result }: ShareModalProps) {
   ];
 
   const shareToKakao = () => {
-    if (typeof window !== 'undefined' && window.Kakao) {
-      window.Kakao.Link.sendDefault({
+    if (typeof window !== 'undefined' && (window as any).Kakao) {
+      (window as any).Kakao.Link.sendDefault({
         objectType: 'feed',
         content: {
           title: shareTitle,
