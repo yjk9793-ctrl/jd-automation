@@ -118,9 +118,20 @@ export function AnalysisForm({ type, language, onAnalyze, isAnalyzing }: Analysi
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!content.trim() || !email.trim()) return;
+    console.log('=== Form Submit Started ===');
+    console.log('Content:', content.substring(0, 50));
+    console.log('Email:', email);
+    console.log('Content trimmed:', !!content.trim());
+    console.log('Email trimmed:', !!email.trim());
     
+    if (!content.trim() || !email.trim()) {
+      console.log('❌ Form validation failed');
+      return;
+    }
+    
+    console.log('✅ Form validation passed, calling onAnalyze...');
     await onAnalyze(type, content, email);
+    console.log('✅ Form submit completed');
   };
 
   return (

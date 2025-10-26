@@ -92,8 +92,14 @@ export default function HomePage() {
   };
 
   const handleAnalyze = async (type: AnalysisType, content: string, email: string) => {
+    console.log('=== handleAnalyze Called ===');
+    console.log('Type:', type);
+    console.log('Email:', email);
+    console.log('Content length:', content.length);
+    
     setIsAnalyzing(true);
     try {
+      console.log('Calling /api/analyze...');
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: {
@@ -105,8 +111,11 @@ export default function HomePage() {
           email,
         }),
       });
+      
+      console.log('Response status:', response.status);
 
       const result = await response.json();
+      console.log('Result:', result);
       
       if (result.success) {
         setAnalysisResult(result.data);
