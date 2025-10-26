@@ -34,7 +34,8 @@ import {
   Menu,
   X,
   Eye,
-  Calendar
+  Calendar,
+  Download
 } from 'lucide-react';
 import { Language, AnalysisType, IndustryFeedback, ProcessStep, ContactForm, AnalysisResult } from '@/types';
 import { useTranslation } from '@/lib/i18n';
