@@ -166,7 +166,8 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
       {/* Main Content */}
       <div className="container-custom px-4 py-8">
         {/* AI Summary Section */}
-        {result.aiSummary && (
+        {/* AI Summary Display */}
+        {result.aiSummary && result.aiSummary.trim() !== '' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
