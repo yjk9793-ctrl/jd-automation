@@ -42,6 +42,14 @@ import { useTranslation } from '@/lib/i18n';
 import { AnalysisForm } from '@/components/AnalysisForm';
 import { AnalysisResults } from '@/components/AnalysisResults';
 import { AnalysisDetailPage } from '@/components/AnalysisDetailPage';
+import { 
+  TypingAnimation, 
+  ParticleAnimation, 
+  FloatingElements, 
+  GlowEffect, 
+  TextReveal, 
+  PulseButton 
+} from '@/components/animations/HeroAnimations';
 
 export default function HomePage() {
   const [language, setLanguage] = useState<Language>('ko');
@@ -325,87 +333,128 @@ export default function HomePage() {
           style={{ y }}
           className="absolute inset-0 bg-hero-pattern opacity-10"
         />
+
+        {/* Particle Animation */}
+        <ParticleAnimation />
         
         <div className="container-custom px-4 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
             {/* JDX (Transformation) Brand */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-8"
-            >
-              <h2 className="text-2xl md:text-3xl font-bold text-blue-400 mb-2">
-                JDX <span className="text-white">(Transformation)</span>
-              </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
-            </motion.div>
+            <FloatingElements>
+              <GlowEffect intensity={0.8}>
+                <TextReveal delay={0}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="mb-8"
+                  >
+                    <h2 className="text-2xl md:text-3xl font-bold text-blue-400 mb-2">
+                      <TypingAnimation 
+                        text="JDX" 
+                        speed={150}
+                        className="text-blue-400"
+                      />
+                      <span className="text-white"> (Transformation)</span>
+                    </h2>
+                    <motion.div 
+                      className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"
+                      initial={{ width: 0 }}
+                      animate={{ width: 96 }}
+                      transition={{ duration: 1, delay: 1 }}
+                    />
+                  </motion.div>
+                </TextReveal>
+              </GlowEffect>
+            </FloatingElements>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl md:text-7xl font-bold mb-6 text-shadow-lg"
-            >
-              <span className="gradient-text">{t.hero.title}</span>
-            </motion.h1>
+            <TextReveal delay={200} direction="up">
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-5xl md:text-7xl font-bold mb-6 text-shadow-lg"
+              >
+                <span className="gradient-text">
+                  <TypingAnimation 
+                    text={t.hero.title} 
+                    speed={80}
+                    className="gradient-text"
+                  />
+                </span>
+              </motion.h1>
+            </TextReveal>
             
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed"
-            >
-              {t.hero.subtitle}
-            </motion.p>
+            <TextReveal delay={400} direction="up">
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed"
+              >
+                <TypingAnimation 
+                  text={t.hero.subtitle} 
+                  speed={60}
+                  className="text-gray-300"
+                />
+              </motion.p>
+            </TextReveal>
             
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-lg text-gray-400 mb-12 max-w-3xl mx-auto"
-            >
-              {t.hero.description}
-            </motion.p>
+            <TextReveal delay={600} direction="up">
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="text-lg text-gray-400 mb-12 max-w-3xl mx-auto"
+              >
+                <TypingAnimation 
+                  text={t.hero.description} 
+                  speed={40}
+                  className="text-gray-400"
+                />
+              </motion.p>
+            </TextReveal>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-            >
-              <button 
-                onClick={() => {
-                  setActiveTab('enterprise');
-                  scrollToSection('analysis');
-                }}
-                className="btn-primary flex items-center space-x-2"
+            <TextReveal delay={800} direction="up">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
               >
-                <Building2 className="w-5 h-5" />
-                <span>{t.hero.enterpriseCta}</span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setActiveTab('personal');
-                  scrollToSection('analysis');
-                }}
-                className="btn-secondary flex items-center space-x-2"
-              >
-                <User className="w-5 h-5" />
-                <span>{t.hero.personalCta}</span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
-              
-              <button 
-                onClick={() => scrollToSection('process')}
-                className="btn-secondary flex items-center space-x-2"
-              >
-                <Play className="w-5 h-5" />
-                <span>{t.hero.demoCta}</span>
-              </button>
-            </motion.div>
+                <PulseButton 
+                  onClick={() => {
+                    setActiveTab('enterprise');
+                    scrollToSection('analysis');
+                  }}
+                  className="btn-primary flex items-center space-x-2"
+                >
+                  <Building2 className="w-5 h-5" />
+                  <span>{t.hero.enterpriseCta}</span>
+                  <ArrowRight className="w-5 h-5" />
+                </PulseButton>
+                
+                <PulseButton 
+                  onClick={() => {
+                    setActiveTab('personal');
+                    scrollToSection('analysis');
+                  }}
+                  className="btn-secondary flex items-center space-x-2"
+                >
+                  <User className="w-5 h-5" />
+                  <span>{t.hero.personalCta}</span>
+                  <ArrowRight className="w-5 h-5" />
+                </PulseButton>
+                
+                <PulseButton 
+                  onClick={() => scrollToSection('process')}
+                  className="btn-secondary flex items-center space-x-2"
+                >
+                  <Play className="w-5 h-5" />
+                  <span>{t.hero.demoCta}</span>
+                </PulseButton>
+              </motion.div>
+            </TextReveal>
           </div>
         </div>
 
@@ -926,8 +975,8 @@ export default function HomePage() {
                       <p className="font-medium">Email</p>
                       <p className="text-gray-400">{t.contact.info.email}</p>
                     </div>
-                  </div>
-                  
+        </div>
+
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
                       <Phone className="w-6 h-6 text-white" />
