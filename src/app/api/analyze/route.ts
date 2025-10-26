@@ -60,34 +60,31 @@ export async function POST(request: NextRequest) {
 }
 
 async function performAnalysis(type: AnalysisType, content: string) {
-  // Log environment variables
-  console.log('Environment check:');
+  // Log ALL environment variables for debugging
+  console.log('=== Environment Variables Debug ===');
+  console.log('All env vars:', Object.keys(process.env).filter(k => k.includes('GEMINI') || k.includes('API')));
   console.log('- GEMINI_API_KEY exists:', !!process.env.GEMINI_API_KEY);
-  console.log('- GEMINI_API_KEY length:', process.env.GEMINI_API_KEY?.length || 0);
-  console.log('- GEMINI_API_KEY first 10 chars:', process.env.GEMINI_API_KEY?.substring(0, 10));
+  console.log('- GEMINI_API_KEY value:', process.env.GEMINI_API_KEY || 'UNDEFINED');
+  
+  // Try using the API key directly
+  const apiKey = process.env.GEMINI_API_KEY;
+  
+  if (!apiKey || apiKey === '') {
+    console.log('❌ GEMINI_API_KEY not found. Using fallback.');
+    return getMockAnalysisResults();
+  }
   
   try {
-    // Try to use Gemini API
-    console.log('Attempting to use Gemini API...');
+    console.log('✅ GEMINI_API_KEY found. Using Gemini API...');
+    console.log('Key length:', apiKey.length);
+    console.log('Key preview:', apiKey.substring(0, 20) + '...');
+    
     const geminiClient = new GeminiLLMClient();
-    console.log('GeminiLLMClient created successfully');
     const result = await geminiClient.analyzeJobDescription(content, type);
-    console.log('Gemini API analysis completed successfully');
+    console.log('✅ Gemini API completed successfully');
     return result;
   } catch (error: any) {
-    console.error('Gemini API Error Details:');
-    console.error('- Error name:', error.name);
-    console.error('- Error message:', error.message);
-    console.error('- Error stack:', error.stack);
-    
-    // If Gemini API fails due to missing key, use mock data
-    if (error.name === 'GeminiAPIKeyError' || (error.message && error.message.includes('GEMINI_API_KEY'))) {
-      console.log('GEMINI_API_KEY not set. Using fallback mock data.');
-      return getMockAnalysisResults();
-    }
-    
-    // Log other errors and use fallback
-    console.error('Unknown error:', error);
+    console.error('❌ Gemini API Error:', error);
     console.log('Using fallback mock data due to error');
     return getMockAnalysisResults();
   }
