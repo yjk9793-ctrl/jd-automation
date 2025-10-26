@@ -185,7 +185,7 @@ export const translations = {
     },
     footer: {
       company: {
-        name: 'AI Agent Transformation',
+        name: 'JDX Transformation',
         description: '기업과 개인의 생산성 혁신을 위한 AI 에이전트 솔루션',
       },
       links: {
@@ -199,7 +199,7 @@ export const translations = {
         terms: '이용약관',
         cookies: '쿠키 정책',
       },
-      copyright: '© 2024 AI Agent Transformation. All rights reserved.',
+      copyright: '© 2024 JDX Transformation. All rights reserved.',
     },
   },
   en: {
@@ -221,7 +221,7 @@ export const translations = {
       demoCta: 'Try Demo',
     },
     features: {
-      title: 'Why AI Agent Transformation?',
+      title: 'Why JDX Transformation?',
       subtitle: 'Productivity innovation for sustainable business growth',
       items: [
         {
@@ -386,7 +386,7 @@ export const translations = {
     },
     footer: {
       company: {
-        name: 'AI Agent Transformation',
+        name: 'JDX Transformation',
         description: 'AI agent solutions for productivity innovation of enterprises and individuals',
       },
       links: {
@@ -400,7 +400,7 @@ export const translations = {
         terms: 'Terms of Service',
         cookies: 'Cookie Policy',
       },
-      copyright: '© 2024 AI Agent Transformation. All rights reserved.',
+      copyright: '© 2024 JDX Transformation. All rights reserved.',
     },
   },
 };

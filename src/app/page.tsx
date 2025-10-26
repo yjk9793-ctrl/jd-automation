@@ -8,11 +8,11 @@ import {
   FileText, 
   Target, 
   ArrowRight, 
-  Play,
+  Play, 
   ChevronRight,
   Star,
-  TrendingUp,
-  Zap,
+  TrendingUp, 
+  Zap, 
   Brain,
   Shield,
   Mail,
@@ -25,7 +25,7 @@ import {
   Activity,
   Clock,
   DollarSign,
-  Users,
+  Users, 
   Building2,
   Lightbulb,
   Rocket,
@@ -147,7 +147,7 @@ export default function HomePage() {
   if (showDetailPage && analysisResult) {
     return (
       <AnalysisDetailPage
-        result={analysisResult}
+          result={analysisResult}
         language={language}
         onBack={handleBackToMain}
       />
@@ -169,7 +169,7 @@ export default function HomePage() {
               <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
                 <Brain className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold gradient-text">AI Agent</span>
+              <span className="text-xl font-bold gradient-text">JDX</span>
             </motion.div>
 
             {/* Desktop Menu */}
@@ -922,14 +922,14 @@ export default function HomePage() {
                     <div>
                       <p className="font-medium">Phone</p>
                       <p className="text-gray-400">{t.contact.info.phone}</p>
-                    </div>
-                  </div>
-                  
+          </div>
+        </div>
+
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
                       <MapPin className="w-6 h-6 text-white" />
                     </div>
-                    <div>
+            <div>
                       <p className="font-medium">Address</p>
                       <p className="text-gray-400">{t.contact.info.address}</p>
                     </div>
