@@ -39,6 +39,8 @@ import {
 import { AnalysisResult, TaskItem, Language } from '@/types';
 import { useTranslation } from '@/lib/i18n';
 import { AutomationChart } from './AutomationChart';
+import { ShareModal } from './ShareModal';
+import { usePDFGenerator } from '@/hooks/usePDFGenerator';
 
 interface AnalysisDetailPageProps {
   result: AnalysisResult;
@@ -52,6 +54,9 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
   const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set());
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'score' | 'roi' | 'difficulty' | 'time'>('score');
+  const [showShareModal, setShowShareModal] = useState(false);
+  
+  const { generatePDF, isGenerating, error } = usePDFGenerator({ result });
   const t = useTranslation(language);
 
   const getCategoryColor = (category: string) => {
@@ -138,13 +143,20 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
             </div>
 
             <div className="flex items-center space-x-3">
-              <button className="btn-secondary flex items-center space-x-2">
+              <button 
+                className="btn-secondary flex items-center space-x-2"
+                onClick={() => setShowShareModal(true)}
+              >
                 <Share2 className="w-4 h-4" />
                 <span>공유</span>
               </button>
-              <button className="btn-primary flex items-center space-x-2">
+              <button 
+                className="btn-primary flex items-center space-x-2"
+                onClick={generatePDF}
+                disabled={isGenerating}
+              >
                 <Download className="w-4 h-4" />
-                <span>PDF 다운로드</span>
+                <span>{isGenerating ? '생성 중...' : 'PDF 다운로드'}</span>
               </button>
             </div>
           </div>
@@ -601,6 +613,13 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
           </motion.div>
         )}
       </div>
+
+      {/* Share Modal */}
+      <ShareModal 
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        result={result}
+      />
     </div>
   );
 }
