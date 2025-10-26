@@ -157,6 +157,7 @@ Respond only with valid JSON.`;
       tasks,
       recommendations: data.recommendations || [],
       nextSteps: data.nextSteps || [],
+      aiSummary: data.aiSummary || '', // Preserve aiSummary if it exists
     };
   }
 
