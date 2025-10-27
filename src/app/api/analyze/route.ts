@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { AnalysisType, AnalysisResult, TaskItem, TaskCategory, DifficultyLevel } from '@/types';
-import { TogetherAILLMClient } from '@/lib/togetherClient';
+import { GroqLLMClient } from '@/lib/groqClient';
 
 const AnalysisRequestSchema = z.object({
   type: z.enum(['enterprise', 'personal']),
@@ -62,29 +62,29 @@ export async function POST(request: NextRequest) {
 async function performAnalysis(type: AnalysisType, content: string) {
   // Log ALL environment variables for debugging
   console.log('=== Environment Variables Debug ===');
-  console.log('All env vars:', Object.keys(process.env).filter(k => k.includes('TOGETHER') || k.includes('API')));
-  console.log('- TOGETHER_API_KEY exists:', !!process.env.TOGETHER_API_KEY);
-  console.log('- TOGETHER_API_KEY value:', process.env.TOGETHER_API_KEY || 'UNDEFINED');
+  console.log('All env vars:', Object.keys(process.env).filter(k => k.includes('GROQ') || k.includes('API')));
+  console.log('- GROQ_API_KEY exists:', !!process.env.GROQ_API_KEY);
+  console.log('- GROQ_API_KEY value:', process.env.GROQ_API_KEY || 'UNDEFINED');
   
   // Try using the API key directly
-  const apiKey = process.env.TOGETHER_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   
   if (!apiKey || apiKey === '') {
-    console.log('❌ TOGETHER_API_KEY not found. Using fallback.');
+    console.log('❌ GROQ_API_KEY not found. Using fallback.');
     return getMockAnalysisResults();
   }
   
   try {
-    console.log('✅ TOGETHER_API_KEY found. Using Together AI...');
+    console.log('✅ GROQ_API_KEY found. Using Groq...');
     console.log('Key length:', apiKey.length);
     console.log('Key preview:', apiKey.substring(0, 20) + '...');
     
-    const togetherClient = new TogetherAILLMClient();
-    const result = await togetherClient.analyzeJobDescription(content, type);
-    console.log('✅ Together AI API completed successfully');
+    const groqClient = new GroqLLMClient();
+    const result = await groqClient.analyzeJobDescription(content, type);
+    console.log('✅ Groq API completed successfully');
     return result;
   } catch (error: any) {
-    console.error('❌ Together AI API Error:', error);
+    console.error('❌ Groq API Error:', error);
     console.log('Using fallback mock data due to error');
     return getMockAnalysisResults();
   }
