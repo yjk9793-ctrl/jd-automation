@@ -268,12 +268,18 @@ export function AnalysisForm({ type, language, onAnalyze, isAnalyzing }: Analysi
           <button
             type="submit"
             disabled={isAnalyzing || isUploading || !content.trim() || !email.trim()}
-            className="btn-primary w-full flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-primary w-full flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
           >
             {isAnalyzing ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 <span>분석 중...</span>
+                {/* Progress Bar */}
+                <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 animate-pulse"
+                     style={{
+                       animation: 'progress 3s infinite',
+                       width: '100%'
+                     }} />
               </>
             ) : (
               <>
@@ -283,6 +289,54 @@ export function AnalysisForm({ type, language, onAnalyze, isAnalyzing }: Analysi
               </>
             )}
           </button>
+
+        {/* Analysis Progress Card */}
+        {isAnalyzing && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-6 p-6 bg-dark-800 border border-primary-500/30 rounded-lg"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+                  <Brain className="w-6 h-6 text-white animate-pulse" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-semibold text-white">AI 분석 진행 중</h4>
+                  <p className="text-sm text-gray-400">잠시만 기다려주세요...</p>
+                </div>
+              </div>
+              <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+            
+            {/* Progress Bar */}
+            <div className="w-full bg-dark-700 rounded-full h-2.5 overflow-hidden">
+              <motion.div
+                initial={{ width: '0%' }}
+                animate={{ width: '100%' }}
+                transition={{ duration: 3, ease: "easeInOut" }}
+                className="h-full bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600"
+              />
+            </div>
+            
+            {/* Progress Steps */}
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-4 h-4 text-green-500" />
+                <span className="text-xs text-gray-400">데이터 준비</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
+                <span className="text-xs text-primary-400">AI 분석 중</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Clock className="w-4 h-4 text-gray-600" />
+                <span className="text-xs text-gray-600">결과 생성</span>
+              </div>
+            </div>
+          </motion.div>
+        )}
         </form>
 
         {/* Features */}
