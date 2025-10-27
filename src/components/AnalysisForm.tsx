@@ -42,6 +42,46 @@ export function AnalysisForm({ type, language, onAnalyze, isAnalyzing }: Analysi
 
     setIsUploading(true);
     try {
+      const extractedContent = await extractFileContent(file);
+      setContent(extractedContent);
+    } catch (error) {
+      console.error('File upload error:', error);
+      alert('파일을 읽는 중 오류가 발생했습니다. 텍스트를 직접 입력해주세요.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const extractFileContent = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        const text = e.target?.result as string;
+        resolve(text);
+      };
+      
+      reader.onerror = () => {
+        reject(new Error('Failed to read file'));
+      };
+      
+      if (file.type === 'application/pdf') {
+        // PDF는 간단한 텍스트 추출만 시도
+        // 실제 프로덕션에서는 pdf-parse 같은 라이브러리 사용 권장
+        reader.readAsText(file);
+      } else {
+        // TXT, DOC, DOCX는 텍스트로 읽기
+        reader.readAsText(file, 'UTF-8');
+      }
+    });
+  };
+
+  const handleFileUploadOld = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
       // Simulate file processing
       await new Promise(resolve => setTimeout(resolve, 1000));
       
