@@ -31,6 +31,10 @@
     "openai": "^4.20.1",
     "@anthropic-ai/sdk": "^0.9.1",
     "@google/generative-ai": "^0.2.1",
+    "@prisma/client": "^5.20.0",
+    "bcryptjs": "^2.4.3",
+    "cookie": "^0.6.0",
+    "jose": "^5.2.4",
     "pdf-parse": "^1.1.1",
     "mammoth": "^1.6.0",
     "clsx": "^2.0.0",
@@ -40,6 +44,7 @@
     "eslint": "^8.56.0",
     "eslint-config-next": "14.0.4",
     "@types/pdf-parse": "^1.1.4",
-    "@types/nodemailer": "^6.4.14"
+    "@types/nodemailer": "^6.4.14",
+    "prisma": "^5.20.0"
   }
 }

@@ -42,6 +42,7 @@ import { useTranslation } from '@/lib/i18n';
 import { AnalysisForm } from '@/components/AnalysisForm';
 import { AnalysisResults } from '@/components/AnalysisResults';
 import { AnalysisDetailPage } from '@/components/AnalysisDetailPage';
+import { AuthModal } from '@/components/auth/AuthModal';
 import { 
   TypingAnimation, 
   ParticleAnimation, 
@@ -66,10 +67,27 @@ export default function HomePage() {
     inquiry: '',
     type: 'general',
   });
+  const [currentUser, setCurrentUser] = useState<{ id: string; email: string; name?: string } | null>(null);
+  const [authOpen, setAuthOpen] = useState(false);
 
   const t = useTranslation(language);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        const json = await res.json();
+        if (json.authenticated) setCurrentUser(json.user);
+      } catch {}
+    })();
+  }, []);
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    setCurrentUser(null);
+  };
 
   // Demo data
   const industryFeedback: IndustryFeedback[] = t.success.feedback.map((feedback, index) => ({
@@ -256,6 +274,16 @@ export default function HomePage() {
                 </button>
               </div>
 
+              {/* Auth */}
+              {currentUser ? (
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-gray-300 hidden sm:inline">{currentUser.email}</span>
+                  <button onClick={handleLogout} className="px-3 py-1 rounded-md bg-dark-700 hover:bg-dark-600 text-gray-200">로그아웃</button>
+                </div>
+              ) : (
+                <button onClick={() => setAuthOpen(true)} className="px-3 py-1 rounded-md bg-primary-600 text-white">로그인</button>
+              )}
+
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -322,6 +350,7 @@ export default function HomePage() {
           </motion.div>
         )}
       </nav>
+      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} onAuthSuccess={(u)=>setCurrentUser(u)} />
 
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
