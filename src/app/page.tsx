@@ -209,13 +209,13 @@ export default function HomePage() {
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
-              <button
+              <a
                 onClick={() => scrollToSection('home')}
                 className="text-gray-300 hover:text-white transition-colors duration-300"
               >
                 {t.nav.home}
-              </button>
-              <button
+              </a>
+              <a
                 onClick={() => {
                   setActiveTab('enterprise');
                   scrollToSection('analysis');
@@ -223,8 +223,8 @@ export default function HomePage() {
                 className="text-gray-300 hover:text-white transition-colors duration-300"
               >
                 {t.nav.enterprise}
-              </button>
-              <button
+              </a>
+              <a
                 onClick={() => {
                   setActiveTab('personal');
                   scrollToSection('analysis');
@@ -232,25 +232,28 @@ export default function HomePage() {
                 className="text-gray-300 hover:text-white transition-colors duration-300"
               >
                 {t.nav.personal}
-              </button>
-              <button
+              </a>
+              <a
                 onClick={() => scrollToSection('process')}
                 className="text-gray-300 hover:text-white transition-colors duration-300"
               >
                 {t.nav.process}
-              </button>
-              <button
+              </a>
+              <a
                 onClick={() => scrollToSection('consulting')}
                 className="text-gray-300 hover:text-white transition-colors duration-300"
               >
                 {t.nav.consulting}
-              </button>
-              <button
+              </a>
+              <a
                 onClick={() => scrollToSection('contact')}
                 className="text-gray-300 hover:text-white transition-colors duration-300"
               >
                 {t.nav.contact}
-              </button>
+              </a>
+              {currentUser && (
+                <a href="/mypage" className="text-gray-300 hover:text-white transition-colors duration-300">내 기록</a>
+              )}
             </div>
 
             {/* Language Toggle */}

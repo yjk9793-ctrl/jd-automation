@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { AnalysisType, AnalysisResult, TaskItem, TaskCategory, DifficultyLevel } from '@/types';
+import { getUserFromRequest } from '@/lib/auth';
+import { prisma } from '@/lib/db';
 import { GroqLLMClient } from '@/lib/groqClient';
 
 const AnalysisRequestSchema = z.object({
@@ -32,6 +34,14 @@ export async function POST(request: NextRequest) {
       createdAt: new Date().toISOString(),
       aiSummary: analysisResult.aiSummary, // Add aiSummary from analysis result
     };
+
+    // Persist for logged-in users
+    try {
+      const user = await getUserFromRequest();
+      if (user) {
+        await prisma.analysis.create({ data: { userId: user.id, type, data: result } as any });
+      }
+    } catch {}
 
     // Send email with results
     await sendAnalysisEmail(email, result);
