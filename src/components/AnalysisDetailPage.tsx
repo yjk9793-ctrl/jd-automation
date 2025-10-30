@@ -184,8 +184,8 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-3">
                     <h3 className="text-lg font-semibold text-white">Summary Report</h3>
-                    <span className="px-2 py-1 text-xs font-medium bg-blue-500/20 text-blue-400 rounded-full">
-                      AI 분석
+                    <span className="px-2 py-1 text-xs font-medium bg-white/10 text-white rounded-full">
+                      AI에이전트로 생산성을 높이세요
                     </span>
                   </div>
                   <p className="text-gray-300 leading-relaxed text-sm">
