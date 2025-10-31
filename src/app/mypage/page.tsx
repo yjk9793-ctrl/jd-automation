@@ -645,6 +645,7 @@ export default function MyPage() {
           )}
         </div>
       </div>
+      </div>
 
       {/* Footer */}
       <footer className="bg-dark-900 border-t border-dark-800 py-12 mt-16">
