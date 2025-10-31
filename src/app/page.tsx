@@ -480,13 +480,13 @@ export default function HomePage() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: 'url(/hero-bg-samsung.png)',
-            opacity: 0.15,
-            filter: 'blur(2px) brightness(0.7)'
+            opacity: 0.35,
+            filter: 'blur(1px) brightness(0.8)'
           }}
         />
         
         {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/50" />
         
         <div className="container-custom px-4 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
@@ -498,9 +498,35 @@ export default function HomePage() {
               </h2>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-shadow-lg">
-              <span className="text-white font-extrabold">{t.hero.title}</span>
-            </h1>
+            <motion.h1 
+              className="text-5xl md:text-7xl font-bold mb-6 text-shadow-lg"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <motion.span 
+                className="text-white font-extrabold block"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ 
+                  opacity: 1, 
+                  scale: 1,
+                  textShadow: [
+                    '0 0 20px rgba(255, 255, 255, 0.3)',
+                    '0 0 30px rgba(59, 130, 246, 0.5)',
+                    '0 0 20px rgba(255, 255, 255, 0.3)'
+                  ]
+                }}
+                transition={{ 
+                  duration: 2,
+                  delay: 0.5,
+                  repeat: Infinity,
+                  repeatType: 'reverse',
+                  ease: 'easeInOut'
+                }}
+              >
+                {t.hero.title}
+              </motion.span>
+            </motion.h1>
             
             <p className="text-xl md:text-2xl text-gray-200 mb-8 leading-relaxed font-medium">
               {t.hero.subtitle}
