@@ -77,9 +77,9 @@ export default function HomePage() {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const res = await fetch('/api/auth/me');
+        const res = await fetch('/api/auth/me', { credentials: 'include' });
         const json = await res.json();
-        if (json.authenticated) {
+        if (json.authenticated && json.user) {
           setCurrentUser(json.user);
         } else {
           setCurrentUser(null);
@@ -103,9 +103,36 @@ export default function HomePage() {
     
     // 로그인 후 리디렉션된 경우 약간의 지연 후 다시 확인 (쿠키 전파 대기)
     if (!window.location.search.includes('error=oauth_failed')) {
-      setTimeout(checkUser, 1000);
+      setTimeout(checkUser, 500);
+      setTimeout(checkUser, 1500); // 두 번 확인하여 확실하게
     }
+
+    // 페이지 포커스 시 사용자 상태 확인 (다른 탭에서 로그인/로그아웃 시)
+    const handleFocus = () => {
+      checkUser();
+    };
+    window.addEventListener('focus', handleFocus);
+    
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+    };
   }, []);
+
+  const handleAuthSuccess = async (user: { id: string; email: string; name?: string }) => {
+    setCurrentUser(user);
+    // 추가 확인으로 사용자 상태 동기화
+    setTimeout(async () => {
+      try {
+        const res = await fetch('/api/auth/me', { credentials: 'include' });
+        const json = await res.json();
+        if (json.authenticated && json.user) {
+          setCurrentUser(json.user);
+        }
+      } catch (error) {
+        console.error('Failed to verify user:', error);
+      }
+    }, 100);
+  };
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
@@ -303,7 +330,12 @@ export default function HomePage() {
               {/* Auth */}
               {currentUser ? (
                 <div className="flex items-center space-x-3">
-                  <span className="text-sm text-gray-300 hidden sm:inline">{currentUser.email}</span>
+                  <a 
+                    href="/mypage" 
+                    className="text-sm text-gray-300 hover:text-white transition-colors cursor-pointer px-2 py-1 rounded-md hover:bg-dark-700"
+                  >
+                    {currentUser.email}
+                  </a>
                   <button onClick={handleLogout} className="px-3 py-1 rounded-md bg-dark-700 hover:bg-dark-600 text-gray-200">로그아웃</button>
                 </div>
               ) : (
@@ -376,7 +408,7 @@ export default function HomePage() {
           </motion.div>
         )}
       </nav>
-      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} onAuthSuccess={(u)=>setCurrentUser(u)} />
+      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} onAuthSuccess={handleAuthSuccess} />
 
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
