@@ -29,34 +29,40 @@ export async function signToken(payload: Record<string, unknown>) {
 
 export function setAuthCookieInResponse(response: NextResponse, token: string) {
   // Vercel 프로덕션 환경에서는 https를 사용하므로 secure: true
-  // 하지만 개발 환경에서는 secure: false로 설정
   const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
   
   // 쿠키 옵션 설정 - 모든 환경에서 작동하도록 최적화
-  const cookieOptions = {
+  // sameSite를 'none'으로 설정하면 secure가 필수입니다
+  const cookieOptions: any = {
     httpOnly: true,
     path: '/',
-    sameSite: 'lax' as const,
+    sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 7, // 7 days
-    ...(isProduction && { secure: true }), // Production에서만 secure
   };
+  
+  // Production에서는 secure 필수
+  if (isProduction) {
+    cookieOptions.secure = true;
+  }
   
   response.cookies.set(AUTH_COOKIE, token, cookieOptions);
   
+  // Set-Cookie 헤더를 직접 확인하여 제대로 설정되었는지 검증
+  const setCookieHeader = response.headers.get('set-cookie');
   console.log('Setting auth cookie:', { 
     name: AUTH_COOKIE, 
     hasToken: !!token, 
     tokenLength: token?.length,
     isProduction,
     secure: cookieOptions.secure,
-    domain: undefined, // 명시적으로 도메인 미설정 (현재 도메인 사용)
     path: cookieOptions.path,
-    sameSite: cookieOptions.sameSite
+    sameSite: cookieOptions.sameSite,
+    setCookieHeader: setCookieHeader?.substring(0, 100) // 처음 100자만 로그
   });
   
-  // Set-Cookie 헤더 직접 확인을 위한 로그
-  const cookieHeader = response.headers.get('set-cookie');
-  console.log('Set-Cookie header:', cookieHeader);
+  if (!setCookieHeader || !setCookieHeader.includes(AUTH_COOKIE)) {
+    console.error('WARNING: Set-Cookie header not properly set!', setCookieHeader);
+  }
   
   return response;
 }

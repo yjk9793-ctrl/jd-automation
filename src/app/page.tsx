@@ -90,9 +90,9 @@ export default function HomePage() {
           setCurrentUser(json.user);
           lastAuthSuccessRef.current = Date.now(); // 로그인 성공 시간 업데이트
         } else {
-          // 로그인 성공 직후(10초 이내)에는 null로 설정하지 않음
+          // 로그인 성공 직후(30초 이내)에는 null로 설정하지 않음
           const timeSinceLastSuccess = Date.now() - lastAuthSuccessRef.current;
-          if (force || timeSinceLastSuccess > 10000) {
+          if (force || timeSinceLastSuccess > 30000) {
             console.log('No authenticated user (force:', force, 'timeSince:', timeSinceLastSuccess, ')');
             setCurrentUser(null);
           } else {
@@ -101,9 +101,9 @@ export default function HomePage() {
         }
       } catch (error) {
         console.error('Failed to check user:', error);
-        // 에러 발생 시에도 최근 로그인 성공이면 상태 유지
+        // 에러 발생 시에도 최근 로그인 성공이면 상태 유지 (30초)
         const timeSinceLastSuccess = Date.now() - lastAuthSuccessRef.current;
-        if (force || timeSinceLastSuccess > 10000) {
+        if (force || timeSinceLastSuccess > 30000) {
           setCurrentUser(null);
         }
       }
@@ -163,14 +163,28 @@ export default function HomePage() {
     setCurrentUser(user);
     lastAuthSuccessRef.current = Date.now(); // 로그인 성공 시간 기록
     
+    // 사용자 상태를 강제로 유지 (30초 동안)
+    const keepUserState = () => {
+      if (lastAuthSuccessRef.current > 0) {
+        const timeSinceLastSuccess = Date.now() - lastAuthSuccessRef.current;
+        if (timeSinceLastSuccess < 30000) { // 30초 동안 유지
+          setCurrentUser(user);
+          setTimeout(keepUserState, 1000); // 1초마다 확인
+        }
+      }
+    };
+    
+    // 즉시 시작하고 계속 유지
+    keepUserState();
+    
     // 전역 체크 함수가 있으면 업데이트된 사용자 정보로 확인
     const checkUserFn = (window as any).__checkUser;
     if (checkUserFn) {
       // 로그인 성공 후 여러 번 확인하되, 실패해도 상태 유지
-      setTimeout(() => checkUserFn(false), 200);
       setTimeout(() => checkUserFn(false), 500);
-      setTimeout(() => checkUserFn(false), 1000);
-      setTimeout(() => checkUserFn(false), 2000);
+      setTimeout(() => checkUserFn(false), 1500);
+      setTimeout(() => checkUserFn(false), 3000);
+      setTimeout(() => checkUserFn(false), 5000);
     }
   };
 
