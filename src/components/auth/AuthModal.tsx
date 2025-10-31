@@ -21,18 +21,44 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalProps) {
     e.preventDefault();
     setLoading(true);
     setError('');
+    
+    // 입력 검증
+    if (!email || !password) {
+      setError('이메일과 비밀번호를 입력해주세요.');
+      setLoading(false);
+      return;
+    }
+    
+    if (mode === 'register' && password.length < 8) {
+      setError('비밀번호는 최소 8자 이상이어야 합니다.');
+      setLoading(false);
+      return;
+    }
+    
     try {
+      console.log('Submitting auth:', { mode, email, hasPassword: !!password, hasName: !!name });
       const res = await fetch(`/api/auth/${mode}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, name: mode === 'register' ? name : undefined }),
       });
+      
       const json = await res.json();
-      if (!json.success) throw new Error(json.error || 'failed');
+      console.log('Auth response:', json);
+      
+      if (!json.success) {
+        const errorMessage = json.error || '실패했습니다.';
+        console.error('Auth error:', errorMessage, json.details);
+        throw new Error(errorMessage);
+      }
+      
+      console.log('Auth success, user:', json.data);
       onAuthSuccess(json.data);
       onClose();
     } catch (err: any) {
-      setError(err.message || '오류가 발생했습니다.');
+      console.error('Auth submit error:', err);
+      const errorMessage = err.message || '오류가 발생했습니다.';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
