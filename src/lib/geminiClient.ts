@@ -52,10 +52,10 @@ export class GeminiLLMClient {
     try {
       const model = this.genAI.getGenerativeModel({ model: 'gemini-pro' });
       
-      const prompt = `다음은 분석된 직무 설명입니다. 500자 이내로 상세한 분석 내용을 요약해주세요.
+      const prompt = `다음은 분석된 직무 설명입니다. 3000자 이내로 상세한 분석 내용을 요약해주세요.
 
 원본 내용:
-${originalContent.substring(0, 500)}...
+${originalContent.substring(0, 2000)}...
 
 분석 결과 요약:
 - 총 작업 수: ${analysisData.summary.total}개
@@ -71,7 +71,7 @@ ${analysisData.tasks.map((task: any, i: number) =>
   `${i+1}. ${task.title} (${task.category}) - 점수: ${task.score}/100, ROI: ${task.roiEstimate}%, 난이도: ${task.difficulty}/5`
 ).join('\n')}
 
-다음 내용을 포함하여 500자 이내로 상세히 요약해주세요:
+다음 내용을 포함하여 3000자 이내로 상세히 요약해주세요:
 1. 이 직무의 자동화 가능성 전체 평가
 2. 주요 자동화 가능 작업들의 특징과 이점
 3. AI 협업이 필요한 작업들과 그 이유
@@ -85,9 +85,9 @@ ${analysisData.tasks.map((task: any, i: number) =>
       const response = result.response;
       let summary = response.text().trim();
       
-      // 500자 제한
-      if (summary.length > 500) {
-        summary = summary.substring(0, 500) + '...';
+      // 3000자 제한 (너무 길면 잘라내되, 전체 내용이 보이도록 충분한 길이 제공)
+      if (summary.length > 3000) {
+        summary = summary.substring(0, 3000) + '...';
       }
       
       return summary;
