@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { SignJWT, jwtVerify } from 'jose';
-import { cookies } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
 
 const AUTH_COOKIE = 'auth_token';
 const ALGORITHM = 'HS256';
@@ -27,27 +27,28 @@ export async function signToken(payload: Record<string, unknown>) {
     .sign(getSecretKey());
 }
 
-export async function setAuthCookie(token: string) {
-  const cookieStore = await cookies();
-  cookieStore.set(AUTH_COOKIE, token, {
+export function setAuthCookieInResponse(response: NextResponse, token: string) {
+  response.cookies.set(AUTH_COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     path: '/',
     sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
+  return response;
 }
 
-export async function removeAuthCookie() {
-  const cookieStore = await cookies();
-  cookieStore.set(AUTH_COOKIE, '', { path: '/', maxAge: 0 });
+export function removeAuthCookieInResponse(response: NextResponse) {
+  response.cookies.set(AUTH_COOKIE, '', { path: '/', maxAge: 0 });
+  return response;
 }
 
-export async function getUserFromRequest(): Promise<{ id: string; email: string } | null> {
+export async function getUserFromRequest(req: NextRequest): Promise<{ id: string; email: string } | null> {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get(AUTH_COOKIE)?.value;
-    if (!token) return null;
+    const token = req.cookies.get(AUTH_COOKIE)?.value;
+    if (!token) {
+      return null;
+    }
     const { payload } = await jwtVerify(token, getSecretKey());
     return { id: String(payload.id), email: String(payload.email) };
   } catch {

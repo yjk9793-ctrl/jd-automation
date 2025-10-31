@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getUserFromRequest } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 
-export async function GET() {
-  const user = await getUserFromRequest();
+export async function GET(req: NextRequest) {
+  const user = await getUserFromRequest(req);
   if (!user) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   const list = await prisma.analysis.findMany({ where: { userId: user.id }, orderBy: { createdAt: 'desc' } });
   const parsed = list.map(item => ({ ...item, data: JSON.parse(item.data || '{}') }));

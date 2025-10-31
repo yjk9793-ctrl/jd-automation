@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     // Persist for logged-in users
     try {
-      const user = await getUserFromRequest();
+      const user = await getUserFromRequest(request);
       if (user) {
         await prisma.analysis.create({ 
           data: { 

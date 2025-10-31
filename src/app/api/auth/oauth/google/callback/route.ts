@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { signToken, setAuthCookie } from '@/lib/auth';
+import { signToken, setAuthCookieInResponse } from '@/lib/auth';
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
@@ -49,8 +49,8 @@ export async function GET(req: NextRequest) {
     if (!user) user = await prisma.user.create({ data: { email, password: 'oauth_google', name } });
 
     const token = await signToken({ id: user.id, email: user.email });
-    await setAuthCookie(token);
-    return NextResponse.redirect(`${baseUrl}/`);
+    const response = NextResponse.redirect(`${baseUrl}/`);
+    return setAuthCookieInResponse(response, token);
   } catch (e) {
     console.error('OAuth callback error:', e);
     return NextResponse.redirect(`${baseUrl}/?error=oauth_failed`);

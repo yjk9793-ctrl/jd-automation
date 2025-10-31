@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/db';
-import { verifyPassword, signToken, setAuthCookie } from '@/lib/auth';
+import { verifyPassword, signToken, setAuthCookieInResponse } from '@/lib/auth';
 
 const LoginSchema = z.object({
   email: z.string().email(),
@@ -24,9 +24,8 @@ export async function POST(req: NextRequest) {
     }
 
     const token = await signToken({ id: user.id, email: user.email });
-    await setAuthCookie(token);
-
-    return NextResponse.json({ success: true, data: { id: user.id, email: user.email, name: user.name } });
+    const response = NextResponse.json({ success: true, data: { id: user.id, email: user.email, name: user.name } });
+    return setAuthCookieInResponse(response, token);
   } catch (error: any) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ success: false, error: '유효하지 않은 입력입니다.', details: error.errors }, { status: 400 });

@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getUserFromRequest } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const authUser = await getUserFromRequest();
+    const authUser = await getUserFromRequest(req);
     if (!authUser) {
       return NextResponse.json({ authenticated: false });
     }
