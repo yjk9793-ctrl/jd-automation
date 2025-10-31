@@ -76,6 +76,19 @@ export default function HomePage() {
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
 
   useEffect(() => {
+    // 페이지 로드 시 로컬 스토리지에서 사용자 정보 확인 (쿠키 문제 대비)
+    const cachedUser = localStorage.getItem('jdx_user');
+    if (cachedUser) {
+      try {
+        const userData = JSON.parse(cachedUser);
+        console.log('Found cached user on page load:', userData.email);
+        setCurrentUser(userData);
+        lastAuthSuccessRef.current = Date.now();
+      } catch (e) {
+        console.error('Failed to parse cached user:', e);
+      }
+    }
+    
     const checkUser = async (force: boolean = false) => {
       try {
         const res = await fetch('/api/auth/me', { 
@@ -89,6 +102,8 @@ export default function HomePage() {
           console.log('Setting user:', json.user);
           setCurrentUser(json.user);
           lastAuthSuccessRef.current = Date.now(); // 로그인 성공 시간 업데이트
+          // 로컬 스토리지에 사용자 정보 저장 (쿠키 문제 대비)
+          localStorage.setItem('jdx_user', JSON.stringify(json.user));
         } else {
           // 로그인 성공 직후(30초 이내)에는 null로 설정하지 않음
           const timeSinceLastSuccess = Date.now() - lastAuthSuccessRef.current;
@@ -162,6 +177,8 @@ export default function HomePage() {
     console.log('Auth success, setting user:', user);
     setCurrentUser(user);
     lastAuthSuccessRef.current = Date.now(); // 로그인 성공 시간 기록
+    // 로컬 스토리지에 사용자 정보 저장 (쿠키 문제 대비)
+    localStorage.setItem('jdx_user', JSON.stringify(user));
     
     // 사용자 상태를 강제로 유지 (30초 동안)
     const keepUserState = () => {
@@ -191,6 +208,8 @@ export default function HomePage() {
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
     setCurrentUser(null);
+    // 로컬 스토리지에서 사용자 정보 제거
+    localStorage.removeItem('jdx_user');
   };
 
   // Demo data

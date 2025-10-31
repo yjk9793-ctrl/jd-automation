@@ -31,44 +31,61 @@ export function setAuthCookieInResponse(response: NextResponse, token: string) {
   // Vercel 프로덕션 환경에서는 https를 사용하므로 secure: true
   const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
   
-  // 쿠키 옵션 설정 - 모든 환경에서 작동하도록 최적화
-  // sameSite를 'none'으로 설정하면 secure가 필수입니다
-  const cookieOptions: any = {
-    httpOnly: true,
-    path: '/',
-    sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 7, // 7 days
-  };
+  // 쿠키 옵션 설정
+  const maxAge = 60 * 60 * 24 * 7; // 7 days
+  const sameSite = 'lax';
+  const path = '/';
+  const httpOnly = true;
+  const secure = isProduction;
   
-  // Production에서는 secure 필수
-  if (isProduction) {
-    cookieOptions.secure = true;
+  // Set-Cookie 헤더 문자열 직접 생성 (더 안정적)
+  let cookieValue = `${AUTH_COOKIE}=${token}; Path=${path}; Max-Age=${maxAge}; SameSite=${sameSite}`;
+  if (httpOnly) cookieValue += '; HttpOnly';
+  if (secure) cookieValue += '; Secure';
+  
+  // 기존 Set-Cookie 헤더 가져오기
+  const existingCookies = response.headers.get('set-cookie');
+  
+  // 새로운 쿠키 추가
+  if (existingCookies) {
+    response.headers.set('Set-Cookie', `${existingCookies}, ${cookieValue}`);
+  } else {
+    response.headers.set('Set-Cookie', cookieValue);
   }
   
-  response.cookies.set(AUTH_COOKIE, token, cookieOptions);
-  
-  // Set-Cookie 헤더를 직접 확인하여 제대로 설정되었는지 검증
-  const setCookieHeader = response.headers.get('set-cookie');
   console.log('Setting auth cookie:', { 
     name: AUTH_COOKIE, 
     hasToken: !!token, 
     tokenLength: token?.length,
     isProduction,
-    secure: cookieOptions.secure,
-    path: cookieOptions.path,
-    sameSite: cookieOptions.sameSite,
-    setCookieHeader: setCookieHeader?.substring(0, 100) // 처음 100자만 로그
+    secure,
+    path,
+    sameSite,
+    cookieHeader: cookieValue.substring(0, 100)
   });
   
+  // 검증
+  const setCookieHeader = response.headers.get('set-cookie');
   if (!setCookieHeader || !setCookieHeader.includes(AUTH_COOKIE)) {
     console.error('WARNING: Set-Cookie header not properly set!', setCookieHeader);
+  } else {
+    console.log('✓ Cookie header successfully set');
   }
   
   return response;
 }
 
 export function removeAuthCookieInResponse(response: NextResponse) {
-  response.cookies.set(AUTH_COOKIE, '', { path: '/', maxAge: 0 });
+  // Set-Cookie 헤더를 직접 설정하여 쿠키 삭제
+  const cookieValue = `${AUTH_COOKIE}=; Path=/; Max-Age=0; SameSite=lax; HttpOnly`;
+  const existingCookies = response.headers.get('set-cookie');
+  
+  if (existingCookies) {
+    response.headers.set('Set-Cookie', `${existingCookies}, ${cookieValue}`);
+  } else {
+    response.headers.set('Set-Cookie', cookieValue);
+  }
+  
   return response;
 }
 

@@ -24,9 +24,23 @@ export default function MyPage() {
   const [loadingAnalyses, setLoadingAnalyses] = useState(false);
 
   useEffect(() => {
-    // 사용자 정보 가져오기 - 여러 번 재시도
+    // 먼저 로컬 스토리지에서 사용자 정보 확인 (쿠키 문제 대비)
+    const cachedUser = localStorage.getItem('jdx_user');
+    if (cachedUser) {
+      try {
+        const userData = JSON.parse(cachedUser);
+        console.log('Found cached user, showing page immediately:', userData.email);
+        setUser(userData);
+        setProfileForm({ name: userData.name || '', email: userData.email, password: '', confirmPassword: '' });
+        setLoading(false); // 캐시가 있으면 즉시 페이지 표시
+      } catch (e) {
+        console.error('Failed to parse cached user:', e);
+      }
+    }
+    
+    // 사용자 정보 가져오기 - 여러 번 재시도 (백그라운드에서 계속 시도)
     let retryCount = 0;
-    const maxRetries = 5;
+    const maxRetries = 15;
     
     const checkAuth = async (): Promise<void> => {
       try {
@@ -39,38 +53,54 @@ export default function MyPage() {
         console.log('Auth check result:', json);
         
         if (json.authenticated && json.user) {
-          console.log('User authenticated:', json.user.email);
+          console.log('User authenticated from server:', json.user.email);
+          // 로컬 스토리지에 사용자 정보 저장 및 업데이트
+          localStorage.setItem('jdx_user', JSON.stringify(json.user));
           setUser(json.user);
           setProfileForm({ name: json.user.name || '', email: json.user.email, password: '', confirmPassword: '' });
           setLoading(false);
           return;
         }
         
-        // 인증 실패 시 재시도
+        // 인증 실패 시 재시도 (백그라운드에서 계속 시도)
         retryCount++;
         if (retryCount < maxRetries) {
-          console.log(`Auth failed, retrying in ${retryCount * 500}ms...`);
-          setTimeout(checkAuth, retryCount * 500); // 점진적으로 대기 시간 증가
+          console.log(`Auth failed, retrying in ${retryCount * 300}ms...`);
+          setTimeout(checkAuth, retryCount * 300);
         } else {
-          console.error('Auth failed after max retries, redirecting to home');
-          setError('로그인이 필요합니다.');
-          setTimeout(() => {
-            router.push('/');
-          }, 2000); // 2초 후 리디렉션 (에러 메시지 표시 후)
+          console.error('Auth failed after max retries');
+          // 캐시된 사용자 정보가 있으면 그것 사용 (서버 인증 실패해도)
+          if (cachedUser) {
+            console.log('Using cached user data - server auth failed but cache exists');
+            // 페이지는 이미 표시되어 있음 (로딩 상태가 false)
+          } else {
+            // 캐시도 없고 서버 인증도 실패하면 에러
+            setError('로그인이 필요합니다.');
+            setLoading(false);
+            setTimeout(() => {
+              router.push('/');
+            }, 2000);
+          }
         }
       } catch (e: any) {
         console.error('Auth check error:', e);
         retryCount++;
         if (retryCount < maxRetries) {
-          setTimeout(checkAuth, retryCount * 500);
+          setTimeout(checkAuth, retryCount * 300);
         } else {
-          setError(e.message || '인증 확인에 실패했습니다.');
-          setLoading(false);
+          // 캐시된 사용자 정보가 있으면 그것 사용
+          if (cachedUser) {
+            console.log('Using cached user data after error');
+            // 페이지는 이미 표시되어 있음
+          } else {
+            setError(e.message || '인증 확인에 실패했습니다.');
+            setLoading(false);
+          }
         }
       }
     };
     
-    // 즉시 확인
+    // 백그라운드에서 서버 인증 확인 (캐시가 있어도 최신 정보 확인)
     checkAuth();
   }, [router]);
 
