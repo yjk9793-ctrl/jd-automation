@@ -506,22 +506,22 @@ export default function HomePage() {
             >
               <motion.span 
                 className="text-white font-extrabold block"
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.8, textShadow: '0 0 0px rgba(59, 130, 246, 0)' }}
                 animate={{ 
                   opacity: 1, 
                   scale: 1,
-                  textShadow: [
-                    '0 0 20px rgba(255, 255, 255, 0.3)',
-                    '0 0 30px rgba(59, 130, 246, 0.5)',
-                    '0 0 20px rgba(255, 255, 255, 0.3)'
-                  ]
+                  textShadow: '0 0 30px rgba(59, 130, 246, 0.6)'
                 }}
                 transition={{ 
-                  duration: 2,
+                  duration: 1.5,
                   delay: 0.5,
-                  repeat: Infinity,
-                  repeatType: 'reverse',
-                  ease: 'easeInOut'
+                  ease: 'easeOut',
+                  opacity: { duration: 0.8 },
+                  scale: { duration: 1.2 },
+                  textShadow: { duration: 2, ease: 'easeInOut' }
+                }}
+                onAnimationComplete={() => {
+                  // 애니메이션 완료 후 정적 텍스트로 유지
                 }}
               >
                 {t.hero.title}
