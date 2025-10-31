@@ -98,19 +98,31 @@ export default function HomePage() {
 
     // URL 파라미터에서 에러 확인 (구글 로그인 실패 시)
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('error')) {
+    const hasError = urlParams.get('error');
+    const hasOAuthReason = urlParams.get('reason');
+    
+    if (hasError) {
+      console.log('OAuth error detected:', hasError, hasOAuthReason);
       urlParams.delete('error');
+      if (hasOAuthReason) urlParams.delete('reason');
       const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
       window.history.replaceState({}, '', newUrl);
+    } else {
+      // 에러가 없으면 구글 OAuth 성공 가능성 - 더 적극적으로 상태 확인
+      console.log('No error in URL, might be successful OAuth redirect');
     }
 
     // 즉시 확인
     checkUser();
     
     // 로그인 후 리디렉션된 경우 여러 번 확인 (쿠키 전파 대기)
-    const intervals = [300, 800, 1500, 2500];
+    // 에러가 없는 경우 더 자주 확인 (OAuth 성공 가능성)
+    const intervals = hasError ? [300, 800, 1500, 2500] : [100, 300, 500, 800, 1200, 2000];
     intervals.forEach((delay) => {
-      setTimeout(checkUser, delay);
+      setTimeout(() => {
+        console.log(`Checking user after ${delay}ms...`);
+        checkUser();
+      }, delay);
     });
 
     // 페이지 포커스 시 사용자 상태 확인 (다른 탭에서 로그인/로그아웃 시)
@@ -129,19 +141,32 @@ export default function HomePage() {
   }, []);
 
   const handleAuthSuccess = async (user: { id: string; email: string; name?: string }) => {
+    console.log('Auth success, setting user:', user);
     setCurrentUser(user);
-    // 추가 확인으로 사용자 상태 동기화
-    setTimeout(async () => {
+    
+    // 즉시 여러 번 확인 (쿠키가 서버에서 클라이언트로 전파되는 시간 고려)
+    const checkInterval = async () => {
       try {
-        const res = await fetch('/api/auth/me', { credentials: 'include' });
+        const res = await fetch('/api/auth/me', { 
+          credentials: 'include',
+          cache: 'no-store' 
+        });
         const json = await res.json();
+        console.log('Post-login check:', json);
         if (json.authenticated && json.user) {
+          console.log('User verified:', json.user.email);
           setCurrentUser(json.user);
         }
       } catch (error) {
         console.error('Failed to verify user:', error);
       }
-    }, 100);
+    };
+    
+    // 즉시, 그리고 짧은 간격으로 여러 번 확인
+    checkInterval();
+    setTimeout(checkInterval, 200);
+    setTimeout(checkInterval, 500);
+    setTimeout(checkInterval, 1000);
   };
 
   const handleLogout = async () => {
