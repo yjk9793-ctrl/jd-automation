@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   FileText, 
@@ -28,13 +28,24 @@ interface AnalysisFormProps {
   language: 'ko' | 'en';
   onAnalyze: (type: AnalysisType, content: string, email: string) => Promise<void>;
   isAnalyzing: boolean;
+  currentUser?: { id: string; email: string; name?: string } | null;
 }
 
-export function AnalysisForm({ type, language, onAnalyze, isAnalyzing }: AnalysisFormProps) {
+export function AnalysisForm({ type, language, onAnalyze, isAnalyzing, currentUser }: AnalysisFormProps) {
   const [content, setContent] = useState('');
   const [email, setEmail] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const t = useTranslation(language);
+
+  // 로그인된 사용자의 이메일을 자동으로 채우기
+  useEffect(() => {
+    if (currentUser?.email) {
+      // 이메일이 비어있거나 placeholder 상태일 때만 자동 채우기
+      if (!email || email === 'analysis@company.com') {
+        setEmail(currentUser.email);
+      }
+    }
+  }, [currentUser?.email]);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

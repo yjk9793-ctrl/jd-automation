@@ -616,6 +616,7 @@ export default function HomePage() {
             language={language}
             onAnalyze={handleAnalyze}
             isAnalyzing={isAnalyzing}
+            currentUser={currentUser}
           />
         </div>
       </section>
