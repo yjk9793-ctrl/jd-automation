@@ -23,7 +23,20 @@ export async function GET(req: NextRequest) {
         grant_type: 'authorization_code',
       }),
     });
+    
+    if (!tokenRes.ok) {
+      const errorText = await tokenRes.text();
+      console.error('Google OAuth token error:', errorText);
+      console.error('Redirect URI:', redirectUri);
+      return NextResponse.redirect('/?error=oauth_failed');
+    }
+    
     const tokenJson = await tokenRes.json();
+    if (!tokenJson.id_token) {
+      console.error('No id_token in response:', tokenJson);
+      return NextResponse.redirect('/?error=oauth_failed');
+    }
+    
     const idToken = tokenJson.id_token as string;
     // Parse id_token (JWT) to get email
     const payload = JSON.parse(Buffer.from(idToken.split('.')[1], 'base64').toString());
