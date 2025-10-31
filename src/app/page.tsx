@@ -596,11 +596,11 @@ export default function HomePage() {
                     setActiveTab('enterprise');
                     scrollToSection('analysis');
                   }}
-                  className="btn-primary flex items-center space-x-2"
+                  className="px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-semibold text-lg flex items-center space-x-3 shadow-lg shadow-primary-600/50 hover:shadow-xl hover:shadow-primary-600/70 transition-all duration-300 transform hover:scale-105"
                 >
-                  <Building2 className="w-5 h-5" />
+                  <Building2 className="w-6 h-6" />
                   <span>{t.hero.enterpriseCta}</span>
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="w-6 h-6" />
                 </PulseButton>
                 
                 <PulseButton 
@@ -608,19 +608,11 @@ export default function HomePage() {
                     setActiveTab('personal');
                     scrollToSection('analysis');
                   }}
-                  className="btn-secondary flex items-center space-x-2"
+                  className="px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-semibold text-lg flex items-center space-x-3 shadow-lg shadow-primary-600/50 hover:shadow-xl hover:shadow-primary-600/70 transition-all duration-300 transform hover:scale-105"
                 >
-                  <User className="w-5 h-5" />
+                  <User className="w-6 h-6" />
                   <span>{t.hero.personalCta}</span>
-                  <ArrowRight className="w-5 h-5" />
-                </PulseButton>
-                
-                <PulseButton 
-                  onClick={() => scrollToSection('process')}
-                  className="btn-secondary flex items-center space-x-2"
-                >
-                  <Play className="w-5 h-5" />
-                  <span>{t.hero.demoCta}</span>
+                  <ArrowRight className="w-6 h-6" />
                 </PulseButton>
               </motion.div>
             </TextReveal>
