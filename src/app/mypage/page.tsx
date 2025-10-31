@@ -24,23 +24,54 @@ export default function MyPage() {
   const [loadingAnalyses, setLoadingAnalyses] = useState(false);
 
   useEffect(() => {
-    // 사용자 정보 가져오기
-    (async () => {
+    // 사용자 정보 가져오기 - 여러 번 재시도
+    let retryCount = 0;
+    const maxRetries = 5;
+    
+    const checkAuth = async (): Promise<void> => {
       try {
-        const res = await fetch('/api/auth/me', { credentials: 'include' });
+        console.log(`Checking auth (attempt ${retryCount + 1}/${maxRetries})...`);
+        const res = await fetch('/api/auth/me', { 
+          credentials: 'include',
+          cache: 'no-store' 
+        });
         const json = await res.json();
-        if (!json.authenticated || !json.user) {
-          router.push('/');
+        console.log('Auth check result:', json);
+        
+        if (json.authenticated && json.user) {
+          console.log('User authenticated:', json.user.email);
+          setUser(json.user);
+          setProfileForm({ name: json.user.name || '', email: json.user.email, password: '', confirmPassword: '' });
+          setLoading(false);
           return;
         }
-        setUser(json.user);
-        setProfileForm({ name: json.user.name || '', email: json.user.email, password: '', confirmPassword: '' });
+        
+        // 인증 실패 시 재시도
+        retryCount++;
+        if (retryCount < maxRetries) {
+          console.log(`Auth failed, retrying in ${retryCount * 500}ms...`);
+          setTimeout(checkAuth, retryCount * 500); // 점진적으로 대기 시간 증가
+        } else {
+          console.error('Auth failed after max retries, redirecting to home');
+          setError('로그인이 필요합니다.');
+          setTimeout(() => {
+            router.push('/');
+          }, 2000); // 2초 후 리디렉션 (에러 메시지 표시 후)
+        }
       } catch (e: any) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
+        console.error('Auth check error:', e);
+        retryCount++;
+        if (retryCount < maxRetries) {
+          setTimeout(checkAuth, retryCount * 500);
+        } else {
+          setError(e.message || '인증 확인에 실패했습니다.');
+          setLoading(false);
+        }
       }
-    })();
+    };
+    
+    // 즉시 확인
+    checkAuth();
   }, [router]);
 
   useEffect(() => {
@@ -112,15 +143,37 @@ export default function MyPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-dark-900 text-white flex items-center justify-center">
-        <p>불러오는 중...</p>
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p>사용자 정보를 확인하는 중...</p>
+        </div>
       </div>
     );
   }
 
-  if (error || !user) {
+  if (error && !user) {
     return (
       <div className="min-h-screen bg-dark-900 text-white flex items-center justify-center">
-        <p className="text-red-400">{error || '사용자 정보를 불러올 수 없습니다.'}</p>
+        <div className="text-center">
+          <p className="text-red-400 mb-4">{error}</p>
+          <p className="text-gray-400 text-sm">곧 홈으로 이동합니다...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-dark-900 text-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-400 mb-4">사용자 정보를 불러올 수 없습니다.</p>
+          <button
+            onClick={() => router.push('/')}
+            className="px-4 py-2 bg-primary-600 hover:bg-primary-700 rounded-md"
+          >
+            홈으로 이동
+          </button>
+        </div>
       </div>
     );
   }
