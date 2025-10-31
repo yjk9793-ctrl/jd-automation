@@ -5,11 +5,13 @@ import { signToken, setAuthCookie } from '@/lib/auth';
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const code = url.searchParams.get('code');
-  if (!code) return NextResponse.redirect('/');
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://jdxwork.com';
+  
+  if (!code) return NextResponse.redirect(`${baseUrl}/`);
 
   const clientId = process.env.GOOGLE_CLIENT_ID!;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET!;
-  const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://jdxwork.com'}/api/auth/oauth/google/callback`;
+  const redirectUri = `${baseUrl}/api/auth/oauth/google/callback`;
 
   try {
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
@@ -28,13 +30,13 @@ export async function GET(req: NextRequest) {
       const errorText = await tokenRes.text();
       console.error('Google OAuth token error:', errorText);
       console.error('Redirect URI:', redirectUri);
-      return NextResponse.redirect('/?error=oauth_failed');
+      return NextResponse.redirect(`${baseUrl}/?error=oauth_failed`);
     }
     
     const tokenJson = await tokenRes.json();
     if (!tokenJson.id_token) {
       console.error('No id_token in response:', tokenJson);
-      return NextResponse.redirect('/?error=oauth_failed');
+      return NextResponse.redirect(`${baseUrl}/?error=oauth_failed`);
     }
     
     const idToken = tokenJson.id_token as string;
@@ -48,9 +50,10 @@ export async function GET(req: NextRequest) {
 
     const token = await signToken({ id: user.id, email: user.email });
     await setAuthCookie(token);
-    return NextResponse.redirect('/');
+    return NextResponse.redirect(`${baseUrl}/`);
   } catch (e) {
-    return NextResponse.redirect('/');
+    console.error('OAuth callback error:', e);
+    return NextResponse.redirect(`${baseUrl}/?error=oauth_failed`);
   }
 }
 
