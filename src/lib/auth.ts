@@ -28,12 +28,26 @@ export async function signToken(payload: Record<string, unknown>) {
 }
 
 export function setAuthCookieInResponse(response: NextResponse, token: string) {
-  response.cookies.set(AUTH_COOKIE, token, {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const cookieOptions: any = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
     path: '/',
-    sameSite: 'lax',
+    sameSite: 'lax' as const,
     maxAge: 60 * 60 * 24 * 7, // 7 days
+  };
+  
+  // Production에서는 secure를 사용하지만, 개발 환경에서는 false
+  if (isProduction) {
+    cookieOptions.secure = true;
+  }
+  
+  response.cookies.set(AUTH_COOKIE, token, cookieOptions);
+  console.log('Setting auth cookie:', { 
+    name: AUTH_COOKIE, 
+    hasToken: !!token, 
+    tokenLength: token?.length,
+    isProduction,
+    secure: cookieOptions.secure 
   });
   return response;
 }
@@ -45,13 +59,21 @@ export function removeAuthCookieInResponse(response: NextResponse) {
 
 export async function getUserFromRequest(req: NextRequest): Promise<{ id: string; email: string } | null> {
   try {
+    const allCookies = req.cookies.getAll();
+    console.log('All cookies:', allCookies.map(c => c.name));
     const token = req.cookies.get(AUTH_COOKIE)?.value;
+    console.log('Auth cookie found:', !!token, 'Token length:', token?.length);
+    
     if (!token) {
+      console.log('No auth token found in cookies');
       return null;
     }
+    
     const { payload } = await jwtVerify(token, getSecretKey());
+    console.log('Token verified, user:', payload.email);
     return { id: String(payload.id), email: String(payload.email) };
-  } catch {
+  } catch (error: any) {
+    console.error('Failed to verify token:', error?.message);
     return null;
   }
 }
