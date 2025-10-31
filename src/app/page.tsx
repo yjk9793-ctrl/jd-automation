@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { 
   Search, 
@@ -69,13 +69,14 @@ export default function HomePage() {
   });
   const [currentUser, setCurrentUser] = useState<{ id: string; email: string; name?: string } | null>(null);
   const [authOpen, setAuthOpen] = useState(false);
+  const lastAuthSuccessRef = useRef<number>(0); // 마지막 로그인 성공 시간 추적
 
   const t = useTranslation(language);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
 
   useEffect(() => {
-    const checkUser = async () => {
+    const checkUser = async (force: boolean = false) => {
       try {
         const res = await fetch('/api/auth/me', { 
           credentials: 'include',
@@ -83,18 +84,33 @@ export default function HomePage() {
         });
         const json = await res.json();
         console.log('User check result:', json);
+        
         if (json.authenticated && json.user) {
           console.log('Setting user:', json.user);
           setCurrentUser(json.user);
+          lastAuthSuccessRef.current = Date.now(); // 로그인 성공 시간 업데이트
         } else {
-          console.log('No authenticated user');
-          setCurrentUser(null);
+          // 로그인 성공 직후(10초 이내)에는 null로 설정하지 않음
+          const timeSinceLastSuccess = Date.now() - lastAuthSuccessRef.current;
+          if (force || timeSinceLastSuccess > 10000) {
+            console.log('No authenticated user (force:', force, 'timeSince:', timeSinceLastSuccess, ')');
+            setCurrentUser(null);
+          } else {
+            console.log('Keeping user state (recently logged in, timeSince:', timeSinceLastSuccess, ')');
+          }
         }
       } catch (error) {
         console.error('Failed to check user:', error);
-        setCurrentUser(null);
+        // 에러 발생 시에도 최근 로그인 성공이면 상태 유지
+        const timeSinceLastSuccess = Date.now() - lastAuthSuccessRef.current;
+        if (force || timeSinceLastSuccess > 10000) {
+          setCurrentUser(null);
+        }
       }
     };
+    
+    // 전역 변수로 외부에서 접근 가능하게
+    (window as any).__checkUser = checkUser;
 
     // URL 파라미터에서 에러 확인 (구글 로그인 실패 시)
     const urlParams = new URLSearchParams(window.location.search);
@@ -127,12 +143,14 @@ export default function HomePage() {
 
     // 페이지 포커스 시 사용자 상태 확인 (다른 탭에서 로그인/로그아웃 시)
     const handleFocus = () => {
-      checkUser();
+      checkUser(true); // 포커스 시에는 강제 확인
     };
     window.addEventListener('focus', handleFocus);
     
-    // 주기적으로 사용자 상태 확인 (5초마다)
-    const intervalId = setInterval(checkUser, 5000);
+    // 주기적으로 사용자 상태 확인 (10초마다, 로그인 직후 방해하지 않도록)
+    const intervalId = setInterval(() => {
+      checkUser(false); // 주기적 확인은 강제하지 않음
+    }, 10000);
     
     return () => {
       window.removeEventListener('focus', handleFocus);
@@ -143,30 +161,17 @@ export default function HomePage() {
   const handleAuthSuccess = async (user: { id: string; email: string; name?: string }) => {
     console.log('Auth success, setting user:', user);
     setCurrentUser(user);
+    lastAuthSuccessRef.current = Date.now(); // 로그인 성공 시간 기록
     
-    // 즉시 여러 번 확인 (쿠키가 서버에서 클라이언트로 전파되는 시간 고려)
-    const checkInterval = async () => {
-      try {
-        const res = await fetch('/api/auth/me', { 
-          credentials: 'include',
-          cache: 'no-store' 
-        });
-        const json = await res.json();
-        console.log('Post-login check:', json);
-        if (json.authenticated && json.user) {
-          console.log('User verified:', json.user.email);
-          setCurrentUser(json.user);
-        }
-      } catch (error) {
-        console.error('Failed to verify user:', error);
-      }
-    };
-    
-    // 즉시, 그리고 짧은 간격으로 여러 번 확인
-    checkInterval();
-    setTimeout(checkInterval, 200);
-    setTimeout(checkInterval, 500);
-    setTimeout(checkInterval, 1000);
+    // 전역 체크 함수가 있으면 업데이트된 사용자 정보로 확인
+    const checkUserFn = (window as any).__checkUser;
+    if (checkUserFn) {
+      // 로그인 성공 후 여러 번 확인하되, 실패해도 상태 유지
+      setTimeout(() => checkUserFn(false), 200);
+      setTimeout(() => checkUserFn(false), 500);
+      setTimeout(() => checkUserFn(false), 1000);
+      setTimeout(() => checkUserFn(false), 2000);
+    }
   };
 
   const handleLogout = async () => {
