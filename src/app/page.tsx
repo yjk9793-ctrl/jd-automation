@@ -77,11 +77,17 @@ export default function HomePage() {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const res = await fetch('/api/auth/me', { credentials: 'include' });
+        const res = await fetch('/api/auth/me', { 
+          credentials: 'include',
+          cache: 'no-store' 
+        });
         const json = await res.json();
+        console.log('User check result:', json);
         if (json.authenticated && json.user) {
+          console.log('Setting user:', json.user);
           setCurrentUser(json.user);
         } else {
+          console.log('No authenticated user');
           setCurrentUser(null);
         }
       } catch (error) {
@@ -101,11 +107,11 @@ export default function HomePage() {
     // 즉시 확인
     checkUser();
     
-    // 로그인 후 리디렉션된 경우 약간의 지연 후 다시 확인 (쿠키 전파 대기)
-    if (!window.location.search.includes('error=oauth_failed')) {
-      setTimeout(checkUser, 500);
-      setTimeout(checkUser, 1500); // 두 번 확인하여 확실하게
-    }
+    // 로그인 후 리디렉션된 경우 여러 번 확인 (쿠키 전파 대기)
+    const intervals = [300, 800, 1500, 2500];
+    intervals.forEach((delay) => {
+      setTimeout(checkUser, delay);
+    });
 
     // 페이지 포커스 시 사용자 상태 확인 (다른 탭에서 로그인/로그아웃 시)
     const handleFocus = () => {
@@ -113,8 +119,12 @@ export default function HomePage() {
     };
     window.addEventListener('focus', handleFocus);
     
+    // 주기적으로 사용자 상태 확인 (5초마다)
+    const intervalId = setInterval(checkUser, 5000);
+    
     return () => {
       window.removeEventListener('focus', handleFocus);
+      clearInterval(intervalId);
     };
   }, []);
 
