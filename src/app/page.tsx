@@ -75,13 +75,36 @@ export default function HomePage() {
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
 
   useEffect(() => {
-    (async () => {
+    const checkUser = async () => {
       try {
         const res = await fetch('/api/auth/me');
         const json = await res.json();
-        if (json.authenticated) setCurrentUser(json.user);
-      } catch {}
-    })();
+        if (json.authenticated) {
+          setCurrentUser(json.user);
+        } else {
+          setCurrentUser(null);
+        }
+      } catch (error) {
+        console.error('Failed to check user:', error);
+        setCurrentUser(null);
+      }
+    };
+
+    // URL 파라미터에서 에러 확인 (구글 로그인 실패 시)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('error')) {
+      urlParams.delete('error');
+      const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+      window.history.replaceState({}, '', newUrl);
+    }
+
+    // 즉시 확인
+    checkUser();
+    
+    // 로그인 후 리디렉션된 경우 약간의 지연 후 다시 확인 (쿠키 전파 대기)
+    if (!window.location.search.includes('error=oauth_failed')) {
+      setTimeout(checkUser, 1000);
+    }
   }, []);
 
   const handleLogout = async () => {
