@@ -188,7 +188,7 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                       AI에이전트로 생산성을 높이세요
                     </span>
                   </div>
-                  <p className="text-gray-300 leading-relaxed text-sm">
+                  <p className="text-gray-300 leading-relaxed text-sm whitespace-pre-wrap break-words">
                     {result.aiSummary}
                   </p>
                 </div>
