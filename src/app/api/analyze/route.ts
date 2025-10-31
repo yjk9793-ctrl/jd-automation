@@ -39,7 +39,13 @@ export async function POST(request: NextRequest) {
     try {
       const user = await getUserFromRequest();
       if (user) {
-        await prisma.analysis.create({ data: { userId: user.id, type, data: result } as any });
+        await prisma.analysis.create({ 
+          data: { 
+            userId: user.id, 
+            type, 
+            data: JSON.stringify(result) 
+          } 
+        });
       }
     } catch {}
 
