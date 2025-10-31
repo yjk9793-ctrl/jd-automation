@@ -1,13 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { User, FileText, CreditCard, Settings, Save, Edit2 } from 'lucide-react';
+import { User, FileText, CreditCard, Settings, Save, Edit2, Brain, Menu, X, Globe, Mail, Phone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { useTranslation } from '@/lib/i18n';
+import { Language } from '@/types';
 
 type TabType = 'profile' | 'analyses' | 'payment';
 
 export default function MyPage() {
   const router = useRouter();
+  const [language, setLanguage] = useState<Language>('ko');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('profile');
   const [user, setUser] = useState<{ id: string; email: string; name?: string } | null>(null);
   const [loading, setLoading] = useState(true);
@@ -22,6 +27,18 @@ export default function MyPage() {
   // Analyses states
   const [analyses, setAnalyses] = useState<any[]>([]);
   const [loadingAnalyses, setLoadingAnalyses] = useState(false);
+
+  const t = useTranslation(language);
+
+  const handleLanguageChange = (lang: Language) => {
+    setLanguage(lang);
+  };
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    localStorage.removeItem('jdx_user');
+    router.push('/');
+  };
 
   useEffect(() => {
     // 먼저 로컬 스토리지에서 사용자 정보 확인 (쿠키 문제 대비)
@@ -210,8 +227,170 @@ export default function MyPage() {
 
   return (
     <div className="min-h-screen bg-dark-900 text-white">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">마이페이지</h1>
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-50 glass-effect">
+        <div className="container-custom px-4">
+          <div className="flex items-center justify-between h-16">
+            <motion.div 
+              className="flex items-center space-x-2 cursor-pointer"
+              onClick={() => router.push('/')}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+                <Brain className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-xl font-bold gradient-text">JDX</span>
+            </motion.div>
+
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center space-x-8">
+              <a
+                href="/"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.home}
+              </a>
+              <a
+                href="/#analysis"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.enterprise}
+              </a>
+              <a
+                href="/#analysis"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.personal}
+              </a>
+              <a
+                href="/#process"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.process}
+              </a>
+              <a
+                href="/#consulting"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.consulting}
+              </a>
+              <a
+                href="/#contact"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.contact}
+              </a>
+              {user && (
+                <a href="/mypage" className="text-primary-600 font-semibold transition-colors duration-300">내 기록</a>
+              )}
+            </div>
+
+            {/* Language Toggle */}
+            <div className="flex items-center space-x-4">
+              <div className="flex bg-dark-800 rounded-lg p-1">
+                <button
+                  onClick={() => handleLanguageChange('ko')}
+                  className={`px-3 py-1 rounded-md text-sm transition-colors duration-300 ${
+                    language === 'ko' ? 'bg-primary-600 text-white' : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  KO
+                </button>
+                <button
+                  onClick={() => handleLanguageChange('en')}
+                  className={`px-3 py-1 rounded-md text-sm transition-colors duration-300 ${
+                    language === 'en' ? 'bg-primary-600 text-white' : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  EN
+                </button>
+              </div>
+
+              {/* Auth */}
+              {user ? (
+                <div className="flex items-center space-x-3">
+                  <a 
+                    href="/mypage" 
+                    className="text-sm text-gray-300 hover:text-white transition-colors cursor-pointer px-2 py-1 rounded-md hover:bg-dark-700"
+                  >
+                    {user.email}
+                  </a>
+                  <button onClick={handleLogout} className="px-3 py-1 rounded-md bg-dark-700 hover:bg-dark-600 text-gray-200">로그아웃</button>
+                </div>
+              ) : (
+                <a href="/" className="px-3 py-1 rounded-md bg-primary-600 text-white">로그인</a>
+              )}
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="md:hidden p-2"
+              >
+                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-dark-800 border-t border-dark-700"
+          >
+            <div className="px-4 py-4 space-y-4">
+              <a
+                href="/"
+                className="block text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.home}
+              </a>
+              <a
+                href="/#analysis"
+                className="block text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.enterprise}
+              </a>
+              <a
+                href="/#analysis"
+                className="block text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.personal}
+              </a>
+              <a
+                href="/#process"
+                className="block text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.process}
+              </a>
+              <a
+                href="/#consulting"
+                className="block text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.consulting}
+              </a>
+              <a
+                href="/#contact"
+                className="block text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.contact}
+              </a>
+              {user && (
+                <a href="/mypage" className="block text-primary-600 font-semibold transition-colors duration-300">내 기록</a>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </nav>
+
+      {/* Content with padding for fixed nav */}
+      <div className="pt-16">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <h1 className="text-3xl font-bold mb-8">마이페이지</h1>
 
         {/* Tabs */}
         <div className="flex space-x-2 mb-6 border-b border-dark-700">
@@ -466,6 +645,73 @@ export default function MyPage() {
           )}
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-dark-900 border-t border-dark-800 py-12 mt-16">
+        <div className="container-custom">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Company Info */}
+            <div className="md:col-span-2">
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+                  <Brain className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xl font-bold gradient-text">{t.footer.company.name}</span>
+              </div>
+              <p className="text-gray-400 mb-6 max-w-md">
+                {t.footer.company.description}
+              </p>
+              <div className="flex space-x-4">
+                <div className="w-10 h-10 bg-dark-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors duration-300 cursor-pointer">
+                  <Globe className="w-5 h-5" />
+                </div>
+                <div className="w-10 h-10 bg-dark-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors duration-300 cursor-pointer">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <div className="w-10 h-10 bg-dark-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors duration-300 cursor-pointer">
+                  <Phone className="w-5 h-5" />
+                </div>
+              </div>
+            </div>
+
+            {/* Links */}
+            <div>
+              <h4 className="font-semibold mb-4">{t.footer.links.product}</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="/#analysis" className="hover:text-white transition-colors duration-300">기업 분석</a></li>
+                <li><a href="/#analysis" className="hover:text-white transition-colors duration-300">개인 분석</a></li>
+                <li><a href="/#process" className="hover:text-white transition-colors duration-300">분석 리포트</a></li>
+                <li><a href="/#contact" className="hover:text-white transition-colors duration-300">API</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4">{t.footer.links.company}</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="/#consulting" className="hover:text-white transition-colors duration-300">회사 소개</a></li>
+                <li><a href="/#consulting" className="hover:text-white transition-colors duration-300">팀</a></li>
+                <li><a href="/#contact" className="hover:text-white transition-colors duration-300">채용</a></li>
+                <li><a href="/#consulting" className="hover:text-white transition-colors duration-300">뉴스</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-dark-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400 text-sm">{t.footer.copyright}</p>
+            <div className="flex space-x-6 mt-4 md:mt-0">
+              <a href="/#contact" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm">
+                {t.footer.legal.privacy}
+              </a>
+              <a href="/#contact" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm">
+                {t.footer.legal.terms}
+              </a>
+              <a href="/#contact" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm">
+                {t.footer.legal.cookies}
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
