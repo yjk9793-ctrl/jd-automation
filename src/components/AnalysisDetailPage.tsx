@@ -42,7 +42,6 @@ import {
   Globe,
   Phone,
   Code,
-  TrendingUp,
   FileCode
 } from 'lucide-react';
 import { AnalysisResult, TaskItem, Language } from '@/types';
