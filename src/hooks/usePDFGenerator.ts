@@ -230,3 +230,4 @@ export function usePDFGenerator({ result }: PDFGeneratorProps) {
     error
   };
 }
+

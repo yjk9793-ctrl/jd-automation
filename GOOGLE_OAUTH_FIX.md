@@ -42,3 +42,4 @@ Vercel에서 재배포합니다.
 - [ ] Vercel에 GOOGLE_CLIENT_SECRET 설정됨
 - [ ] 재배포 완료
 
+

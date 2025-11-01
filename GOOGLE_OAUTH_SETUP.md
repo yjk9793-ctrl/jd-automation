@@ -77,3 +77,4 @@ GOOGLE_CLIENT_SECRET=your_client_secret_here
 클라이언트 ID와 SECRET을 알려주시면
 코드에 바로 연동해드리겠습니다!
 
+

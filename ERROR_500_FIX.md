@@ -50,3 +50,4 @@ build 스크립트에 `prisma generate`가 포함되어 있는지 확인
 Vercel Runtime Logs에서 에러 메시지를 확인해서
 정확한 원인을 알려주시면 해결해드리겠습니다!
 
+

@@ -42,3 +42,4 @@ const img = document.createElement('img');
 img.src = canvas.toDataURL('image/png');
 document.body.appendChild(img);
 </script>
+

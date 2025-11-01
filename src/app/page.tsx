@@ -61,6 +61,7 @@ export default function HomePage() {
   });
   const [currentUser, setCurrentUser] = useState<{ id: string; email: string; name?: string } | null>(null);
   const [authOpen, setAuthOpen] = useState(false);
+  const [pendingDetailView, setPendingDetailView] = useState(false); // 로그인 후 상세 페이지 보기 요청
   const lastAuthSuccessRef = useRef<number>(0); // 마지막 로그인 성공 시간 추적
 
   const t = useTranslation(language);
@@ -169,6 +170,16 @@ export default function HomePage() {
     lastAuthSuccessRef.current = Date.now(); // 로그인 성공 시간 기록
     // 로컬 스토리지에 사용자 정보 저장 (쿠키 문제 대비)
     localStorage.setItem('jdx_user', JSON.stringify(user));
+    
+    // 로그인 성공 후 상세 페이지 보기 요청이 있으면 상세 페이지 열기
+    if (pendingDetailView && analysisResult) {
+      setPendingDetailView(false);
+      setAuthOpen(false);
+      // 약간의 지연 후 상세 페이지 열기 (모달 닫히는 애니메이션 대기)
+      setTimeout(() => {
+        setShowDetailPage(true);
+      }, 300);
+    }
     
     // 사용자 상태를 강제로 유지 (30초 동안)
     const keepUserState = () => {
@@ -284,6 +295,14 @@ export default function HomePage() {
   };
 
   const handleViewDetails = () => {
+    // 로그인 체크
+    if (!currentUser) {
+      // 로그인되지 않은 경우 로그인 모달 열기
+      setPendingDetailView(true); // 로그인 성공 후 상세 페이지 보기 요청 플래그 설정
+      setAuthOpen(true);
+      return;
+    }
+    // 로그인된 경우 상세 페이지 보기
     setShowDetailPage(true);
   };
 
@@ -291,11 +310,21 @@ export default function HomePage() {
     setShowDetailPage(false);
   };
 
-  // Show detail page if analysis result exists and user wants to view details
-  if (showDetailPage && analysisResult) {
+  // Show detail page if analysis result exists and user wants to view details and user is logged in
+  // 로그인 체크: 로그인되지 않은 경우 상세 페이지를 보여주지 않음
+  useEffect(() => {
+    if (showDetailPage && analysisResult && !currentUser) {
+      // 로그인되지 않은 경우 상세 페이지 보기 취소하고 로그인 모달 열기
+      setShowDetailPage(false);
+      setPendingDetailView(true);
+      setAuthOpen(true);
+    }
+  }, [showDetailPage, analysisResult, currentUser]);
+
+  if (showDetailPage && analysisResult && currentUser) {
     return (
       <AnalysisDetailPage
-          result={analysisResult}
+        result={analysisResult}
         language={language}
         onBack={handleBackToMain}
       />
@@ -471,7 +500,14 @@ export default function HomePage() {
           </motion.div>
         )}
       </nav>
-      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} onAuthSuccess={handleAuthSuccess} />
+      <AuthModal 
+        isOpen={authOpen} 
+        onClose={() => {
+          setAuthOpen(false);
+          setPendingDetailView(false); // 모달 닫을 때 요청 플래그도 초기화
+        }} 
+        onAuthSuccess={handleAuthSuccess} 
+      />
 
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">

@@ -5,7 +5,8 @@ import { User, FileText, CreditCard, Settings, Save, Edit2, Brain, Menu, X, Glob
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useTranslation } from '@/lib/i18n';
-import { Language } from '@/types';
+import { Language, AnalysisResult } from '@/types';
+import { AnalysisDetailPage } from '@/components/AnalysisDetailPage';
 
 type TabType = 'profile' | 'analyses' | 'payment';
 
@@ -27,6 +28,7 @@ export default function MyPage() {
   // Analyses states
   const [analyses, setAnalyses] = useState<any[]>([]);
   const [loadingAnalyses, setLoadingAnalyses] = useState(false);
+  const [selectedAnalysis, setSelectedAnalysis] = useState<AnalysisResult | null>(null);
 
   const t = useTranslation(language);
 
@@ -222,6 +224,17 @@ export default function MyPage() {
           </button>
         </div>
       </div>
+    );
+  }
+
+  // 상세 페이지 표시
+  if (selectedAnalysis) {
+    return (
+      <AnalysisDetailPage
+        result={selectedAnalysis}
+        language={language}
+        onBack={() => setSelectedAnalysis(null)}
+      />
     );
   }
 
@@ -557,8 +570,32 @@ export default function MyPage() {
                 <div className="space-y-4">
                   {analyses.map((item: any) => {
                     const data = typeof item.data === 'string' ? JSON.parse(item.data) : item.data;
+                    const analysisResult: AnalysisResult = {
+                      id: item.id,
+                      type: item.type as 'enterprise' | 'personal',
+                      jobRole: data.jobRole || '',
+                      summary: data.summary || {
+                        total: 0,
+                        automate: 0,
+                        copilot: 0,
+                        humanCritical: 0,
+                        averageScore: 0,
+                        estimatedROI: 0,
+                        automationPotential: 0,
+                      },
+                      tasks: data.tasks || [],
+                      recommendations: data.recommendations || [],
+                      nextSteps: data.nextSteps || [],
+                      createdAt: item.createdAt,
+                      aiSummary: data.aiSummary || '',
+                    };
+                    
                     return (
-                      <div key={item.id} className="p-4 border border-dark-700 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors">
+                      <div 
+                        key={item.id} 
+                        onClick={() => setSelectedAnalysis(analysisResult)}
+                        className="p-4 border border-dark-700 rounded-lg bg-dark-700 hover:bg-dark-600 hover:border-primary-500 transition-colors cursor-pointer"
+                      >
                         <div className="flex items-center justify-between mb-3">
                           <div className="text-sm text-gray-400">
                             {new Date(item.createdAt).toLocaleString('ko-KR')}

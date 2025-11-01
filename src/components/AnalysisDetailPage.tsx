@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { 
   BarChart3, 
   PieChart, 
@@ -34,13 +35,17 @@ import {
   Eye,
   Settings,
   Filter,
-  Search
+  Search,
+  Home,
+  Menu,
+  X
 } from 'lucide-react';
 import { AnalysisResult, TaskItem, Language } from '@/types';
 import { useTranslation } from '@/lib/i18n';
 import { AutomationChart } from './AutomationChart';
 import { ShareModal } from './ShareModal';
 import { usePDFGenerator } from '@/hooks/usePDFGenerator';
+import { AuthModal } from './auth/AuthModal';
 
 interface AnalysisDetailPageProps {
   result: AnalysisResult;
@@ -49,15 +54,75 @@ interface AnalysisDetailPageProps {
 }
 
 export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailPageProps) {
+  const router = useRouter();
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'detailed' | 'recommendations' | 'implementation'>('overview');
   const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set());
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'score' | 'roi' | 'difficulty' | 'time'>('score');
   const [showShareModal, setShowShareModal] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState<Language>(language);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{ id: string; email: string; name?: string } | null>(null);
+  const [authOpen, setAuthOpen] = useState(false);
   
   const { generatePDF, isGenerating, error } = usePDFGenerator({ result });
-  const t = useTranslation(language);
+  const t = useTranslation(currentLanguage);
+
+  // 사용자 정보 확인
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const cachedUser = localStorage.getItem('jdx_user');
+        if (cachedUser) {
+          try {
+            const userData = JSON.parse(cachedUser);
+            setCurrentUser(userData);
+          } catch (e) {
+            console.error('Failed to parse cached user:', e);
+          }
+        }
+
+        const res = await fetch('/api/auth/me', { 
+          credentials: 'include',
+          cache: 'no-store' 
+        });
+        const json = await res.json();
+        
+        if (json.authenticated && json.user) {
+          setCurrentUser(json.user);
+          localStorage.setItem('jdx_user', JSON.stringify(json.user));
+        }
+      } catch (e) {
+        console.error('User check error:', e);
+      }
+    };
+
+    checkUser();
+    
+    // 주기적으로 사용자 상태 확인
+    const intervalId = setInterval(() => {
+      checkUser();
+    }, 10000);
+    
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    setCurrentUser(null);
+    localStorage.removeItem('jdx_user');
+    router.push('/');
+  };
+
+  const handleAuthSuccess = async (user: { id: string; email: string; name?: string }) => {
+    setCurrentUser(user);
+    localStorage.setItem('jdx_user', JSON.stringify(user));
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    router.push(`/#${sectionId}`);
+  };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -116,8 +181,168 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
 
   return (
     <div className="min-h-screen bg-dark-900 text-white">
-      {/* Header */}
-      <div className="sticky top-0 z-50 glass-effect border-b border-dark-700">
+      {/* Navigation Header */}
+      <nav className="fixed top-0 w-full z-50 glass-effect">
+        <div className="container-custom px-4">
+          <div className="flex items-center justify-between h-16">
+            <motion.div 
+              className="flex items-center space-x-2 cursor-pointer"
+              onClick={() => router.push('/')}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+                <Brain className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-xl font-bold gradient-text">JDX</span>
+            </motion.div>
+
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center space-x-8">
+              <a
+                href="/"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.home}
+              </a>
+              <a
+                href="/#analysis"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.enterprise}
+              </a>
+              <a
+                href="/#analysis"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.personal}
+              </a>
+              <a
+                href="/#process"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.process}
+              </a>
+              <a
+                href="/#consulting"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.consulting}
+              </a>
+              <a
+                href="/#contact"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.contact}
+              </a>
+              {currentUser && (
+                <a href="/mypage" className="text-gray-300 hover:text-white transition-colors duration-300">내 기록</a>
+              )}
+            </div>
+
+            {/* Language Toggle */}
+            <div className="flex items-center space-x-4">
+              <div className="flex bg-dark-800 rounded-lg p-1">
+                <button
+                  onClick={() => setCurrentLanguage('ko')}
+                  className={`px-3 py-1 rounded-md text-sm transition-colors duration-300 ${
+                    currentLanguage === 'ko' ? 'bg-primary-600 text-white' : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  KO
+                </button>
+                <button
+                  onClick={() => setCurrentLanguage('en')}
+                  className={`px-3 py-1 rounded-md text-sm transition-colors duration-300 ${
+                    currentLanguage === 'en' ? 'bg-primary-600 text-white' : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  EN
+                </button>
+              </div>
+
+              {/* Auth */}
+              {currentUser ? (
+                <div className="flex items-center space-x-3">
+                  <a 
+                    href="/mypage" 
+                    className="text-sm text-gray-300 hover:text-white transition-colors cursor-pointer px-2 py-1 rounded-md hover:bg-dark-700"
+                  >
+                    {currentUser.email}
+                  </a>
+                  <button onClick={handleLogout} className="px-3 py-1 rounded-md bg-dark-700 hover:bg-dark-600 text-gray-200">로그아웃</button>
+                </div>
+              ) : (
+                <button onClick={() => setAuthOpen(true)} className="px-3 py-1 rounded-md bg-primary-600 text-white">로그인</button>
+              )}
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="md:hidden p-2"
+              >
+                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-dark-800 border-t border-dark-700"
+          >
+            <div className="px-4 py-4 space-y-4">
+              <a
+                href="/"
+                className="block text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.home}
+              </a>
+              <a
+                href="/#analysis"
+                className="block text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.enterprise}
+              </a>
+              <a
+                href="/#analysis"
+                className="block text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.personal}
+              </a>
+              <a
+                href="/#process"
+                className="block text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.process}
+              </a>
+              <a
+                href="/#consulting"
+                className="block text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.consulting}
+              </a>
+              <a
+                href="/#contact"
+                className="block text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {t.nav.contact}
+              </a>
+              {currentUser && (
+                <a href="/mypage" className="block text-gray-300 hover:text-white transition-colors duration-300">내 기록</a>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </nav>
+
+      {/* Page Header */}
+      <div className="sticky top-16 z-40 glass-effect border-b border-dark-700">
         <div className="container-custom px-4">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
@@ -143,6 +368,13 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
             </div>
 
             <div className="flex items-center space-x-3">
+              <a
+                href="/mypage"
+                className="btn-secondary flex items-center space-x-2"
+              >
+                <Home className="w-4 h-4" />
+                <span>마이페이지</span>
+              </a>
               <button 
                 className="btn-secondary flex items-center space-x-2"
                 onClick={() => setShowShareModal(true)}
@@ -164,7 +396,7 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
       </div>
 
       {/* Main Content */}
-      <div className="container-custom px-4 py-8">
+      <div className="container-custom px-4 py-8 pt-24">
         {/* AI Summary Section */}
         {/* AI Summary Display */}
         {result.aiSummary && result.aiSummary.trim() !== '' && (
@@ -651,6 +883,13 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
         result={result}
+      />
+
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={authOpen} 
+        onClose={() => setAuthOpen(false)} 
+        onAuthSuccess={handleAuthSuccess} 
       />
     </div>
   );
