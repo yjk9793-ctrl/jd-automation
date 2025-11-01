@@ -204,42 +204,42 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
-              <a
-                href="/"
-                className="text-gray-300 hover:text-white transition-colors duration-300"
+              <button
+                onClick={() => router.push('/')}
+                className="text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.home}
-              </a>
-              <a
-                href="/#analysis"
-                className="text-gray-300 hover:text-white transition-colors duration-300"
+              </button>
+              <button
+                onClick={() => router.push('/#analysis')}
+                className="text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.enterprise}
-              </a>
-              <a
-                href="/#analysis"
-                className="text-gray-300 hover:text-white transition-colors duration-300"
+              </button>
+              <button
+                onClick={() => router.push('/#analysis')}
+                className="text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.personal}
-              </a>
-              <a
-                href="/#process"
-                className="text-gray-300 hover:text-white transition-colors duration-300"
+              </button>
+              <button
+                onClick={() => router.push('/#process')}
+                className="text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.process}
-              </a>
-              <a
-                href="/#consulting"
-                className="text-gray-300 hover:text-white transition-colors duration-300"
+              </button>
+              <button
+                onClick={() => router.push('/#consulting')}
+                className="text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.consulting}
-              </a>
-              <a
-                href="/#contact"
-                className="text-gray-300 hover:text-white transition-colors duration-300"
+              </button>
+              <button
+                onClick={() => router.push('/#contact')}
+                className="text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.contact}
-              </a>
+              </button>
             </div>
 
             {/* Language Toggle */}
