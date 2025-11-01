@@ -646,24 +646,38 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                               </span>
                             )}
                           </div>
-                          {/* 에이전트 역할과 기대 효과 설명 */}
-                          {task.shortDescription ? (
-                            <p className="text-gray-300 mb-3 text-sm leading-relaxed bg-dark-700/50 rounded-lg p-3 border-l-2 border-primary-500/50">
-                              {task.shortDescription}
-                            </p>
-                          ) : task.expectedEffects && task.expectedEffects.length > 0 ? (
-                            <p className="text-gray-300 mb-3 text-sm leading-relaxed bg-dark-700/50 rounded-lg p-3 border-l-2 border-primary-500/50">
-                              {task.expectedEffects[0].length > 100 
-                                ? task.expectedEffects[0].substring(0, 100) + '...' 
-                                : task.expectedEffects[0]}
-                            </p>
-                          ) : (
-                            <p className="text-gray-400 mb-3 text-sm leading-relaxed line-clamp-2 italic">
-                              {task.reasoning && task.reasoning.length > 100 
-                                ? task.reasoning.substring(0, 100) + '...' 
-                                : task.reasoning || task.sourceText}
-                            </p>
-                          )}
+                          {/* 에이전트 역할과 기대 효과 설명 - 항상 표시 */}
+                          {(() => {
+                            let description = '';
+                            
+                            // 1순위: shortDescription
+                            if (task.shortDescription) {
+                              description = task.shortDescription;
+                            }
+                            // 2순위: expectedEffects 첫 번째 항목
+                            else if (task.expectedEffects && task.expectedEffects.length > 0) {
+                              description = task.expectedEffects[0];
+                            }
+                            // 3순위: reasoning의 앞부분
+                            else if (task.reasoning) {
+                              description = task.reasoning;
+                            }
+                            // 4순위: sourceText
+                            else {
+                              description = task.sourceText;
+                            }
+                            
+                            // 100자로 제한
+                            const truncatedDescription = description.length > 100 
+                              ? description.substring(0, 100) + '...' 
+                              : description;
+                            
+                            return (
+                              <p className="text-gray-300 mb-3 text-sm leading-relaxed bg-dark-700/50 rounded-lg p-3 border-l-2 border-primary-500/50">
+                                {truncatedDescription}
+                              </p>
+                            );
+                          })()}
                           <div className="flex flex-wrap items-center gap-4 text-xs">
                             <div className="flex items-center space-x-1.5">
                               <Target className="w-3.5 h-3.5 text-primary-400" />
