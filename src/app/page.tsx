@@ -346,17 +346,30 @@ export default function HomePage() {
   // Show detail page if analysis result exists and user wants to view details and user is logged in
   // 로그인 체크: 로그인되지 않은 경우 상세 페이지를 보여주지 않음
   useEffect(() => {
+    // 상세 페이지를 보려고 하는 경우에만 체크
+    if (!showDetailPage) return;
+    
     // 로컬 스토리지에서 사용자 정보 확인 (캐시된 사용자 정보가 있으면 로그인된 것으로 간주)
     const cachedUser = localStorage.getItem('jdx_user');
     const hasCachedUser = cachedUser !== null;
     
-    // 실제로 로그인이 안 되어 있고, 상세 페이지를 보려고 하며, 모달이 열려있지 않을 때만 모달 열기
-    // 로컬 스토리지에 사용자 정보가 있으면 로그인 상태로 간주하여 모달을 열지 않음
-    if (showDetailPage && analysisResult && !currentUser && !authOpen && !hasCachedUser) {
+    // 이미 모달이 열려있으면 중복 실행 방지
+    if (authOpen) return;
+    
+    // 실제로 로그인이 안 되어 있고, 상세 페이지를 보려고 하며, 로컬 스토리지에도 사용자 정보가 없을 때만 모달 열기
+    if (analysisResult && !currentUser && !hasCachedUser) {
       // 로그인되지 않은 경우 상세 페이지 보기 취소하고 로그인 모달 열기
       setShowDetailPage(false);
       setPendingDetailView(true);
       setAuthOpen(true);
+    } else if (analysisResult && !currentUser && hasCachedUser) {
+      // 로컬 스토리지에 사용자 정보가 있으면 현재 사용자 상태 업데이트
+      try {
+        const userData = JSON.parse(cachedUser);
+        setCurrentUser(userData);
+      } catch (e) {
+        console.error('Failed to parse cached user:', e);
+      }
     }
   }, [showDetailPage, analysisResult, currentUser, authOpen]);
 
