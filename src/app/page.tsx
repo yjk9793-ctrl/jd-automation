@@ -398,9 +398,6 @@ export default function HomePage() {
               >
                 {t.nav.contact}
               </a>
-              {currentUser && (
-                <a href="/mypage" className="text-gray-300 hover:text-white transition-colors duration-300">내 기록</a>
-              )}
             </div>
 
             {/* Language Toggle */}

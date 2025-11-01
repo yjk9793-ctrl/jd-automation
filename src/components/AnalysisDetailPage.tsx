@@ -240,9 +240,6 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
               >
                 {t.nav.contact}
               </a>
-              {currentUser && (
-                <a href="/mypage" className="text-gray-300 hover:text-white transition-colors duration-300">내 기록</a>
-              )}
             </div>
 
             {/* Language Toggle */}
@@ -337,9 +334,6 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
               >
                 {t.nav.contact}
               </a>
-              {currentUser && (
-                <a href="/mypage" className="block text-gray-300 hover:text-white transition-colors duration-300">내 기록</a>
-              )}
             </div>
           </motion.div>
         )}
