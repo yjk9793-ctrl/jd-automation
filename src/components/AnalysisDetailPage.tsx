@@ -727,157 +727,156 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                         className="mt-6 pt-6 border-t border-dark-700"
                       >
                         <div className="space-y-6">
-                          {/* 핵심 정보 요약 표 */}
-                          <div className="card overflow-hidden">
+                          {/* 핵심 정보 - 카드 그리드 */}
+                          <div>
                             <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
                               <Target className="w-5 h-5 text-primary-500" />
                               <span>에이전트 전환 핵심 정보</span>
                             </h4>
-                            <div className="overflow-x-auto">
-                              <table className="w-full border-collapse">
-                                <thead>
-                                  <tr className="bg-dark-700">
-                                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300 border-b border-dark-600">항목</th>
-                                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300 border-b border-dark-600">내용</th>
-                                  </tr>
-                                </thead>
-                                <tbody className="text-sm">
-                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
-                                    <td className="px-4 py-3 text-gray-400 font-medium">전환 가능성</td>
-                                    <td className="px-4 py-3">
-                                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                                        task.conversionPotential === '높음' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
-                                        task.conversionPotential === '중간' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
-                                        'bg-gray-500/20 text-gray-400 border border-gray-500/30'
-                                      }`}>
-                                        {task.conversionPotential || (task.category === 'Automate' ? '높음' : task.category === 'AI-Copilot' ? '중간' : '낮음')}
-                                      </span>
-                                    </td>
-                                  </tr>
-                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
-                                    <td className="px-4 py-3 text-gray-400 font-medium">우선순위</td>
-                                    <td className="px-4 py-3">
-                                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                                        task.priority === 'high' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
-                                        task.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
-                                        'bg-gray-500/20 text-gray-400 border border-gray-500/30'
-                                      }`}>
-                                        {task.priority === 'high' ? '높음 (빠른 전환 필요)' :
-                                         task.priority === 'medium' ? '중간' : 
-                                         task.priority === 'low' ? '낮음' : 
-                                         (task.score >= 70 ? '높음 (빠른 전환 필요)' : task.score >= 50 ? '중간' : '낮음')}
-                                      </span>
-                                    </td>
-                                  </tr>
-                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
-                                    <td className="px-4 py-3 text-gray-400 font-medium">예상 도입 비용</td>
-                                    <td className="px-4 py-3 text-gray-200">{task.estimatedAdoptionCost || '분석 필요'}</td>
-                                  </tr>
-                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
-                                    <td className="px-4 py-3 text-gray-400 font-medium">예상 운영 비용 (월간)</td>
-                                    <td className="px-4 py-3 text-gray-200">{task.estimatedOperatingCost || '분석 필요'}</td>
-                                  </tr>
-                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
-                                    <td className="px-4 py-3 text-gray-400 font-medium">예상 절감 비용 (연간)</td>
-                                    <td className="px-4 py-3 text-green-400 font-semibold">{task.estimatedSavingsCost || '분석 필요'}</td>
-                                  </tr>
-                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
-                                    <td className="px-4 py-3 text-gray-400 font-medium">ROI</td>
-                                    <td className="px-4 py-3 text-green-400 font-semibold">{task.roiEstimate}%</td>
-                                  </tr>
-                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
-                                    <td className="px-4 py-3 text-gray-400 font-medium">예상 구축 기간</td>
-                                    <td className="px-4 py-3 text-gray-200">{task.estimatedBuildPeriod || task.estimatedTime}</td>
-                                  </tr>
-                                  <tr>
-                                    <td className="px-4 py-3 text-gray-400 font-medium">자동화 가능성</td>
-                                    <td className="px-4 py-3">
-                                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getCategoryColor(task.category)}`}>
-                                        {task.category === 'Automate' ? '완전 자동화' : task.category === 'AI-Copilot' ? 'AI 협업' : '인간 중심'}
-                                      </span>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                              {/* 전환 가능성 */}
+                              <div className="bg-dark-700 rounded-lg p-4 border border-dark-600 hover:border-primary-500/50 transition-colors">
+                                <div className="text-xs text-gray-400 mb-2">전환 가능성</div>
+                                <div className="flex items-center space-x-2">
+                                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                    (task.conversionPotential || (task.category === 'Automate' ? '높음' : task.category === 'AI-Copilot' ? '중간' : '낮음')) === '높음' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                                    (task.conversionPotential || (task.category === 'Automate' ? '높음' : task.category === 'AI-Copilot' ? '중간' : '낮음')) === '중간' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                                    'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                                  }`}>
+                                    {task.conversionPotential || (task.category === 'Automate' ? '높음' : task.category === 'AI-Copilot' ? '중간' : '낮음')}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* 우선순위 */}
+                              <div className="bg-dark-700 rounded-lg p-4 border border-dark-600 hover:border-primary-500/50 transition-colors">
+                                <div className="text-xs text-gray-400 mb-2">우선순위</div>
+                                <div className="flex items-center space-x-2">
+                                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                    (task.priority === 'high' || (!task.priority && task.score >= 70)) ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                                    (task.priority === 'medium' || (!task.priority && task.score >= 50)) ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                                    'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                                  }`}>
+                                    {task.priority === 'high' || (!task.priority && task.score >= 70) ? '높음' :
+                                     task.priority === 'medium' || (!task.priority && task.score >= 50) ? '중간' : 
+                                     task.priority === 'low' || (!task.priority && task.score < 50) ? '낮음' : '중간'}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* ROI */}
+                              <div className="bg-dark-700 rounded-lg p-4 border border-dark-600 hover:border-primary-500/50 transition-colors">
+                                <div className="text-xs text-gray-400 mb-2">예상 ROI</div>
+                                <div className="text-xl font-bold text-green-400">{task.roiEstimate}%</div>
+                              </div>
+
+                              {/* 구축 기간 */}
+                              <div className="bg-dark-700 rounded-lg p-4 border border-dark-600 hover:border-primary-500/50 transition-colors">
+                                <div className="text-xs text-gray-400 mb-2">구축 기간</div>
+                                <div className="text-sm font-semibold text-gray-200">{task.estimatedBuildPeriod || task.estimatedTime}</div>
+                              </div>
+
+                              {/* 도입 비용 */}
+                              {task.estimatedAdoptionCost && (
+                                <div className="bg-dark-700 rounded-lg p-4 border border-dark-600 hover:border-primary-500/50 transition-colors">
+                                  <div className="text-xs text-gray-400 mb-2">예상 도입 비용</div>
+                                  <div className="text-sm font-semibold text-gray-200">{task.estimatedAdoptionCost}</div>
+                                </div>
+                              )}
+
+                              {/* 운영 비용 */}
+                              {task.estimatedOperatingCost && (
+                                <div className="bg-dark-700 rounded-lg p-4 border border-dark-600 hover:border-primary-500/50 transition-colors">
+                                  <div className="text-xs text-gray-400 mb-2">운영 비용 (월간)</div>
+                                  <div className="text-sm font-semibold text-gray-200">{task.estimatedOperatingCost}</div>
+                                </div>
+                              )}
+
+                              {/* 절감 비용 */}
+                              {task.estimatedSavingsCost && (
+                                <div className="bg-dark-700 rounded-lg p-4 border border-dark-600 hover:border-primary-500/50 transition-colors">
+                                  <div className="text-xs text-gray-400 mb-2">절감 비용 (연간)</div>
+                                  <div className="text-sm font-semibold text-green-400">{task.estimatedSavingsCost}</div>
+                                </div>
+                              )}
                             </div>
                           </div>
 
-                          {/* 분석 근거 - 더 상세하게 */}
-                          <div className="card">
-                            <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
+                          {/* 분석 근거 */}
+                          <div>
+                            <h4 className="text-lg font-semibold mb-3 flex items-center space-x-2">
                               <Lightbulb className="w-5 h-5 text-yellow-500" />
-                              <span>상세 분석 근거</span>
+                              <span>분석 근거</span>
                             </h4>
-                            <div className="space-y-3">
-                              <div className="bg-dark-700 rounded-lg p-4">
-                                <p className="text-gray-300 leading-relaxed">{task.reasoning}</p>
-                              </div>
+                            <div className="bg-dark-700 rounded-lg p-4 border-l-2 border-yellow-500/50">
+                              <p className="text-gray-300 leading-relaxed text-sm">{task.reasoning}</p>
                             </div>
                           </div>
 
-                          {/* 기대 효과 */}
-                          {task.expectedEffects && task.expectedEffects.length > 0 && (
-                            <div className="card">
-                              <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
-                                <TrendingUp className="w-5 h-5 text-green-500" />
-                                <span>전환 시 기대 효과</span>
-                              </h4>
-                              <div className="space-y-3">
-                                {task.expectedEffects.map((effect, effectIndex) => (
-                                  <div key={effectIndex} className="flex items-start space-x-3 p-3 bg-dark-700 rounded-lg hover:bg-dark-600 transition-colors">
-                                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                      <CheckCircle className="w-4 h-4 text-white" />
+                          {/* 기대 효과 및 전환 저해 요인 - 컴팩트하게 */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* 기대 효과 */}
+                            {task.expectedEffects && task.expectedEffects.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-semibold mb-3 flex items-center space-x-2 text-green-400">
+                                  <TrendingUp className="w-4 h-4" />
+                                  <span>전환 시 기대 효과</span>
+                                </h4>
+                                <div className="bg-dark-700 rounded-lg p-4 border border-dark-600 space-y-2">
+                                  {task.expectedEffects.map((effect, effectIndex) => (
+                                    <div key={effectIndex} className="flex items-start space-x-2 text-xs">
+                                      <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-1.5 flex-shrink-0" />
+                                      <span className="text-gray-300 leading-relaxed">{effect}</span>
                                     </div>
-                                    <p className="text-gray-300 leading-relaxed">{effect}</p>
-                                  </div>
-                                ))}
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
 
-                          {/* 전환 저해 요인 */}
-                          {task.conversionBarriers && task.conversionBarriers.length > 0 && (
-                            <div className="card">
-                              <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
-                                <AlertCircle className="w-5 h-5 text-orange-500" />
-                                <span>전환 저해 요인</span>
-                              </h4>
-                              <div className="space-y-3">
-                                {task.conversionBarriers.map((barrier, barrierIndex) => (
-                                  <div key={barrierIndex} className="flex items-start space-x-3 p-3 bg-dark-700 rounded-lg hover:bg-dark-600 transition-colors">
-                                    <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                      <AlertCircle className="w-4 h-4 text-white" />
+                            {/* 전환 저해 요인 */}
+                            {task.conversionBarriers && task.conversionBarriers.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-semibold mb-3 flex items-center space-x-2 text-orange-400">
+                                  <AlertCircle className="w-4 h-4" />
+                                  <span>전환 저해 요인</span>
+                                </h4>
+                                <div className="bg-dark-700 rounded-lg p-4 border border-dark-600 space-y-2">
+                                  {task.conversionBarriers.map((barrier, barrierIndex) => (
+                                    <div key={barrierIndex} className="flex items-start space-x-2 text-xs">
+                                      <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-1.5 flex-shrink-0" />
+                                      <span className="text-gray-300 leading-relaxed">{barrier}</span>
                                     </div>
-                                    <p className="text-gray-300 leading-relaxed">{barrier}</p>
-                                  </div>
-                                ))}
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
+                          </div>
 
                           {/* 기술 요구사항 */}
                           {task.technicalRequirements && task.technicalRequirements.length > 0 && (
-                            <div className="card">
-                              <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
-                                <Settings className="w-5 h-5 text-blue-500" />
+                            <div>
+                              <h4 className="text-sm font-semibold mb-3 flex items-center space-x-2 text-blue-400">
+                                <Settings className="w-4 h-4" />
                                 <span>기술 요구사항</span>
                               </h4>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {task.technicalRequirements.map((requirement, reqIndex) => (
-                                  <div key={reqIndex} className="flex items-center space-x-2 p-3 bg-dark-700 rounded-lg hover:bg-dark-600 transition-colors">
-                                    <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0" />
-                                    <span className="text-sm text-gray-300">{requirement}</span>
-                                  </div>
-                                ))}
+                              <div className="bg-dark-700 rounded-lg p-4 border border-dark-600">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                  {task.technicalRequirements.map((requirement, reqIndex) => (
+                                    <div key={reqIndex} className="flex items-center space-x-2 text-xs">
+                                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full flex-shrink-0" />
+                                      <span className="text-gray-300">{requirement}</span>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
                             </div>
                           )}
 
                           {/* 샘플 프롬프트 */}
                           {task.samplePrompt && (
-                            <div className="card">
-                              <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
-                                <Code className="w-5 h-5 text-blue-500" />
+                            <div>
+                              <h4 className="text-sm font-semibold mb-3 flex items-center space-x-2 text-blue-400">
+                                <Code className="w-4 h-4" />
                                 <span>샘플 명령어 프롬프트</span>
                               </h4>
                               <div className="bg-dark-800 rounded-lg p-4 border border-dark-700">
@@ -888,72 +887,77 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                                       e.stopPropagation();
                                       navigator.clipboard.writeText(task.samplePrompt || '');
                                     }}
-                                    className="text-xs text-primary-500 hover:text-primary-400 flex items-center space-x-1"
+                                    className="text-xs text-primary-500 hover:text-primary-400 flex items-center space-x-1 transition-colors"
                                   >
                                     <Copy className="w-3 h-3" />
                                     <span>복사</span>
                                   </button>
                                 </div>
-                                <pre className="text-sm text-gray-300 font-mono whitespace-pre-wrap break-words overflow-x-auto">
+                                <pre className="text-xs text-gray-300 font-mono whitespace-pre-wrap break-words overflow-x-auto">
                                   <code>{task.samplePrompt}</code>
                                 </pre>
                               </div>
                             </div>
                           )}
 
-                          {/* Tools, Risks, Safeguards를 그리드로 */}
-                          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            {/* Tools */}
-                            <div>
-                              <h4 className="text-lg font-semibold mb-3 flex items-center space-x-2">
-                                <Settings className="w-5 h-5 text-blue-500" />
-                                <span>필요 도구</span>
-                              </h4>
-                              <div className="space-y-2">
-                                {task.tools.map((tool, toolIndex) => (
-                                  <div key={toolIndex} className="p-3 bg-dark-700 rounded-lg">
-                                    <div className="font-medium text-white mb-1">{tool.name}</div>
-                                    <div className="text-sm text-gray-400 mb-2">{tool.purpose}</div>
-                                    <div className="text-xs text-gray-500">
-                                      대안: {tool.alternatives.join(', ')}
-                                    </div>
+                          {/* Tools, Risks, Safeguards - 컴팩트한 형태 */}
+                          {(task.tools.length > 0 || task.risks.length > 0 || task.safeguards.length > 0) && (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                              {/* Tools */}
+                              {task.tools.length > 0 && (
+                                <div className="bg-dark-700 rounded-lg p-4 border border-dark-600">
+                                  <h4 className="text-sm font-semibold mb-3 flex items-center space-x-2 text-blue-400">
+                                    <Settings className="w-4 h-4" />
+                                    <span>필요 도구</span>
+                                  </h4>
+                                  <div className="space-y-2">
+                                    {task.tools.map((tool, toolIndex) => (
+                                      <div key={toolIndex} className="text-xs">
+                                        <div className="font-medium text-white mb-0.5">{tool.name}</div>
+                                        <div className="text-gray-400">{tool.purpose}</div>
+                                      </div>
+                                    ))}
                                   </div>
-                                ))}
-                              </div>
-                            </div>
+                                </div>
+                              )}
 
-                            {/* Risks */}
-                            <div>
-                              <h4 className="text-lg font-semibold mb-3 flex items-center space-x-2">
-                                <AlertCircle className="w-5 h-5 text-red-500" />
-                                <span>위험 요소</span>
-                              </h4>
-                              <div className="space-y-2">
-                                {task.risks.map((risk, riskIndex) => (
-                                  <div key={riskIndex} className="flex items-start space-x-2">
-                                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0" />
-                                    <span className="text-sm text-gray-300">{risk}</span>
+                              {/* Risks */}
+                              {task.risks.length > 0 && (
+                                <div className="bg-dark-700 rounded-lg p-4 border border-dark-600">
+                                  <h4 className="text-sm font-semibold mb-3 flex items-center space-x-2 text-red-400">
+                                    <AlertCircle className="w-4 h-4" />
+                                    <span>위험 요소</span>
+                                  </h4>
+                                  <div className="space-y-2">
+                                    {task.risks.map((risk, riskIndex) => (
+                                      <div key={riskIndex} className="flex items-start space-x-2 text-xs">
+                                        <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5 flex-shrink-0" />
+                                        <span className="text-gray-300 leading-relaxed">{risk}</span>
+                                      </div>
+                                    ))}
                                   </div>
-                                ))}
-                              </div>
-                            </div>
+                                </div>
+                              )}
 
-                            {/* Safeguards */}
-                            <div>
-                              <h4 className="text-lg font-semibold mb-3 flex items-center space-x-2">
-                                <CheckCircle className="w-5 h-5 text-green-500" />
-                                <span>안전장치</span>
-                              </h4>
-                              <div className="space-y-2">
-                                {task.safeguards.map((safeguard, safeguardIndex) => (
-                                  <div key={safeguardIndex} className="flex items-start space-x-2">
-                                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0" />
-                                    <span className="text-sm text-gray-300">{safeguard}</span>
+                              {/* Safeguards */}
+                              {task.safeguards.length > 0 && (
+                                <div className="bg-dark-700 rounded-lg p-4 border border-dark-600">
+                                  <h4 className="text-sm font-semibold mb-3 flex items-center space-x-2 text-green-400">
+                                    <CheckCircle className="w-4 h-4" />
+                                    <span>안전장치</span>
+                                  </h4>
+                                  <div className="space-y-2">
+                                    {task.safeguards.map((safeguard, safeguardIndex) => (
+                                      <div key={safeguardIndex} className="flex items-start space-x-2 text-xs">
+                                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-1.5 flex-shrink-0" />
+                                        <span className="text-gray-300 leading-relaxed">{safeguard}</span>
+                                      </div>
+                                    ))}
                                   </div>
-                                ))}
-                              </div>
+                                </div>
+                              )}
                             </div>
-                          </div>
+                          )}
                         </div>
                       </motion.div>
                     )}
