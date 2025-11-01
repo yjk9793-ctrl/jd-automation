@@ -40,7 +40,10 @@ import {
   Menu,
   X,
   Globe,
-  Phone
+  Phone,
+  Code,
+  TrendingUp,
+  FileCode
 } from 'lucide-react';
 import { AnalysisResult, TaskItem, Language } from '@/types';
 import { useTranslation } from '@/lib/i18n';
@@ -671,63 +674,135 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                         exit={{ opacity: 0, height: 0 }}
                         className="mt-6 pt-6 border-t border-dark-700"
                       >
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                          {/* Reasoning */}
-                          <div>
-                            <h4 className="text-lg font-semibold mb-3 flex items-center space-x-2">
+                        <div className="space-y-6">
+                          {/* 분석 근거 - 더 상세하게 */}
+                          <div className="card">
+                            <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
                               <Lightbulb className="w-5 h-5 text-yellow-500" />
-                              <span>분석 근거</span>
+                              <span>상세 분석 근거</span>
                             </h4>
-                            <p className="text-gray-300 leading-relaxed">{task.reasoning}</p>
-                          </div>
-
-                          {/* Tools */}
-                          <div>
-                            <h4 className="text-lg font-semibold mb-3 flex items-center space-x-2">
-                              <Settings className="w-5 h-5 text-blue-500" />
-                              <span>필요 도구</span>
-                            </h4>
-                            <div className="space-y-2">
-                              {task.tools.map((tool, toolIndex) => (
-                                <div key={toolIndex} className="p-3 bg-dark-700 rounded-lg">
-                                  <div className="font-medium text-white mb-1">{tool.name}</div>
-                                  <div className="text-sm text-gray-400 mb-2">{tool.purpose}</div>
-                                  <div className="text-xs text-gray-500">
-                                    대안: {tool.alternatives.join(', ')}
+                            <div className="space-y-3">
+                              <div className="bg-dark-700 rounded-lg p-4">
+                                <p className="text-gray-300 leading-relaxed mb-3">{task.reasoning}</p>
+                                <div className="border-t border-dark-600 pt-3">
+                                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                                    <div>
+                                      <span className="text-gray-400">현재 상태:</span>
+                                      <p className="text-gray-200 mt-1">수동 처리, 반복적 작업</p>
+                                    </div>
+                                    <div>
+                                      <span className="text-gray-400">자동화 가능성:</span>
+                                      <p className="text-gray-200 mt-1">{task.category === 'Automate' ? '완전 자동화' : task.category === 'AI-Copilot' ? 'AI 협업' : '인간 중심'}</p>
+                                    </div>
+                                    <div>
+                                      <span className="text-gray-400">우선순위:</span>
+                                      <p className="text-gray-200 mt-1">높음 (점수: {task.score}/100)</p>
+                                    </div>
                                   </div>
                                 </div>
-                              ))}
+                              </div>
                             </div>
                           </div>
 
-                          {/* Risks and Safeguards */}
-                          <div>
-                            <h4 className="text-lg font-semibold mb-3 flex items-center space-x-2">
-                              <AlertCircle className="w-5 h-5 text-red-500" />
-                              <span>위험 요소</span>
-                            </h4>
-                            <div className="space-y-2">
-                              {task.risks.map((risk, riskIndex) => (
-                                <div key={riskIndex} className="flex items-start space-x-2">
-                                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0" />
-                                  <span className="text-sm text-gray-300">{risk}</span>
-                                </div>
-                              ))}
+                          {/* 기대 효과 */}
+                          {task.expectedEffects && task.expectedEffects.length > 0 && (
+                            <div className="card">
+                              <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
+                                <TrendingUp className="w-5 h-5 text-green-500" />
+                                <span>에이전트 개발 시 기대 효과</span>
+                              </h4>
+                              <div className="space-y-3">
+                                {task.expectedEffects.map((effect, effectIndex) => (
+                                  <div key={effectIndex} className="flex items-start space-x-3 p-3 bg-dark-700 rounded-lg">
+                                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                      <CheckCircle className="w-4 h-4 text-white" />
+                                    </div>
+                                    <p className="text-gray-300 leading-relaxed">{effect}</p>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
-                          </div>
+                          )}
 
-                          <div>
-                            <h4 className="text-lg font-semibold mb-3 flex items-center space-x-2">
-                              <CheckCircle className="w-5 h-5 text-green-500" />
-                              <span>안전장치</span>
-                            </h4>
-                            <div className="space-y-2">
-                              {task.safeguards.map((safeguard, safeguardIndex) => (
-                                <div key={safeguardIndex} className="flex items-start space-x-2">
-                                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0" />
-                                  <span className="text-sm text-gray-300">{safeguard}</span>
+                          {/* 샘플 프롬프트 */}
+                          {task.samplePrompt && (
+                            <div className="card">
+                              <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
+                                <Code className="w-5 h-5 text-blue-500" />
+                                <span>샘플 명령어 프롬프트</span>
+                              </h4>
+                              <div className="bg-dark-800 rounded-lg p-4 border border-dark-700">
+                                <div className="flex items-center justify-between mb-2">
+                                  <span className="text-xs text-gray-400 font-mono">Agent Development Prompt</span>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      navigator.clipboard.writeText(task.samplePrompt || '');
+                                    }}
+                                    className="text-xs text-primary-500 hover:text-primary-400 flex items-center space-x-1"
+                                  >
+                                    <Copy className="w-3 h-3" />
+                                    <span>복사</span>
+                                  </button>
                                 </div>
-                              ))}
+                                <pre className="text-sm text-gray-300 font-mono whitespace-pre-wrap break-words overflow-x-auto">
+                                  <code>{task.samplePrompt}</code>
+                                </pre>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Tools, Risks, Safeguards를 그리드로 */}
+                          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            {/* Tools */}
+                            <div>
+                              <h4 className="text-lg font-semibold mb-3 flex items-center space-x-2">
+                                <Settings className="w-5 h-5 text-blue-500" />
+                                <span>필요 도구</span>
+                              </h4>
+                              <div className="space-y-2">
+                                {task.tools.map((tool, toolIndex) => (
+                                  <div key={toolIndex} className="p-3 bg-dark-700 rounded-lg">
+                                    <div className="font-medium text-white mb-1">{tool.name}</div>
+                                    <div className="text-sm text-gray-400 mb-2">{tool.purpose}</div>
+                                    <div className="text-xs text-gray-500">
+                                      대안: {tool.alternatives.join(', ')}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Risks */}
+                            <div>
+                              <h4 className="text-lg font-semibold mb-3 flex items-center space-x-2">
+                                <AlertCircle className="w-5 h-5 text-red-500" />
+                                <span>위험 요소</span>
+                              </h4>
+                              <div className="space-y-2">
+                                {task.risks.map((risk, riskIndex) => (
+                                  <div key={riskIndex} className="flex items-start space-x-2">
+                                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0" />
+                                    <span className="text-sm text-gray-300">{risk}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Safeguards */}
+                            <div>
+                              <h4 className="text-lg font-semibold mb-3 flex items-center space-x-2">
+                                <CheckCircle className="w-5 h-5 text-green-500" />
+                                <span>안전장치</span>
+                              </h4>
+                              <div className="space-y-2">
+                                {task.safeguards.map((safeguard, safeguardIndex) => (
+                                  <div key={safeguardIndex} className="flex items-start space-x-2">
+                                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0" />
+                                    <span className="text-sm text-gray-300">{safeguard}</span>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
                           </div>
                         </div>

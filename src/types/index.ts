@@ -24,6 +24,8 @@ export interface TaskItem {
   safeguards: string[];
   tools: Tool[];
   reasoning: string;
+  expectedEffects?: string[]; // 에이전트 개발 시 기대 효과
+  samplePrompt?: string; // 샘플 명령어 프롬프트
   estimatedTime: string;
 }
 
