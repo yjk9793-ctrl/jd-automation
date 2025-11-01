@@ -40,7 +40,6 @@ import {
 import { Language, AnalysisType, IndustryFeedback, ProcessStep, ContactForm, AnalysisResult } from '@/types';
 import { useTranslation } from '@/lib/i18n';
 import { AnalysisForm } from '@/components/AnalysisForm';
-import { AnalysisResults } from '@/components/AnalysisResults';
 import { AnalysisDetailPage } from '@/components/AnalysisDetailPage';
 import { AuthModal } from '@/components/auth/AuthModal';
 
