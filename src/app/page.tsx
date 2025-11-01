@@ -96,10 +96,26 @@ export default function HomePage() {
           localStorage.setItem('jdx_user', JSON.stringify(json.user));
         } else {
           // 로그인 성공 직후(30초 이내)에는 null로 설정하지 않음
+          // 또한 로컬 스토리지에 사용자 정보가 있으면 로그인 상태로 간주
+          const cachedUser = localStorage.getItem('jdx_user');
           const timeSinceLastSuccess = Date.now() - lastAuthSuccessRef.current;
-          if (force || timeSinceLastSuccess > 30000) {
+          
+          // 로컬 스토리지에 사용자 정보가 있고, 최근에 로그인했다면 상태 유지
+          if (cachedUser && timeSinceLastSuccess < 30000) {
+            console.log('Keeping user state (cached user exists, timeSince:', timeSinceLastSuccess, ')');
+            try {
+              const userData = JSON.parse(cachedUser);
+              setCurrentUser(userData);
+            } catch (e) {
+              console.error('Failed to parse cached user:', e);
+            }
+          } else if (force || timeSinceLastSuccess > 30000) {
             console.log('No authenticated user (force:', force, 'timeSince:', timeSinceLastSuccess, ')');
             setCurrentUser(null);
+            // 로컬 스토리지도 정리
+            if (timeSinceLastSuccess > 30000) {
+              localStorage.removeItem('jdx_user');
+            }
           } else {
             console.log('Keeping user state (recently logged in, timeSince:', timeSinceLastSuccess, ')');
           }
@@ -107,9 +123,22 @@ export default function HomePage() {
       } catch (error) {
         console.error('Failed to check user:', error);
         // 에러 발생 시에도 최근 로그인 성공이면 상태 유지 (30초)
+        // 로컬 스토리지에 사용자 정보가 있으면 로그인 상태로 간주
+        const cachedUser = localStorage.getItem('jdx_user');
         const timeSinceLastSuccess = Date.now() - lastAuthSuccessRef.current;
-        if (force || timeSinceLastSuccess > 30000) {
+        
+        if (cachedUser && timeSinceLastSuccess < 30000) {
+          try {
+            const userData = JSON.parse(cachedUser);
+            setCurrentUser(userData);
+          } catch (e) {
+            console.error('Failed to parse cached user:', e);
+          }
+        } else if (force || timeSinceLastSuccess > 30000) {
           setCurrentUser(null);
+          if (timeSinceLastSuccess > 30000) {
+            localStorage.removeItem('jdx_user');
+          }
         }
       }
     };
@@ -317,8 +346,13 @@ export default function HomePage() {
   // Show detail page if analysis result exists and user wants to view details and user is logged in
   // 로그인 체크: 로그인되지 않은 경우 상세 페이지를 보여주지 않음
   useEffect(() => {
-    // 로그인 성공 직후가 아니고, 상세 페이지를 보려고 하는데 사용자가 로그인하지 않은 경우
-    if (showDetailPage && analysisResult && !currentUser && !authOpen) {
+    // 로컬 스토리지에서 사용자 정보 확인 (캐시된 사용자 정보가 있으면 로그인된 것으로 간주)
+    const cachedUser = localStorage.getItem('jdx_user');
+    const hasCachedUser = cachedUser !== null;
+    
+    // 실제로 로그인이 안 되어 있고, 상세 페이지를 보려고 하며, 모달이 열려있지 않을 때만 모달 열기
+    // 로컬 스토리지에 사용자 정보가 있으면 로그인 상태로 간주하여 모달을 열지 않음
+    if (showDetailPage && analysisResult && !currentUser && !authOpen && !hasCachedUser) {
       // 로그인되지 않은 경우 상세 페이지 보기 취소하고 로그인 모달 열기
       setShowDetailPage(false);
       setPendingDetailView(true);
