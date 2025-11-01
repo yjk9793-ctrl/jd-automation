@@ -27,6 +27,15 @@ export interface TaskItem {
   expectedEffects?: string[]; // 에이전트 개발 시 기대 효과
   samplePrompt?: string; // 샘플 명령어 프롬프트
   estimatedTime: string;
+  // 상세 정보
+  conversionPotential?: string; // 전환 가능성 (높음/중간/낮음)
+  priority?: 'high' | 'medium' | 'low'; // 우선순위
+  conversionBarriers?: string[]; // 전환 저해 요인
+  estimatedAdoptionCost?: string; // 예상 도입 비용
+  estimatedOperatingCost?: string; // 예상 운영 비용 (월간)
+  estimatedSavingsCost?: string; // 예상 절감 비용 (연간)
+  estimatedBuildPeriod?: string; // 예상 구축 기간
+  technicalRequirements?: string[]; // 기술 요구사항
 }
 
 export interface AnalysisSummary {

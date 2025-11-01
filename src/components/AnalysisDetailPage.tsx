@@ -557,6 +557,17 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
             transition={{ duration: 0.5 }}
             className="space-y-6"
           >
+            {/* Header Section */}
+            <div className="card bg-gradient-to-r from-primary-500/10 to-blue-500/10 border border-primary-500/30">
+              <div className="flex items-center space-x-3 mb-2">
+                <Brain className="w-6 h-6 text-primary-500" />
+                <h2 className="text-2xl font-bold">AI 에이전트 개발 가능 항목</h2>
+              </div>
+              <p className="text-gray-400 text-sm">
+                {result.jobRole || '분석된 직무'}에서 자동화 및 AI 협업이 가능한 업무 항목입니다. 각 항목을 클릭하면 상세 정보를 확인할 수 있습니다.
+              </p>
+            </div>
+
             {/* Filters and Sorting */}
             <div className="card">
               <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
@@ -596,61 +607,75 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
               </div>
             </div>
 
-            {/* Task List */}
-            <div className="space-y-4">
+            {/* Agent List - Grid Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {filteredTasks.map((task, index) => {
                 const IconComponent = getCategoryIcon(task.category);
                 const isExpanded = expandedTasks.has(task.id);
+                const priorityBadge = task.priority === 'high' ? '높음' : task.priority === 'medium' ? '중간' : '낮음';
+                const priorityColor = task.priority === 'high' ? 'bg-red-500/20 text-red-400 border-red-500/30' : 
+                                     task.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' : 
+                                     'bg-gray-500/20 text-gray-400 border-gray-500/30';
                 
                 return (
                   <motion.div
                     key={task.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="card-hover cursor-pointer"
+                    transition={{ duration: 0.5, delay: index * 0.05 }}
+                    className={`card-hover cursor-pointer ${isExpanded ? 'md:col-span-2' : ''}`}
                     onClick={() => toggleTaskExpansion(task.id)}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-start space-x-4 flex-1">
-                        <div className={`w-12 h-12 rounded-lg flex items-center justify-center border ${getCategoryColor(task.category)}`}>
-                          <IconComponent className="w-6 h-6" />
+                        <div className={`w-14 h-14 rounded-xl flex items-center justify-center border-2 ${getCategoryColor(task.category)}`}>
+                          <IconComponent className="w-7 h-7" />
                         </div>
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-3 mb-2">
-                            <h3 className="text-xl font-semibold">{task.title}</h3>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(task.category)}`}>
-                              {task.category}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-3 mb-3 flex-wrap">
+                            <h3 className="text-lg font-bold text-white">{task.title}</h3>
+                            <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${getCategoryColor(task.category)}`}>
+                              {task.category === 'Automate' ? '완전 자동화' : task.category === 'AI-Copilot' ? 'AI 협업' : '인간 중심'}
                             </span>
-                          </div>
-                          <p className="text-gray-400 mb-4 line-clamp-2">{task.sourceText}</p>
-                          <div className="flex items-center space-x-6 text-sm">
-                            <div className="flex items-center space-x-2">
-                              <Target className="w-4 h-4 text-gray-500" />
-                              <span className="text-gray-400">점수: </span>
-                              <span className="font-semibold text-primary-500">{task.score}/100</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <DollarSign className="w-4 h-4 text-gray-500" />
-                              <span className="text-gray-400">ROI: </span>
-                              <span className="font-semibold text-green-500">{task.roiEstimate}%</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <Clock className="w-4 h-4 text-gray-500" />
-                              <span className="text-gray-400">소요시간: </span>
-                              <span className="font-semibold text-blue-500">{task.estimatedTime}</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <Star className="w-4 h-4 text-gray-500" />
-                              <span className="text-gray-400">난이도: </span>
-                              <span className={`font-semibold ${getDifficultyColor(task.difficulty)}`}>
-                                {getDifficultyStars(task.difficulty)}
+                            {task.priority && (
+                              <span className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${priorityColor}`}>
+                                우선순위: {priorityBadge}
                               </span>
+                            )}
+                          </div>
+                          <p className="text-gray-300 mb-3 text-sm leading-relaxed line-clamp-2">{task.sourceText}</p>
+                          <div className="flex flex-wrap items-center gap-4 text-xs">
+                            <div className="flex items-center space-x-1.5">
+                              <Target className="w-3.5 h-3.5 text-primary-400" />
+                              <span className="text-gray-400">점수</span>
+                              <span className="font-bold text-primary-400">{task.score}/100</span>
                             </div>
+                            <div className="flex items-center space-x-1.5">
+                              <DollarSign className="w-3.5 h-3.5 text-green-400" />
+                              <span className="text-gray-400">ROI</span>
+                              <span className="font-bold text-green-400">{task.roiEstimate}%</span>
+                            </div>
+                            <div className="flex items-center space-x-1.5">
+                              <Clock className="w-3.5 h-3.5 text-blue-400" />
+                              <span className="text-gray-400">기간</span>
+                              <span className="font-semibold text-blue-400">{task.estimatedTime}</span>
+                            </div>
+                            {task.conversionPotential && (
+                              <div className="flex items-center space-x-1.5">
+                                <TrendingUp className="w-3.5 h-3.5 text-purple-400" />
+                                <span className="text-gray-400">전환가능성</span>
+                                <span className={`font-semibold ${
+                                  task.conversionPotential === '높음' ? 'text-green-400' :
+                                  task.conversionPotential === '중간' ? 'text-yellow-400' : 'text-gray-400'
+                                }`}>
+                                  {task.conversionPotential}
+                                </span>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2 ml-4">
                         {isExpanded ? (
                           <ChevronDown className="w-5 h-5 text-gray-400" />
                         ) : (
@@ -668,6 +693,81 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                         className="mt-6 pt-6 border-t border-dark-700"
                       >
                         <div className="space-y-6">
+                          {/* 핵심 정보 요약 표 */}
+                          <div className="card overflow-hidden">
+                            <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
+                              <Target className="w-5 h-5 text-primary-500" />
+                              <span>에이전트 전환 핵심 정보</span>
+                            </h4>
+                            <div className="overflow-x-auto">
+                              <table className="w-full border-collapse">
+                                <thead>
+                                  <tr className="bg-dark-700">
+                                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300 border-b border-dark-600">항목</th>
+                                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300 border-b border-dark-600">내용</th>
+                                  </tr>
+                                </thead>
+                                <tbody className="text-sm">
+                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
+                                    <td className="px-4 py-3 text-gray-400 font-medium">전환 가능성</td>
+                                    <td className="px-4 py-3">
+                                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                        task.conversionPotential === '높음' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                                        task.conversionPotential === '중간' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                                        'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                                      }`}>
+                                        {task.conversionPotential || (task.category === 'Automate' ? '높음' : task.category === 'AI-Copilot' ? '중간' : '낮음')}
+                                      </span>
+                                    </td>
+                                  </tr>
+                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
+                                    <td className="px-4 py-3 text-gray-400 font-medium">우선순위</td>
+                                    <td className="px-4 py-3">
+                                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                        task.priority === 'high' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                                        task.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                                        'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                                      }`}>
+                                        {task.priority === 'high' ? '높음 (빠른 전환 필요)' :
+                                         task.priority === 'medium' ? '중간' : 
+                                         task.priority === 'low' ? '낮음' : 
+                                         (task.score >= 70 ? '높음 (빠른 전환 필요)' : task.score >= 50 ? '중간' : '낮음')}
+                                      </span>
+                                    </td>
+                                  </tr>
+                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
+                                    <td className="px-4 py-3 text-gray-400 font-medium">예상 도입 비용</td>
+                                    <td className="px-4 py-3 text-gray-200">{task.estimatedAdoptionCost || '분석 필요'}</td>
+                                  </tr>
+                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
+                                    <td className="px-4 py-3 text-gray-400 font-medium">예상 운영 비용 (월간)</td>
+                                    <td className="px-4 py-3 text-gray-200">{task.estimatedOperatingCost || '분석 필요'}</td>
+                                  </tr>
+                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
+                                    <td className="px-4 py-3 text-gray-400 font-medium">예상 절감 비용 (연간)</td>
+                                    <td className="px-4 py-3 text-green-400 font-semibold">{task.estimatedSavingsCost || '분석 필요'}</td>
+                                  </tr>
+                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
+                                    <td className="px-4 py-3 text-gray-400 font-medium">ROI</td>
+                                    <td className="px-4 py-3 text-green-400 font-semibold">{task.roiEstimate}%</td>
+                                  </tr>
+                                  <tr className="border-b border-dark-700 hover:bg-dark-700/50">
+                                    <td className="px-4 py-3 text-gray-400 font-medium">예상 구축 기간</td>
+                                    <td className="px-4 py-3 text-gray-200">{task.estimatedBuildPeriod || task.estimatedTime}</td>
+                                  </tr>
+                                  <tr>
+                                    <td className="px-4 py-3 text-gray-400 font-medium">자동화 가능성</td>
+                                    <td className="px-4 py-3">
+                                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getCategoryColor(task.category)}`}>
+                                        {task.category === 'Automate' ? '완전 자동화' : task.category === 'AI-Copilot' ? 'AI 협업' : '인간 중심'}
+                                      </span>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+
                           {/* 분석 근거 - 더 상세하게 */}
                           <div className="card">
                             <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
@@ -676,23 +776,7 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                             </h4>
                             <div className="space-y-3">
                               <div className="bg-dark-700 rounded-lg p-4">
-                                <p className="text-gray-300 leading-relaxed mb-3">{task.reasoning}</p>
-                                <div className="border-t border-dark-600 pt-3">
-                                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-                                    <div>
-                                      <span className="text-gray-400">현재 상태:</span>
-                                      <p className="text-gray-200 mt-1">수동 처리, 반복적 작업</p>
-                                    </div>
-                                    <div>
-                                      <span className="text-gray-400">자동화 가능성:</span>
-                                      <p className="text-gray-200 mt-1">{task.category === 'Automate' ? '완전 자동화' : task.category === 'AI-Copilot' ? 'AI 협업' : '인간 중심'}</p>
-                                    </div>
-                                    <div>
-                                      <span className="text-gray-400">우선순위:</span>
-                                      <p className="text-gray-200 mt-1">높음 (점수: {task.score}/100)</p>
-                                    </div>
-                                  </div>
-                                </div>
+                                <p className="text-gray-300 leading-relaxed">{task.reasoning}</p>
                               </div>
                             </div>
                           </div>
@@ -702,15 +786,53 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                             <div className="card">
                               <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
                                 <TrendingUp className="w-5 h-5 text-green-500" />
-                                <span>에이전트 개발 시 기대 효과</span>
+                                <span>전환 시 기대 효과</span>
                               </h4>
                               <div className="space-y-3">
                                 {task.expectedEffects.map((effect, effectIndex) => (
-                                  <div key={effectIndex} className="flex items-start space-x-3 p-3 bg-dark-700 rounded-lg">
+                                  <div key={effectIndex} className="flex items-start space-x-3 p-3 bg-dark-700 rounded-lg hover:bg-dark-600 transition-colors">
                                     <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                                       <CheckCircle className="w-4 h-4 text-white" />
                                     </div>
                                     <p className="text-gray-300 leading-relaxed">{effect}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 전환 저해 요인 */}
+                          {task.conversionBarriers && task.conversionBarriers.length > 0 && (
+                            <div className="card">
+                              <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
+                                <AlertCircle className="w-5 h-5 text-orange-500" />
+                                <span>전환 저해 요인</span>
+                              </h4>
+                              <div className="space-y-3">
+                                {task.conversionBarriers.map((barrier, barrierIndex) => (
+                                  <div key={barrierIndex} className="flex items-start space-x-3 p-3 bg-dark-700 rounded-lg hover:bg-dark-600 transition-colors">
+                                    <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                      <AlertCircle className="w-4 h-4 text-white" />
+                                    </div>
+                                    <p className="text-gray-300 leading-relaxed">{barrier}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 기술 요구사항 */}
+                          {task.technicalRequirements && task.technicalRequirements.length > 0 && (
+                            <div className="card">
+                              <h4 className="text-lg font-semibold mb-4 flex items-center space-x-2">
+                                <Settings className="w-5 h-5 text-blue-500" />
+                                <span>기술 요구사항</span>
+                              </h4>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {task.technicalRequirements.map((requirement, reqIndex) => (
+                                  <div key={reqIndex} className="flex items-center space-x-2 p-3 bg-dark-700 rounded-lg hover:bg-dark-600 transition-colors">
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0" />
+                                    <span className="text-sm text-gray-300">{requirement}</span>
                                   </div>
                                 ))}
                               </div>
