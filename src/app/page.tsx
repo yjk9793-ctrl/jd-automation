@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Search, 
@@ -62,6 +62,7 @@ export default function HomePage() {
   const [authOpen, setAuthOpen] = useState(false);
   const [pendingDetailView, setPendingDetailView] = useState(false); // 로그인 후 상세 페이지 보기 요청
   const lastAuthSuccessRef = useRef<number>(0); // 마지막 로그인 성공 시간 추적
+  const sessionStateRef = useRef({ isAnalyzing: false, showDetailPage: false, analysisResult: null as AnalysisResult | null });
 
   const t = useTranslation(language);
 
@@ -79,7 +80,32 @@ export default function HomePage() {
       }
     }
     
+    // 세션 상태를 ref에 저장하여 최신 값을 참조
+    sessionStateRef.current = { isAnalyzing, showDetailPage, analysisResult };
+    
     const checkUser = async (force: boolean = false) => {
+      // 분석 중이거나 상세 페이지를 보고 있으면 로그인 상태를 더 적극적으로 유지
+      // ref를 통해 최신 상태 값을 참조
+      const { isAnalyzing: isActiveAnalyzing, showDetailPage: isActiveDetailPage, analysisResult: activeResult } = sessionStateRef.current;
+      const isActiveSession = isActiveAnalyzing || isActiveDetailPage || activeResult !== null;
+      
+      // 로컬 스토리지를 먼저 확인하여 사용자 정보가 있으면 즉시 상태 업데이트
+      const cachedUser = localStorage.getItem('jdx_user');
+      if (cachedUser) {
+        // currentUser가 없거나, 로컬 스토리지의 사용자 정보가 더 최신인 경우 업데이트
+        const shouldUpdate = !currentUser || (cachedUser && !currentUser);
+        if (shouldUpdate) {
+          try {
+            const userData = JSON.parse(cachedUser);
+            console.log('Restoring user from cache:', userData.email);
+            setCurrentUser(userData);
+            lastAuthSuccessRef.current = Date.now();
+          } catch (e) {
+            console.error('Failed to parse cached user:', e);
+          }
+        }
+      }
+      
       try {
         const res = await fetch('/api/auth/me', { 
           credentials: 'include',
@@ -95,50 +121,52 @@ export default function HomePage() {
           // 로컬 스토리지에 사용자 정보 저장 (쿠키 문제 대비)
           localStorage.setItem('jdx_user', JSON.stringify(json.user));
         } else {
-          // 로그인 성공 직후(30초 이내)에는 null로 설정하지 않음
-          // 또한 로컬 스토리지에 사용자 정보가 있으면 로그인 상태로 간주
-          const cachedUser = localStorage.getItem('jdx_user');
+          // 로컬 스토리지에 사용자 정보가 있으면 로그인 상태로 간주 (30초 제한 없이)
+          // 특히 분석 중이거나 상세 페이지를 보고 있으면 더 적극적으로 유지
+          if (cachedUser) {
+            const timeSinceLastSuccess = Date.now() - lastAuthSuccessRef.current;
+            // 분석 중이거나 상세 페이지를 보고 있으면 항상 상태 유지
+            // 또는 최근에 로그인했다면(60초 이내) 상태 유지
+            const shouldKeepState = isActiveSession || timeSinceLastSuccess < 60000;
+            
+            if (shouldKeepState) {
+              console.log('Keeping user state (cached user exists, isActive:', isActiveSession, 'timeSince:', timeSinceLastSuccess, ')');
+              try {
+                const userData = JSON.parse(cachedUser);
+                setCurrentUser(userData);
+              } catch (e) {
+                console.error('Failed to parse cached user:', e);
+              }
+            } else if (force) {
+              console.log('Force clearing user state');
+              setCurrentUser(null);
+              localStorage.removeItem('jdx_user');
+            }
+          } else if (force) {
+            console.log('No cached user, clearing state');
+            setCurrentUser(null);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to check user:', error);
+        // 에러 발생 시에도 로컬 스토리지에 사용자 정보가 있으면 상태 유지
+        if (cachedUser) {
           const timeSinceLastSuccess = Date.now() - lastAuthSuccessRef.current;
+          const shouldKeepState = isActiveSession || timeSinceLastSuccess < 60000;
           
-          // 로컬 스토리지에 사용자 정보가 있고, 최근에 로그인했다면 상태 유지
-          if (cachedUser && timeSinceLastSuccess < 30000) {
-            console.log('Keeping user state (cached user exists, timeSince:', timeSinceLastSuccess, ')');
+          if (shouldKeepState) {
             try {
               const userData = JSON.parse(cachedUser);
               setCurrentUser(userData);
             } catch (e) {
               console.error('Failed to parse cached user:', e);
             }
-          } else if (force || timeSinceLastSuccess > 30000) {
-            console.log('No authenticated user (force:', force, 'timeSince:', timeSinceLastSuccess, ')');
+          } else if (force) {
             setCurrentUser(null);
-            // 로컬 스토리지도 정리
-            if (timeSinceLastSuccess > 30000) {
-              localStorage.removeItem('jdx_user');
-            }
-          } else {
-            console.log('Keeping user state (recently logged in, timeSince:', timeSinceLastSuccess, ')');
-          }
-        }
-      } catch (error) {
-        console.error('Failed to check user:', error);
-        // 에러 발생 시에도 최근 로그인 성공이면 상태 유지 (30초)
-        // 로컬 스토리지에 사용자 정보가 있으면 로그인 상태로 간주
-        const cachedUser = localStorage.getItem('jdx_user');
-        const timeSinceLastSuccess = Date.now() - lastAuthSuccessRef.current;
-        
-        if (cachedUser && timeSinceLastSuccess < 30000) {
-          try {
-            const userData = JSON.parse(cachedUser);
-            setCurrentUser(userData);
-          } catch (e) {
-            console.error('Failed to parse cached user:', e);
-          }
-        } else if (force || timeSinceLastSuccess > 30000) {
-          setCurrentUser(null);
-          if (timeSinceLastSuccess > 30000) {
             localStorage.removeItem('jdx_user');
           }
+        } else if (force) {
+          setCurrentUser(null);
         }
       }
     };
@@ -190,7 +218,7 @@ export default function HomePage() {
       window.removeEventListener('focus', handleFocus);
       clearInterval(intervalId);
     };
-  }, []);
+  }, [isAnalyzing, showDetailPage, analysisResult]);
 
   const handleAuthSuccess = async (user: { id: string; email: string; name?: string }) => {
     console.log('Auth success, setting user:', user);
@@ -356,6 +384,9 @@ export default function HomePage() {
     // 이미 모달이 열려있으면 중복 실행 방지
     if (authOpen) return;
     
+    // 분석 중이면 모달을 열지 않음
+    if (isAnalyzing) return;
+    
     // 실제로 로그인이 안 되어 있고, 상세 페이지를 보려고 하며, 로컬 스토리지에도 사용자 정보가 없을 때만 모달 열기
     if (analysisResult && !currentUser && !hasCachedUser) {
       // 로그인되지 않은 경우 상세 페이지 보기 취소하고 로그인 모달 열기
@@ -367,11 +398,12 @@ export default function HomePage() {
       try {
         const userData = JSON.parse(cachedUser);
         setCurrentUser(userData);
+        lastAuthSuccessRef.current = Date.now();
       } catch (e) {
         console.error('Failed to parse cached user:', e);
       }
     }
-  }, [showDetailPage, analysisResult, currentUser, authOpen]);
+  }, [showDetailPage, analysisResult, currentUser, authOpen, isAnalyzing]);
 
   if (showDetailPage && analysisResult && currentUser) {
     return (
