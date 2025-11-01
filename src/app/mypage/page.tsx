@@ -295,9 +295,6 @@ export default function MyPage() {
               >
                 {t.nav.contact}
               </a>
-              {user && (
-                <a href="/mypage" className="text-primary-600 font-semibold transition-colors duration-300">내 기록</a>
-              )}
             </div>
 
             {/* Language Toggle */}
@@ -328,7 +325,7 @@ export default function MyPage() {
                     href="/mypage" 
                     className="text-sm text-gray-300 hover:text-white transition-colors cursor-pointer px-2 py-1 rounded-md hover:bg-dark-700"
                   >
-                    {user.email}
+                    마이페이지
                   </a>
                   <button onClick={handleLogout} className="px-3 py-1 rounded-md bg-dark-700 hover:bg-dark-600 text-gray-200">로그아웃</button>
                 </div>
@@ -392,9 +389,6 @@ export default function MyPage() {
               >
                 {t.nav.contact}
               </a>
-              {user && (
-                <a href="/mypage" className="block text-primary-600 font-semibold transition-colors duration-300">내 기록</a>
-              )}
             </div>
           </motion.div>
         )}
