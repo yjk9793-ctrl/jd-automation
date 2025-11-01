@@ -191,7 +191,7 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
           <div className="flex items-center justify-between h-16">
             <motion.div 
               className="flex items-center space-x-2 cursor-pointer"
-              onClick={() => router.push('/')}
+              onClick={() => window.location.href = '/'}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
@@ -205,37 +205,37 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
               <button
-                onClick={() => router.push('/')}
+                onClick={() => window.location.href = '/'}
                 className="text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.home}
               </button>
               <button
-                onClick={() => router.push('/#analysis')}
+                onClick={() => window.location.href = '/#analysis'}
                 className="text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.enterprise}
               </button>
               <button
-                onClick={() => router.push('/#analysis')}
+                onClick={() => window.location.href = '/#analysis'}
                 className="text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.personal}
               </button>
               <button
-                onClick={() => router.push('/#process')}
+                onClick={() => window.location.href = '/#process'}
                 className="text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.process}
               </button>
               <button
-                onClick={() => router.push('/#consulting')}
+                onClick={() => window.location.href = '/#consulting'}
                 className="text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.consulting}
               </button>
               <button
-                onClick={() => router.push('/#contact')}
+                onClick={() => window.location.href = '/#contact'}
                 className="text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.contact}
@@ -299,37 +299,37 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
           >
             <div className="px-4 py-4 space-y-4">
               <button
-                onClick={() => router.push('/')}
+                onClick={() => window.location.href = '/'}
                 className="block w-full text-left text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.home}
               </button>
               <button
-                onClick={() => router.push('/#analysis')}
+                onClick={() => window.location.href = '/#analysis'}
                 className="block w-full text-left text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.enterprise}
               </button>
               <button
-                onClick={() => router.push('/#analysis')}
+                onClick={() => window.location.href = '/#analysis'}
                 className="block w-full text-left text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.personal}
               </button>
               <button
-                onClick={() => router.push('/#process')}
+                onClick={() => window.location.href = '/#process'}
                 className="block w-full text-left text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.process}
               </button>
               <button
-                onClick={() => router.push('/#consulting')}
+                onClick={() => window.location.href = '/#consulting'}
                 className="block w-full text-left text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.consulting}
               </button>
               <button
-                onClick={() => router.push('/#contact')}
+                onClick={() => window.location.href = '/#contact'}
                 className="block w-full text-left text-gray-300 hover:text-white transition-colors duration-300 cursor-pointer"
               >
                 {t.nav.contact}
