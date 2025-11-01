@@ -38,7 +38,9 @@ import {
   Search,
   Home,
   Menu,
-  X
+  X,
+  Globe,
+  Phone
 } from 'lucide-react';
 import { AnalysisResult, TaskItem, Language } from '@/types';
 import { useTranslation } from '@/lib/i18n';
@@ -368,13 +370,6 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
             </div>
 
             <div className="flex items-center space-x-3">
-              <a
-                href="/mypage"
-                className="btn-secondary flex items-center space-x-2"
-              >
-                <Home className="w-4 h-4" />
-                <span>마이페이지</span>
-              </a>
               <button 
                 className="btn-secondary flex items-center space-x-2"
                 onClick={() => setShowShareModal(true)}
@@ -891,6 +886,73 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
         onClose={() => setAuthOpen(false)} 
         onAuthSuccess={handleAuthSuccess} 
       />
+
+      {/* Footer */}
+      <footer className="bg-dark-900 border-t border-dark-800 py-12">
+        <div className="container-custom">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Company Info */}
+            <div className="md:col-span-2">
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+                  <Brain className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xl font-bold gradient-text">{t.footer.company.name}</span>
+              </div>
+              <p className="text-gray-400 mb-6 max-w-md">
+                {t.footer.company.description}
+              </p>
+              <div className="flex space-x-4">
+                <div className="w-10 h-10 bg-dark-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors duration-300 cursor-pointer">
+                  <Globe className="w-5 h-5" />
+                </div>
+                <div className="w-10 h-10 bg-dark-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors duration-300 cursor-pointer">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <div className="w-10 h-10 bg-dark-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors duration-300 cursor-pointer">
+                  <Phone className="w-5 h-5" />
+                </div>
+              </div>
+            </div>
+
+            {/* Links */}
+            <div>
+              <h4 className="font-semibold mb-4">{t.footer.links.product}</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="/#analysis" className="hover:text-white transition-colors duration-300">기업 분석</a></li>
+                <li><a href="/#analysis" className="hover:text-white transition-colors duration-300">개인 분석</a></li>
+                <li><a href="/#process" className="hover:text-white transition-colors duration-300">분석 리포트</a></li>
+                <li><a href="/#contact" className="hover:text-white transition-colors duration-300">API</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4">{t.footer.links.company}</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="/#consulting" className="hover:text-white transition-colors duration-300">회사 소개</a></li>
+                <li><a href="/#consulting" className="hover:text-white transition-colors duration-300">팀</a></li>
+                <li><a href="/#contact" className="hover:text-white transition-colors duration-300">채용</a></li>
+                <li><a href="/#consulting" className="hover:text-white transition-colors duration-300">뉴스</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-dark-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400 text-sm">{t.footer.copyright}</p>
+            <div className="flex space-x-6 mt-4 md:mt-0">
+              <a href="/#contact" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm">
+                {t.footer.legal.privacy}
+              </a>
+              <a href="/#contact" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm">
+                {t.footer.legal.terms}
+              </a>
+              <a href="/#contact" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm">
+                {t.footer.legal.cookies}
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
