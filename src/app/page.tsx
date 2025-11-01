@@ -165,19 +165,24 @@ export default function HomePage() {
 
   const handleAuthSuccess = async (user: { id: string; email: string; name?: string }) => {
     console.log('Auth success, setting user:', user);
-    setCurrentUser(user);
-    lastAuthSuccessRef.current = Date.now(); // 로그인 성공 시간 기록
+    
     // 로컬 스토리지에 사용자 정보 저장 (쿠키 문제 대비)
     localStorage.setItem('jdx_user', JSON.stringify(user));
+    lastAuthSuccessRef.current = Date.now(); // 로그인 성공 시간 기록
+    
+    // 로그인 모달 즉시 닫기
+    setAuthOpen(false);
+    
+    // 사용자 상태 업데이트
+    setCurrentUser(user);
     
     // 로그인 성공 후 상세 페이지 보기 요청이 있으면 상세 페이지 열기
     if (pendingDetailView && analysisResult) {
       setPendingDetailView(false);
-      setAuthOpen(false);
-      // 약간의 지연 후 상세 페이지 열기 (모달 닫히는 애니메이션 대기)
+      // 약간의 지연 후 상세 페이지 열기 (상태 업데이트 및 모달 닫히는 애니메이션 대기)
       setTimeout(() => {
         setShowDetailPage(true);
-      }, 300);
+      }, 500);
     }
     
     // 사용자 상태를 강제로 유지 (30초 동안)
@@ -312,13 +317,14 @@ export default function HomePage() {
   // Show detail page if analysis result exists and user wants to view details and user is logged in
   // 로그인 체크: 로그인되지 않은 경우 상세 페이지를 보여주지 않음
   useEffect(() => {
-    if (showDetailPage && analysisResult && !currentUser) {
+    // 로그인 성공 직후가 아니고, 상세 페이지를 보려고 하는데 사용자가 로그인하지 않은 경우
+    if (showDetailPage && analysisResult && !currentUser && !authOpen) {
       // 로그인되지 않은 경우 상세 페이지 보기 취소하고 로그인 모달 열기
       setShowDetailPage(false);
       setPendingDetailView(true);
       setAuthOpen(true);
     }
-  }, [showDetailPage, analysisResult, currentUser]);
+  }, [showDetailPage, analysisResult, currentUser, authOpen]);
 
   if (showDetailPage && analysisResult && currentUser) {
     return (
