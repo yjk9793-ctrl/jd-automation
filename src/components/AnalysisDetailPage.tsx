@@ -632,8 +632,11 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                           <IconComponent className="w-7 h-7" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center space-x-3 mb-3 flex-wrap">
-                            <h3 className="text-lg font-bold text-white">{task.title}</h3>
+                          <div className="flex items-center space-x-3 mb-2 flex-wrap">
+                            <h3 className="text-lg font-bold text-white">
+                              <span className="text-primary-400">Agent </span>
+                              {task.title}
+                            </h3>
                             <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${getCategoryColor(task.category)}`}>
                               {task.category === 'Automate' ? '완전 자동화' : task.category === 'AI-Copilot' ? 'AI 협업' : '인간 중심'}
                             </span>
@@ -643,7 +646,24 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                               </span>
                             )}
                           </div>
-                          <p className="text-gray-300 mb-3 text-sm leading-relaxed line-clamp-2">{task.sourceText}</p>
+                          {/* 에이전트 역할과 기대 효과 설명 */}
+                          {task.shortDescription ? (
+                            <p className="text-gray-300 mb-3 text-sm leading-relaxed bg-dark-700/50 rounded-lg p-3 border-l-2 border-primary-500/50">
+                              {task.shortDescription}
+                            </p>
+                          ) : task.expectedEffects && task.expectedEffects.length > 0 ? (
+                            <p className="text-gray-300 mb-3 text-sm leading-relaxed bg-dark-700/50 rounded-lg p-3 border-l-2 border-primary-500/50">
+                              {task.expectedEffects[0].length > 100 
+                                ? task.expectedEffects[0].substring(0, 100) + '...' 
+                                : task.expectedEffects[0]}
+                            </p>
+                          ) : (
+                            <p className="text-gray-400 mb-3 text-sm leading-relaxed line-clamp-2 italic">
+                              {task.reasoning && task.reasoning.length > 100 
+                                ? task.reasoning.substring(0, 100) + '...' 
+                                : task.reasoning || task.sourceText}
+                            </p>
+                          )}
                           <div className="flex flex-wrap items-center gap-4 text-xs">
                             <div className="flex items-center space-x-1.5">
                               <Target className="w-3.5 h-3.5 text-primary-400" />

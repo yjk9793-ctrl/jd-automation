@@ -36,6 +36,7 @@ export interface TaskItem {
   estimatedSavingsCost?: string; // 예상 절감 비용 (연간)
   estimatedBuildPeriod?: string; // 예상 구축 기간
   technicalRequirements?: string[]; // 기술 요구사항
+  shortDescription?: string; // 에이전트 역할과 기대 효과 설명 (100자 이내)
 }
 
 export interface AnalysisSummary {
