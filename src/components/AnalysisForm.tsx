@@ -45,7 +45,7 @@ export function AnalysisForm({ type, language, onAnalyze, isAnalyzing, currentUs
         setEmail(currentUser.email);
       }
     }
-  }, [currentUser?.email]);
+  }, [currentUser?.email, email]);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
