@@ -424,6 +424,48 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
           </motion.div>
         )}
 
+        {/* Tabs - 상단으로 이동하여 더 눈에 띄게 */}
+        <div className="sticky top-24 z-30 mb-8 bg-dark-900/95 backdrop-blur-sm py-4 -mx-4 px-4 rounded-xl border-y border-dark-700">
+          <div className="flex flex-col space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-bold text-white flex items-center space-x-2">
+                <BarChart3 className="w-5 h-5 text-primary-400" />
+                <span>분석 섹션 탐색</span>
+              </h3>
+              <span className="text-xs text-gray-400 px-3 py-1 bg-dark-800 rounded-full border border-dark-700">
+                {activeTab === 'overview' ? '📊 개요' : activeTab === 'detailed' ? '🔍 상세 분석' : activeTab === 'recommendations' ? '💡 권장사항' : '🚀 구현 계획'}
+              </span>
+            </div>
+            <div className="flex space-x-2 overflow-x-auto pb-2">
+              {[
+                { id: 'overview', label: '개요', icon: BarChart3, description: '전체 요약 및 차트' },
+                { id: 'detailed', label: '상세 분석', icon: PieChart, description: '에이전트별 상세 정보' },
+                { id: 'recommendations', label: '권장사항', icon: Lightbulb, description: 'AI 최적화 가이드' },
+                { id: 'implementation', label: '구현 계획', icon: Rocket, description: '단계별 실행 로드맵' },
+              ].map((tab) => {
+                const IconComponent = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as any)}
+                    className={`flex flex-col items-start space-y-1 px-4 py-3 rounded-lg transition-all duration-300 min-w-[120px] border-2 ${
+                      activeTab === tab.id
+                        ? 'bg-primary-600 border-primary-500 text-white shadow-lg shadow-primary-500/30'
+                        : 'bg-dark-800 border-dark-700 text-gray-400 hover:bg-dark-700 hover:border-primary-500/30 hover:text-white'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <IconComponent className="w-4 h-4" />
+                      <span className="font-semibold">{tab.label}</span>
+                    </div>
+                    <span className="text-xs opacity-80">{tab.description}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
         {/* Summary Cards */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -463,32 +505,6 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
             <div className="text-gray-400">자동화 잠재력</div>
           </div>
         </motion.div>
-
-        {/* Tabs */}
-        <div className="flex space-x-1 bg-dark-800 p-1 rounded-lg mb-8">
-          {[
-            { id: 'overview', label: '개요', icon: BarChart3 },
-            { id: 'detailed', label: '상세 분석', icon: PieChart },
-            { id: 'recommendations', label: '권장사항', icon: Lightbulb },
-            { id: 'implementation', label: '구현 계획', icon: Rocket },
-          ].map((tab) => {
-            const IconComponent = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors duration-300 ${
-                  activeTab === tab.id
-                    ? 'bg-primary-600 text-white'
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                <IconComponent className="w-4 h-4" />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
 
         {/* Tab Content */}
         {activeTab === 'overview' && (
