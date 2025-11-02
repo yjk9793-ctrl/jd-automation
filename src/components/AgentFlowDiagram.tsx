@@ -18,22 +18,7 @@ const ReactFlow = dynamic(
   }
 );
 
-interface Node {
-  id: string;
-  type: string;
-  position: { x: number; y: number };
-  data: { label: string; description?: string };
-}
-
-interface Edge {
-  id: string;
-  source: string;
-  target: string;
-  type: string;
-  animated: boolean;
-  markerEnd: { type: string; color: string };
-  style: { stroke: string; strokeWidth: number };
-}
+// React Flow types will be inferred from the library
 
 const nodeTypes = {
   custom: ({ data }: any) => {
@@ -103,8 +88,8 @@ export function AgentFlowDiagram({ task, height = '400px' }: { task: TaskItem; h
   }, []);
 
   const { nodes, edges } = useMemo(() => {
-    const nodes: Node[] = [];
-    const edges: Edge[] = [];
+    const nodes: any[] = [];
+    const edges: any[] = [];
     
     if (task.developmentSpec?.flowSteps && task.developmentSpec.flowSteps.length > 0) {
       // Custom flow steps from LLM
