@@ -4,8 +4,8 @@ export const translations = {
   ko: {
     nav: {
       home: '홈',
-      enterprise: '기업 분석',
-      personal: '개인 분석',
+      enterprise: 'JD 직무분석',
+      personal: '개인 이력분석',
       process: '분석 과정',
       consulting: '컨설팅',
       contact: '문의하기',
@@ -15,8 +15,8 @@ export const translations = {
       title: 'AI 에이전트로 비즈니스 혁신',
       subtitle: '직무 분석을 통해 생산성과 효율성을 극대화하세요',
       description: '기업의 직무 설명서와 개인의 이력서를 분석하여 AI 에이전트로 자동화 가능한 업무를 찾아드립니다.',
-      enterpriseCta: '기업 분석 시작',
-      personalCta: '개인 분석 시작',
+      enterpriseCta: 'JD 직무분석',
+      personalCta: '개인 이력분석',
       demoCta: '데모 체험하기',
     },
     features: {

@@ -60,6 +60,7 @@ export default function HomePage() {
   });
   const [currentUser, setCurrentUser] = useState<{ id: string; email: string; name?: string } | null>(null);
   const [authOpen, setAuthOpen] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
   const [pendingDetailView, setPendingDetailView] = useState(false); // 로그인 후 상세 페이지 보기 요청
   const lastAuthSuccessRef = useRef<number>(0); // 마지막 로그인 성공 시간 추적
   const sessionStateRef = useRef({ isAnalyzing: false, showDetailPage: false, analysisResult: null as AnalysisResult | null });
@@ -452,8 +453,7 @@ export default function HomePage() {
               </a>
               <a
                 onClick={() => {
-                  setActiveTab('personal');
-                  scrollToSection('analysis');
+                  setShowComingSoon(true);
                 }}
                 className="text-gray-300 hover:text-white transition-colors duration-300"
               >
@@ -552,8 +552,7 @@ export default function HomePage() {
               </button>
               <button
                 onClick={() => {
-                  setActiveTab('personal');
-                  scrollToSection('analysis');
+                  setShowComingSoon(true);
                 }}
                 className="block w-full text-left text-gray-300 hover:text-white transition-colors duration-300"
               >
@@ -589,6 +588,35 @@ export default function HomePage() {
         }} 
         onAuthSuccess={handleAuthSuccess} 
       />
+
+      {/* Coming Soon Modal */}
+      {showComingSoon && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-dark-800 rounded-2xl shadow-2xl w-full max-w-md border border-dark-700 p-8"
+          >
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Clock className="w-10 h-10 text-white" />
+              </div>
+              <h2 className="text-3xl font-bold text-white mb-4">Coming Soon!</h2>
+              <p className="text-gray-300 mb-8 leading-relaxed">
+                개인 이력분석 기능은 곧 출시될 예정입니다.<br />
+                조금만 기다려주세요!
+              </p>
+              <button
+                onClick={() => setShowComingSoon(false)}
+                className="w-full px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-semibold transition-colors duration-300"
+              >
+                확인
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -668,8 +696,7 @@ export default function HomePage() {
               
               <button 
                 onClick={() => {
-                  setActiveTab('personal');
-                  scrollToSection('analysis');
+                  setShowComingSoon(true);
                 }}
                 className="px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-semibold text-lg flex items-center space-x-3 shadow-lg shadow-primary-600/50 hover:shadow-xl hover:shadow-primary-600/70 transition-all duration-300"
               >
@@ -711,10 +738,13 @@ export default function HomePage() {
                   }`}
                 >
                   <Building2 className="w-5 h-5 inline mr-2" />
-                  기업 분석
+                  JD 직무분석
                 </button>
                 <button
-                  onClick={() => setActiveTab('personal')}
+                  onClick={() => {
+                    setActiveTab('personal');
+                    setShowComingSoon(true);
+                  }}
                   className={`px-6 py-3 rounded-md transition-colors duration-300 ${
                     activeTab === 'personal'
                       ? 'bg-primary-600 text-white'
@@ -722,7 +752,7 @@ export default function HomePage() {
                   }`}
                 >
                   <User className="w-5 h-5 inline mr-2" />
-                  개인 분석
+                  개인 이력분석
                 </button>
               </div>
             </div>
