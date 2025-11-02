@@ -43,7 +43,7 @@ import {
   Phone,
   Code,
   FileCode,
-  ArrowDown
+  Wrench
 } from 'lucide-react';
 import { AnalysisResult, TaskItem, Language } from '@/types';
 import { useTranslation } from '@/lib/i18n';
@@ -51,6 +51,7 @@ import { AutomationChart } from './AutomationChart';
 import { ShareModal } from './ShareModal';
 import { usePDFGenerator } from '@/hooks/usePDFGenerator';
 import { AuthModal } from './auth/AuthModal';
+import { AgentDevelopmentModal } from './AgentDevelopmentModal';
 
 interface AnalysisDetailPageProps {
   result: AnalysisResult;
@@ -68,9 +69,10 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
   const [showShareModal, setShowShareModal] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<Language>(language);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showDevModal, setShowDevModal] = useState(false);
+  const [selectedDevTask, setSelectedDevTask] = useState<TaskItem | null>(null);
   const [currentUser, setCurrentUser] = useState<{ id: string; email: string; name?: string } | null>(null);
   const [authOpen, setAuthOpen] = useState(false);
-  const [selectedDevSpec, setSelectedDevSpec] = useState<string | null>(null);
   
   const { generatePDF, isGenerating, error } = usePDFGenerator({ result });
   const t = useTranslation(currentLanguage);
@@ -705,11 +707,26 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                                   task.conversionPotential === '중간' ? 'text-yellow-400' : 'text-gray-400'
                                 }`}>
                                   {task.conversionPotential}
-                                </span>
-                              </div>
+                              </span>
+                            </div>
                             )}
                           </div>
+                          
+                          {/* 개발하기 버튼 */}
+                          <div className="mt-4 pt-4 border-t border-dark-700">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedDevTask(task);
+                                setShowDevModal(true);
+                              }}
+                              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                            >
+                              <Wrench className="w-5 h-5" />
+                              <span>개발하기</span>
+                            </button>
                         </div>
+                      </div>
                       </div>
                       <div className="flex items-center space-x-2 ml-4">
                         {isExpanded ? (
@@ -819,7 +836,7 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {/* 기대 효과 */}
                             {task.expectedEffects && task.expectedEffects.length > 0 && (
-                              <div>
+                          <div>
                                 <h4 className="text-sm font-semibold mb-3 flex items-center space-x-2 text-green-400">
                                   <TrendingUp className="w-4 h-4" />
                                   <span>전환 시 기대 효과</span>
@@ -910,17 +927,17 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                                 <div className="bg-dark-700 rounded-lg p-4 border border-dark-600">
                                   <h4 className="text-sm font-semibold mb-3 flex items-center space-x-2 text-blue-400">
                                     <Settings className="w-4 h-4" />
-                                    <span>필요 도구</span>
-                                  </h4>
-                                  <div className="space-y-2">
-                                    {task.tools.map((tool, toolIndex) => (
+                              <span>필요 도구</span>
+                            </h4>
+                            <div className="space-y-2">
+                              {task.tools.map((tool, toolIndex) => (
                                       <div key={toolIndex} className="text-xs">
                                         <div className="font-medium text-white mb-0.5">{tool.name}</div>
                                         <div className="text-gray-400">{tool.purpose}</div>
-                                      </div>
-                                    ))}
-                                  </div>
                                 </div>
+                              ))}
+                            </div>
+                          </div>
                               )}
 
                               {/* Risks */}
@@ -928,17 +945,17 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                                 <div className="bg-dark-700 rounded-lg p-4 border border-dark-600">
                                   <h4 className="text-sm font-semibold mb-3 flex items-center space-x-2 text-red-400">
                                     <AlertCircle className="w-4 h-4" />
-                                    <span>위험 요소</span>
-                                  </h4>
-                                  <div className="space-y-2">
-                                    {task.risks.map((risk, riskIndex) => (
+                              <span>위험 요소</span>
+                            </h4>
+                            <div className="space-y-2">
+                              {task.risks.map((risk, riskIndex) => (
                                       <div key={riskIndex} className="flex items-start space-x-2 text-xs">
                                         <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5 flex-shrink-0" />
                                         <span className="text-gray-300 leading-relaxed">{risk}</span>
-                                      </div>
-                                    ))}
-                                  </div>
                                 </div>
+                              ))}
+                            </div>
+                          </div>
                               )}
 
                               {/* Safeguards */}
@@ -946,35 +963,20 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                                 <div className="bg-dark-700 rounded-lg p-4 border border-dark-600">
                                   <h4 className="text-sm font-semibold mb-3 flex items-center space-x-2 text-green-400">
                                     <CheckCircle className="w-4 h-4" />
-                                    <span>안전장치</span>
-                                  </h4>
-                                  <div className="space-y-2">
-                                    {task.safeguards.map((safeguard, safeguardIndex) => (
+                              <span>안전장치</span>
+                            </h4>
+                            <div className="space-y-2">
+                              {task.safeguards.map((safeguard, safeguardIndex) => (
                                       <div key={safeguardIndex} className="flex items-start space-x-2 text-xs">
                                         <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-1.5 flex-shrink-0" />
                                         <span className="text-gray-300 leading-relaxed">{safeguard}</span>
-                                      </div>
-                                    ))}
-                                  </div>
                                 </div>
+                              ))}
+                            </div>
+                          </div>
                               )}
                             </div>
                           )}
-
-                          {/* 개발하기 버튼 */}
-                          <div className="flex justify-center pt-4">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedDevSpec(task.id);
-                              }}
-                              className="px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 group"
-                            >
-                              <Rocket className="w-5 h-5 group-hover:animate-bounce" />
-                              <span>개발하기</span>
-                              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                            </button>
-                          </div>
                         </div>
                       </motion.div>
                     )}
@@ -1199,253 +1201,17 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
         </div>
       </footer>
 
-      {/* Development Spec Modal */}
-      {selectedDevSpec && (() => {
-        const task = result.tasks.find(t => t.id === selectedDevSpec);
-        if (!task) return null;
-        
-        return (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedDevSpec(null)}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-dark-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-dark-700"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Header */}
-              <div className="sticky top-0 bg-dark-800 border-b border-dark-700 px-6 py-4 flex items-center justify-between z-10">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center border-2 ${getCategoryColor(task.category)}`}>
-                    {(() => {
-                      const IconComponent = getCategoryIcon(task.category);
-                      return <IconComponent className="w-6 h-6" />;
-                    })()}
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">
-                      <span className="text-primary-400">Agent </span>
-                      {task.title}
-                    </h2>
-                    <p className="text-sm text-gray-400">개발 스펙 및 작동 흐름</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setSelectedDevSpec(null)}
-                  className="p-2 hover:bg-dark-700 rounded-lg transition-colors"
-                >
-                  <X className="w-5 h-5 text-gray-400" />
-                </button>
-              </div>
-
-              {/* Modal Content */}
-              <div className="p-6 space-y-6">
-                {/* 작동 흐름 다이어그램 */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-4 flex items-center space-x-2 text-primary-400">
-                    <ArrowRight className="w-5 h-5" />
-                    <span>작동 흐름 (Flow Diagram)</span>
-                  </h3>
-                  <div className="bg-gradient-to-br from-dark-700 to-dark-800 rounded-xl p-6 border border-dark-600">
-                    {/* Flow Chart */}
-                    <div className="space-y-4">
-                      {/* Step 1: 입력 */}
-                      <div className="flex items-center space-x-4">
-                        <div className="bg-primary-500 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">
-                          <span className="text-white font-bold">1</span>
-                        </div>
-                        <div className="flex-1 bg-dark-700 rounded-lg p-4 border border-primary-500/30">
-                          <div className="flex items-center space-x-2 mb-2">
-                            <FileText className="w-4 h-4 text-primary-400" />
-                            <span className="font-semibold text-white">입력</span>
-                          </div>
-                          <p className="text-sm text-gray-300">
-                            {task.sourceText || task.reasoning}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Arrow */}
-                      <div className="flex justify-center">
-                        <ArrowDown className="w-6 h-6 text-primary-500 animate-pulse" />
-                      </div>
-
-                      {/* Step 2: 처리 */}
-                      <div className="flex items-center space-x-4">
-                        <div className="bg-blue-500 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">
-                          <span className="text-white font-bold">2</span>
-                        </div>
-                        <div className="flex-1 bg-dark-700 rounded-lg p-4 border border-blue-500/30">
-                          <div className="flex items-center space-x-2 mb-2">
-                            <Settings className="w-4 h-4 text-blue-400" />
-                            <span className="font-semibold text-white">AI 에이전트 처리</span>
-                          </div>
-                          {task.tools.length > 0 && (
-                            <div className="mt-2 space-y-2">
-                              {task.tools.map((tool, idx) => (
-                                <div key={idx} className="text-xs bg-dark-600 rounded px-2 py-1 inline-block mr-2">
-                                  <span className="text-blue-400 font-medium">{tool.name}:</span>
-                                  <span className="text-gray-300 ml-1">{tool.purpose}</span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Arrow */}
-                      <div className="flex justify-center">
-                        <ArrowDown className="w-6 h-6 text-primary-500 animate-pulse" />
-                      </div>
-
-                      {/* Step 3: 검증 */}
-                      {task.safeguards.length > 0 && (
-                        <>
-                          <div className="flex items-center space-x-4">
-                            <div className="bg-green-500 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">
-                              <span className="text-white font-bold">3</span>
-                            </div>
-                            <div className="flex-1 bg-dark-700 rounded-lg p-4 border border-green-500/30">
-                              <div className="flex items-center space-x-2 mb-2">
-                                <CheckCircle className="w-4 h-4 text-green-400" />
-                                <span className="font-semibold text-white">안전 검증</span>
-                              </div>
-                              <ul className="space-y-1 mt-2">
-                                {task.safeguards.map((safeguard, idx) => (
-                                  <li key={idx} className="text-sm text-gray-300 flex items-start space-x-2">
-                                    <CheckCircle className="w-3 h-3 text-green-400 mt-1 flex-shrink-0" />
-                                    <span>{safeguard}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-
-                          {/* Arrow */}
-                          <div className="flex justify-center">
-                            <ArrowDown className="w-6 h-6 text-primary-500 animate-pulse" />
-                          </div>
-                        </>
-                      )}
-
-                      {/* Step 4: 출력 */}
-                      <div className="flex items-center space-x-4">
-                        <div className="bg-purple-500 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">
-                          <span className="text-white font-bold">{task.safeguards.length > 0 ? '4' : '3'}</span>
-                        </div>
-                        <div className="flex-1 bg-dark-700 rounded-lg p-4 border border-purple-500/30">
-                          <div className="flex items-center space-x-2 mb-2">
-                            <Rocket className="w-4 h-4 text-purple-400" />
-                            <span className="font-semibold text-white">결과 출력</span>
-                          </div>
-                          {task.expectedEffects && task.expectedEffects.length > 0 && (
-                            <ul className="space-y-1 mt-2">
-                              {task.expectedEffects.slice(0, 3).map((effect, idx) => (
-                                <li key={idx} className="text-sm text-gray-300 flex items-start space-x-2">
-                                  <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 flex-shrink-0" />
-                                  <span>{effect}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 핵심 기능 */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-4 flex items-center space-x-2 text-blue-400">
-                    <Zap className="w-5 h-5" />
-                    <span>핵심 기능</span>
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-dark-700 rounded-lg p-4 border border-blue-500/30">
-                      <div className="text-sm font-semibold text-blue-400 mb-2">자동화 범위</div>
-                      <p className="text-gray-300 text-sm">{task.category === 'Automate' ? '완전 자동화 가능 - 인간 개입 없이 독립 작동' : task.category === 'AI-Copilot' ? 'AI 협업 - 인간과 함께 작업 수행' : '인간 중심 - 자동화 제한적'}</p>
-                    </div>
-                    <div className="bg-dark-700 rounded-lg p-4 border border-green-500/30">
-                      <div className="text-sm font-semibold text-green-400 mb-2">예상 효과</div>
-                      <div className="text-2xl font-bold text-green-400">{task.roiEstimate}% ROI</div>
-                      <p className="text-gray-300 text-xs mt-1">점수: {task.score}/100</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 위험 요소 */}
-                {task.risks.length > 0 && (
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 flex items-center space-x-2 text-red-400">
-                      <AlertCircle className="w-5 h-5" />
-                      <span>주의사항</span>
-                    </h3>
-                    <div className="bg-dark-700 rounded-lg p-4 border border-red-500/30">
-                      <ul className="space-y-2">
-                        {task.risks.map((risk, idx) => (
-                          <li key={idx} className="flex items-start space-x-2 text-sm text-gray-300">
-                            <AlertCircle className="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" />
-                            <span>{risk}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                )}
-
-                {/* 기술 스펙 */}
-                {task.samplePrompt && (
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 flex items-center space-x-2 text-yellow-400">
-                      <Code className="w-5 h-5" />
-                      <span>개발 프롬프트</span>
-                    </h3>
-                    <div className="bg-dark-900 rounded-lg p-4 border border-yellow-500/30">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-gray-400 font-mono">AI Agent Prompt</span>
-                        <button
-                          onClick={() => {
-                            navigator.clipboard.writeText(task.samplePrompt || '');
-                            alert('프롬프트가 복사되었습니다!');
-                          }}
-                          className="text-xs text-yellow-500 hover:text-yellow-400 flex items-center space-x-1"
-                        >
-                          <Copy className="w-3 h-3" />
-                          <span>복사</span>
-                        </button>
-                      </div>
-                      <pre className="text-xs text-gray-300 font-mono whitespace-pre-wrap break-words overflow-x-auto">
-                        <code>{task.samplePrompt}</code>
-                      </pre>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Modal Footer */}
-              <div className="sticky bottom-0 bg-dark-800 border-t border-dark-700 px-6 py-4 flex items-center justify-end space-x-3">
-                <button
-                  onClick={() => setSelectedDevSpec(null)}
-                  className="px-4 py-2 bg-dark-700 hover:bg-dark-600 text-white rounded-lg transition-colors"
-                >
-                  닫기
-                </button>
-                <button
-                  onClick={() => {
-                    if (task.samplePrompt) {
-                      navigator.clipboard.writeText(task.samplePrompt);
-                      alert('프롬프트가 복사되었습니다!');
-                    }
-                  }}
-                  className="px-6 py-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-lg transition-all"
-                >
-                  프롬프트 복사
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        );
-      })()}
+      {/* Development Modal */}
+      {selectedDevTask && (
+        <AgentDevelopmentModal
+          isOpen={showDevModal}
+          onClose={() => {
+            setShowDevModal(false);
+            setSelectedDevTask(null);
+          }}
+          task={selectedDevTask}
+        />
+      )}
     </div>
   );
 }

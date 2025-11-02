@@ -12,6 +12,21 @@ export interface Tool {
   alternatives: string[];
 }
 
+export interface AgentFlowStep {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+}
+
+export interface AgentDevelopmentSpec {
+  flowSteps?: AgentFlowStep[]; // 에이전트 작동 플로우
+  architecture?: string; // 시스템 아키텍처 설명
+  endpoints?: string[]; // 필요한 API 엔드포인트
+  dataModel?: string[]; // 데이터 모델 설명
+  integrationPoints?: string[]; // 통합 포인트
+}
+
 export interface TaskItem {
   id: string;
   title: string;
@@ -37,6 +52,7 @@ export interface TaskItem {
   estimatedBuildPeriod?: string; // 예상 구축 기간
   technicalRequirements?: string[]; // 기술 요구사항
   shortDescription?: string; // 에이전트 역할과 기대 효과 설명 (100자 이내)
+  developmentSpec?: AgentDevelopmentSpec; // 개발 스펙 정보
 }
 
 export interface AnalysisSummary {
