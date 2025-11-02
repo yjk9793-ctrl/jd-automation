@@ -52,6 +52,13 @@ import { ShareModal } from './ShareModal';
 import { usePDFGenerator } from '@/hooks/usePDFGenerator';
 import { AuthModal } from './auth/AuthModal';
 import { AgentDevelopmentModal } from './AgentDevelopmentModal';
+import { RadarChart } from './charts/RadarChart';
+import { ImpactEffortChart } from './charts/ImpactEffortChart';
+import { AutomationGauge } from './charts/AutomationGauge';
+import { TimelineChart } from './charts/TimelineChart';
+import { GanttChart } from './charts/GanttChart';
+import { ComparisonMatrix } from './charts/ComparisonMatrix';
+import { InfographicSummary } from './InfographicSummary';
 
 interface AnalysisDetailPageProps {
   result: AnalysisResult;
@@ -509,64 +516,37 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
         {/* Tab Content */}
         {activeTab === 'overview' && (
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+            className="space-y-8"
           >
-            {/* Chart Area */}
-            <div className="lg:col-span-2">
-              <AutomationChart result={result} />
+            {/* Infographic Summary */}
+            <InfographicSummary result={result} />
+
+            {/* Main Charts Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Automation Gauge */}
+              <AutomationGauge result={result} />
+
+              {/* Radar Chart */}
+              <RadarChart result={result} />
             </div>
 
-            {/* Key Metrics */}
-            <div className="space-y-6">
-              <div className="card">
-                <h3 className="text-lg font-semibold mb-4">핵심 지표</h3>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400">평균 점수</span>
-                    <span className="font-semibold text-primary-500">{result.summary.averageScore}/100</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400">예상 ROI</span>
-                    <span className="font-semibold text-green-500">{result.summary.estimatedROI}%</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400">자동화 잠재력</span>
-                    <span className="font-semibold text-purple-500">{result.summary.automationPotential}%</span>
-                  </div>
-                </div>
-              </div>
+            {/* Impact vs Effort Chart */}
+            <ImpactEffortChart result={result} />
 
-              <div className="card">
-                <h3 className="text-lg font-semibold mb-4">분석 정보</h3>
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <Calendar className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-300">
-                      {new Date(result.createdAt).toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    {result.type === 'enterprise' ? (
-                      <Building2 className="w-4 h-4 text-gray-500" />
-                    ) : (
-                      <User className="w-4 h-4 text-gray-500" />
-                    )}
-                    <span className="text-sm text-gray-300">
-                      {result.type === 'enterprise' ? '기업 분석' : '개인 분석'}
-                    </span>
-                  </div>
-                  {result.jobRole && (
-                    <div className="flex items-center space-x-3">
-                      <Target className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm text-gray-300">{result.jobRole}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
+            {/* Timeline and Gantt */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <TimelineChart result={result} />
+              <GanttChart result={result} />
             </div>
+
+            {/* Comparison Matrix */}
+            <ComparisonMatrix result={result} />
+
+            {/* Traditional Charts */}
+            <AutomationChart result={result} />
           </motion.div>
         )}
 

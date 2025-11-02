@@ -42,7 +42,8 @@
     "mammoth": "^1.6.0",
     "clsx": "^2.0.0",
     "tailwind-merge": "^2.2.0",
-    "reactflow": "^11.10.1"
+    "reactflow": "^11.10.1",
+    "d3": "^7.8.5"
   },
   "devDependencies": {
     "eslint": "^8.56.0",
@@ -50,6 +51,7 @@
     "@types/pdf-parse": "^1.1.4",
     "@types/nodemailer": "^6.4.14",
     "@types/bcryptjs": "^2.4.6",
+    "@types/d3": "^7.4.3",
     "prisma": "^5.20.0"
   }
 }
