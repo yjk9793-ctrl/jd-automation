@@ -136,7 +136,72 @@ Format your response as JSON with this structure:
       "estimatedTime": "time estimate",
       "tools": [{"name": "tool name", "purpose": "purpose", "alternatives": ["alt1"]}],
       "risks": ["risk1"],
-      "safeguards": ["safeguard1"]
+      "safeguards": ["safeguard1"],
+      "shortDescription": "Agent role and expected effects (within 100 characters)",
+      "agentIntroduction": "Agent's role, purpose, core value (200-300 characters)",
+      "expectedEffects": ["effect1", "effect2", "effect3"],
+      "developmentSpec": {
+        "flowSteps": [
+          {
+            "id": "step-1",
+            "title": "Step title",
+            "description": "Step description",
+            "icon": "icon-name",
+            "input": "Input data",
+            "output": "Output data",
+            "processLogic": "Process logic"
+          }
+        ],
+        "architecture": "System architecture description"
+      },
+      "operatorCompetencies": [
+        {
+          "category": "Backend",
+          "skills": [
+            {
+              "name": "Python",
+              "level": "intermediate",
+              "priority": "required",
+              "description": "Required skill description"
+            }
+          ]
+        }
+      ],
+      "teamComposition": [
+        {
+          "title": "Backend Developer",
+          "count": "1-2 people",
+          "responsibilities": ["responsibility1", "responsibility2"],
+          "requiredSkills": ["Python", "FastAPI"],
+          "experienceLevel": "3+ years"
+        }
+      ],
+      "technologyStack": [
+        {
+          "category": "Backend Framework",
+          "items": ["FastAPI", "Python 3.11"]
+        }
+      ],
+      "learningResources": [
+        {
+          "type": "course",
+          "title": "AI Agent Development Basics",
+          "provider": "Coursera",
+          "url": "https://example.com",
+          "duration": "4 weeks",
+          "level": "beginner"
+        }
+      ],
+      "implementationMilestones": [
+        {
+          "phase": "Phase 1",
+          "title": "Basic Infrastructure",
+          "duration": "2-4 weeks",
+          "tasks": ["task1", "task2"],
+          "deliverables": ["deliverable1"],
+          "checkpoints": ["checkpoint1"]
+        }
+      ]
     }
   ],
   "recommendations": ["rec1", "rec2"],
@@ -177,6 +242,25 @@ Respond only with valid JSON.`;
       tools: task.tools || [],
       risks: task.risks || [],
       safeguards: task.safeguards || [],
+      shortDescription: task.shortDescription,
+      agentIntroduction: task.agentIntroduction,
+      expectedEffects: task.expectedEffects || [],
+      developmentSpec: task.developmentSpec,
+      operatorCompetencies: task.operatorCompetencies,
+      teamComposition: task.teamComposition,
+      technologyStack: task.technologyStack,
+      deploymentRequirements: task.deploymentRequirements,
+      learningResources: task.learningResources,
+      implementationMilestones: task.implementationMilestones,
+      samplePrompt: task.samplePrompt,
+      conversionPotential: task.conversionPotential,
+      priority: task.priority,
+      conversionBarriers: task.conversionBarriers,
+      technicalRequirements: task.technicalRequirements,
+      estimatedAdoptionCost: task.estimatedAdoptionCost,
+      estimatedOperatingCost: task.estimatedOperatingCost,
+      estimatedSavingsCost: task.estimatedSavingsCost,
+      estimatedBuildPeriod: task.estimatedBuildPeriod,
     }));
 
     return {

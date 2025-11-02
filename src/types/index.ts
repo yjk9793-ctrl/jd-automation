@@ -17,6 +17,50 @@ export interface AgentFlowStep {
   title: string;
   description: string;
   icon: string;
+  input?: string; // 입력 데이터
+  output?: string; // 출력 데이터
+  processLogic?: string; // 처리 로직
+}
+
+export interface OperatorCompetency {
+  category: string; // "Backend", "AI/ML", "DevOps" 등
+  skills: {
+    name: string;
+    level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+    priority: 'required' | 'preferred' | 'optional';
+    description: string;
+  }[];
+}
+
+export interface TeamRole {
+  title: string;
+  count: string; // "1-2명"
+  responsibilities: string[];
+  requiredSkills: string[];
+  experienceLevel?: string;
+}
+
+export interface LearningResource {
+  type: 'course' | 'documentation' | 'tutorial' | 'certification';
+  title: string;
+  provider: string;
+  url: string;
+  duration: string;
+  level: string;
+}
+
+export interface DeploymentRequirement {
+  category: string;
+  requirements: string[];
+}
+
+export interface ImplementationMilestone {
+  phase: string;
+  title: string;
+  duration: string;
+  tasks: string[];
+  deliverables: string[];
+  checkpoints: string[];
 }
 
 export interface AgentDevelopmentSpec {
@@ -53,6 +97,14 @@ export interface TaskItem {
   technicalRequirements?: string[]; // 기술 요구사항
   shortDescription?: string; // 에이전트 역할과 기대 효과 설명 (100자 이내)
   developmentSpec?: AgentDevelopmentSpec; // 개발 스펙 정보
+  // 에이전트 고도화를 위한 추가 필드
+  agentIntroduction?: string; // 에이전트 소개 (200-300자)
+  operatorCompetencies?: OperatorCompetency[]; // 운영자 역량
+  teamComposition?: TeamRole[]; // 팀 구성
+  technologyStack?: { category: string; items: string[] }[]; // 기술 스택
+  deploymentRequirements?: DeploymentRequirement[]; // 배포 요구사항
+  learningResources?: LearningResource[]; // 학습 리소스
+  implementationMilestones?: ImplementationMilestone[]; // 구현 마일스톤
 }
 
 export interface AnalysisSummary {

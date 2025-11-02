@@ -186,14 +186,79 @@ ${content}
       "estimatedTime": "시간 추정",
       "tools": [{"name": "도구 이름", "purpose": "용도", "alternatives": ["대안1"]}],
       "risks": ["위험1"],
-      "safeguards": ["안전장치1"]
+      "safeguards": ["안전장치1"],
+      "shortDescription": "에이전트 역할과 기대 효과 (100자 이내)",
+      "agentIntroduction": "에이전트의 역할, 목적, 핵심 가치 (200-300자)",
+      "expectedEffects": ["효과1", "효과2", "효과3"],
+      "developmentSpec": {
+        "flowSteps": [
+          {
+            "id": "step-1",
+            "title": "단계 제목",
+            "description": "단계 설명",
+            "icon": "icon-name",
+            "input": "입력 데이터",
+            "output": "출력 데이터",
+            "processLogic": "처리 로직"
+          }
+        ],
+        "architecture": "시스템 아키텍처 설명"
+      },
+      "operatorCompetencies": [
+        {
+          "category": "Backend",
+          "skills": [
+            {
+              "name": "Python",
+              "level": "intermediate",
+              "priority": "required",
+              "description": "필수 스킬 설명"
+            }
+          ]
+        }
+      ],
+      "teamComposition": [
+        {
+          "title": "백엔드 개발자",
+          "count": "1-2명",
+          "responsibilities": ["책임1", "책임2"],
+          "requiredSkills": ["Python", "FastAPI"],
+          "experienceLevel": "3년 이상"
+        }
+      ],
+      "technologyStack": [
+        {
+          "category": "Backend Framework",
+          "items": ["FastAPI", "Python 3.11"]
+        }
+      ],
+      "learningResources": [
+        {
+          "type": "course",
+          "title": "AI Agent 개발 입문",
+          "provider": "Coursera",
+          "url": "https://example.com",
+          "duration": "4주",
+          "level": "초급"
+        }
+      ],
+      "implementationMilestones": [
+        {
+          "phase": "Phase 1",
+          "title": "기초 인프라",
+          "duration": "2-4주",
+          "tasks": ["태스크1", "태스크2"],
+          "deliverables": ["산출물1"],
+          "checkpoints": ["체크포인트1"]
+        }
+      ]
     }
   ],
   "recommendations": ["권장사항1", "권장사항2"],
   "nextSteps": ["단계1", "단계2"]
 }
 
-유효한 JSON만 응답하세요.`;
+유효한 JSON만 응답하세요. 각 작업(task)마다 에이전트 개발을 위한 상세 정보를 포함해주세요.`;
   }
 
   private parseAnalysisResponse(text: string): any {
@@ -227,6 +292,25 @@ ${content}
       tools: task.tools || [],
       risks: task.risks || [],
       safeguards: task.safeguards || [],
+      shortDescription: task.shortDescription,
+      agentIntroduction: task.agentIntroduction,
+      expectedEffects: task.expectedEffects || [],
+      developmentSpec: task.developmentSpec,
+      operatorCompetencies: task.operatorCompetencies,
+      teamComposition: task.teamComposition,
+      technologyStack: task.technologyStack,
+      deploymentRequirements: task.deploymentRequirements,
+      learningResources: task.learningResources,
+      implementationMilestones: task.implementationMilestones,
+      samplePrompt: task.samplePrompt,
+      conversionPotential: task.conversionPotential,
+      priority: task.priority,
+      conversionBarriers: task.conversionBarriers,
+      technicalRequirements: task.technicalRequirements,
+      estimatedAdoptionCost: task.estimatedAdoptionCost,
+      estimatedOperatingCost: task.estimatedOperatingCost,
+      estimatedSavingsCost: task.estimatedSavingsCost,
+      estimatedBuildPeriod: task.estimatedBuildPeriod,
     }));
 
     return {
