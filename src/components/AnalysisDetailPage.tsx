@@ -678,34 +678,49 @@ export function AnalysisDetailPage({ result, language, onBack }: AnalysisDetailP
                               </p>
                             );
                           })()}
-                          <div className="flex flex-wrap items-center gap-4 text-xs">
-                            <div className="flex items-center space-x-1.5">
-                              <Target className="w-3.5 h-3.5 text-primary-400" />
-                              <span className="text-gray-400">점수</span>
-                              <span className="font-bold text-primary-400">{task.score}/100</span>
+                          {/* Metrics with Progress Bars */}
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-1.5">
+                                <Target className="w-3.5 h-3.5 text-primary-400" />
+                                <span className="text-gray-400 text-xs">점수</span>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <span className="font-bold text-primary-400">{task.score}/100</span>
+                                <div className="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                                  <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${task.score}%` }}
+                                    transition={{ duration: 0.8, delay: 0.1 }}
+                                    className="h-full bg-gradient-to-r from-primary-500 to-blue-500"
+                                  />
+                                </div>
+                              </div>
                             </div>
-                            <div className="flex items-center space-x-1.5">
-                              <DollarSign className="w-3.5 h-3.5 text-green-400" />
-                              <span className="text-gray-400">ROI</span>
-                              <span className="font-bold text-green-400">{task.roiEstimate}%</span>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-1.5">
+                                <DollarSign className="w-3.5 h-3.5 text-green-400" />
+                                <span className="text-gray-400 text-xs">ROI</span>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <span className="font-bold text-green-400">{task.roiEstimate}%</span>
+                                <div className="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                                  <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${Math.min(100, task.roiEstimate)}%` }}
+                                    transition={{ duration: 0.8, delay: 0.2 }}
+                                    className="h-full bg-gradient-to-r from-green-500 to-emerald-500"
+                                  />
+                                </div>
+                              </div>
                             </div>
-                            <div className="flex items-center space-x-1.5">
-                              <Clock className="w-3.5 h-3.5 text-blue-400" />
-                              <span className="text-gray-400">기간</span>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-1.5">
+                                <Clock className="w-3.5 h-3.5 text-blue-400" />
+                                <span className="text-gray-400 text-xs">기간</span>
+                              </div>
                               <span className="font-semibold text-blue-400">{task.estimatedTime}</span>
                             </div>
-                            {task.conversionPotential && (
-                              <div className="flex items-center space-x-1.5">
-                                <TrendingUp className="w-3.5 h-3.5 text-purple-400" />
-                                <span className="text-gray-400">전환가능성</span>
-                                <span className={`font-semibold ${
-                                  task.conversionPotential === '높음' ? 'text-green-400' :
-                                  task.conversionPotential === '중간' ? 'text-yellow-400' : 'text-gray-400'
-                                }`}>
-                                  {task.conversionPotential}
-                              </span>
-                            </div>
-                            )}
                           </div>
                           
                           {/* 개발하기 버튼 */}
