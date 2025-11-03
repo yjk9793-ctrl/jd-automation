@@ -709,65 +709,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Analysis Section */}
-      <section id="analysis" className="section-padding bg-dark-800">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
-              AI 에이전트 분석
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-              기업의 직무나 개인의 역량을 분석하여 AI 에이전트로 변환 가능한 영역을 찾아보세요.
-            </p>
-            
-            {/* Analysis Type Tabs */}
-            <div className="flex justify-center mb-8">
-              <div className="flex bg-dark-700 p-1 rounded-lg">
-                <button
-                  onClick={() => setActiveTab('enterprise')}
-                  className={`px-6 py-3 rounded-md transition-colors duration-300 ${
-                    activeTab === 'enterprise'
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  <Building2 className="w-5 h-5 inline mr-2" />
-                  JD 직무분석
-                </button>
-                <button
-                  onClick={() => {
-                    setActiveTab('personal');
-                    setShowComingSoon(true);
-                  }}
-                  className={`px-6 py-3 rounded-md transition-colors duration-300 ${
-                    activeTab === 'personal'
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  <User className="w-5 h-5 inline mr-2" />
-                  개인 이력분석
-                </button>
-              </div>
-            </div>
-          </motion.div>
-
-          <AnalysisForm
-            type={activeTab}
-            language={language}
-            onAnalyze={handleAnalyze}
-            isAnalyzing={isAnalyzing}
-            currentUser={currentUser}
-          />
-        </div>
-      </section>
-
       {/* Analysis Results Summary */}
       {analysisResult && (
         <section id="analysis-results" className="section-padding">
@@ -1092,6 +1033,65 @@ export default function HomePage() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Analysis Section */}
+      <section id="analysis" className="section-padding bg-dark-800">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
+              AI 에이전트 분석
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+              기업의 직무나 개인의 역량을 분석하여 AI 에이전트로 변환 가능한 영역을 찾아보세요.
+            </p>
+            
+            {/* Analysis Type Tabs */}
+            <div className="flex justify-center mb-8">
+              <div className="flex bg-dark-700 p-1 rounded-lg">
+                <button
+                  onClick={() => setActiveTab('enterprise')}
+                  className={`px-6 py-3 rounded-md transition-colors duration-300 ${
+                    activeTab === 'enterprise'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <Building2 className="w-5 h-5 inline mr-2" />
+                  JD 직무분석
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab('personal');
+                    setShowComingSoon(true);
+                  }}
+                  className={`px-6 py-3 rounded-md transition-colors duration-300 ${
+                    activeTab === 'personal'
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <User className="w-5 h-5 inline mr-2" />
+                  개인 이력분석
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
+          <AnalysisForm
+            type={activeTab}
+            language={language}
+            onAnalyze={handleAnalyze}
+            isAnalyzing={isAnalyzing}
+            currentUser={currentUser}
+          />
         </div>
       </section>
 
