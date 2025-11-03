@@ -226,27 +226,31 @@ export const translations = {
     },
     features: {
       title: 'Why JDX Transformation?',
-      subtitle: 'Productivity innovation for sustainable business growth',
+      subtitle: 'Transform Your Business Paradigm with AI Agents',
       items: [
         {
-          title: 'Job Automation Analysis',
-          description: 'Analyze job descriptions to identify tasks that can be transformed into AI agents.',
-          icon: 'Search',
+          title: 'Productivity Maximization & Automation',
+          subtitle: 'Productivity & Automation',
+          description: 'AI agents autonomously handle repetitive and standardized tasks, freeing up time for employees to focus on more strategic and creative work. By consistently performing tasks such as customer support, data analysis, report writing, and supply chain optimization 24/7, processing speed improves dramatically and human errors are minimized, maximizing overall productivity.',
+          icon: 'Zap',
         },
         {
-          title: 'Personal Capability Analysis',
-          description: 'Analyze resumes to evaluate personal potential for AI agent utilization.',
-          icon: 'User',
-        },
-        {
-          title: 'Detailed Analysis Report',
-          description: 'Provide detailed analysis of transformation potential, expected effects, and required skills.',
-          icon: 'FileText',
-        },
-        {
-          title: 'Customized Solutions',
-          description: 'Propose AI agent solutions tailored to the characteristics of enterprises and individuals.',
+          title: 'Performance-Driven Culture',
+          subtitle: 'Performance-Driven Culture',
+          description: 'Agent adoption is a key tool for reorganizing the organization into a task-centered culture. As AI agents, rather than people, perform the tasks themselves, the organizational focus shifts from "who did the work" to "the results of the work." This enables data-based accurate performance measurement and objective evaluation, establishing a performance-driven culture.',
           icon: 'Target',
+        },
+        {
+          title: 'Cost Reduction & Optimization',
+          subtitle: 'Cost Reduction & Optimization',
+          description: 'AI agents do not incur hourly costs and can handle large-scale repetitive tasks quickly, significantly reducing operational costs including labor costs. Agents can replace 30% or more of the total workforce, enabling automation to the level where one person good at utilizing AI can do the work of 2-3 people.',
+          icon: 'TrendingDown',
+        },
+        {
+          title: 'Agile Decision-Making & Competitiveness',
+          subtitle: 'Agile Decision-Making & Competitiveness',
+          description: 'AI agents can collect, analyze, and reason from vast amounts of data in real time, and based on the results, make autonomous decisions and execute actions. By providing highly accurate predictive analysis based on overwhelming amounts of information difficult for humans to process, they dramatically shorten decision-making speed for management, becoming a key competitive advantage.',
+          icon: 'TrendingUp',
         },
       ],
     },
