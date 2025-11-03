@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Star,
   TrendingUp, 
+  TrendingDown,
   Zap, 
   Brain,
   Shield,
@@ -841,7 +842,7 @@ export default function HomePage() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {t.features.items.map((feature, index) => {
               const IconComponent = require('lucide-react')[feature.icon];
               return (
@@ -851,13 +852,30 @@ export default function HomePage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="card-hover group"
+                  className="card-hover group relative overflow-hidden"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <IconComponent className="w-8 h-8 text-white" />
+                  {/* Gradient background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative">
+                    {/* Icon and Title Section */}
+                    <div className="flex items-start space-x-4 mb-4">
+                      <div className="w-16 h-16 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                        <IconComponent className="w-8 h-8 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold mb-2 text-white">{feature.title}</h3>
+                        <p className="text-sm text-primary-400 font-medium tracking-wide mb-3">
+                          {feature.subtitle}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Description */}
+                    <div className="pl-20">
+                      <p className="text-gray-300 leading-relaxed">{feature.description}</p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-semibold mb-4">{feature.title}</h3>
-                  <p className="text-gray-400 leading-relaxed">{feature.description}</p>
                 </motion.div>
               );
             })}
