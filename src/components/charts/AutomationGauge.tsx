@@ -20,11 +20,6 @@ export function AutomationGauge({ result }: AutomationGaugeProps) {
     automationPotential >= 70 ? 'from-green-500 to-emerald-500' :
     automationPotential >= 50 ? 'from-yellow-500 to-orange-500' : 'from-red-500 to-orange-500';
 
-  // 게이지 SVG 생성
-  const radius = 80;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (automationPotential / 100) * circumference;
-
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -48,30 +43,28 @@ export function AutomationGauge({ result }: AutomationGaugeProps) {
           </div>
         </div>
 
-        {/* Gauge SVG */}
-        <div className="flex justify-center items-center relative py-8">
-          <svg width="220" height="180" className="transform -rotate-90">
-            {/* Background Circle */}
-            <circle
-              cx="110"
-              cy="110"
-              r={radius}
+        {/* Gauge SVG - Semi-circle */}
+        <div className="flex justify-center items-start relative py-8">
+          <svg width="280" height="140" viewBox="0 0 280 140" className="transform -rotate-180">
+            {/* Background Arc */}
+            <path
+              d="M 40,100 A 100,100 0 0,1 240,100"
               fill="none"
               stroke="#1f2937"
-              strokeWidth="16"
+              strokeWidth="18"
               strokeLinecap="round"
+              strokeLinejoin="round"
             />
-            {/* Progress Circle */}
-            <circle
-              cx="110"
-              cy="110"
-              r={radius}
+            {/* Progress Arc */}
+            <path
+              d="M 40,100 A 100,100 0 0,1 240,100"
               fill="none"
               stroke={`url(#gradient-${automationPotential})`}
-              strokeWidth="16"
+              strokeWidth="18"
               strokeLinecap="round"
-              strokeDasharray={circumference}
-              strokeDashoffset={offset}
+              strokeLinejoin="round"
+              strokeDasharray={Math.PI * 100}
+              strokeDashoffset={Math.PI * 100 - (automationPotential / 100) * Math.PI * 100}
               className="transition-all duration-1500 ease-out"
             />
             {/* Gradient Definition */}
@@ -84,7 +77,7 @@ export function AutomationGauge({ result }: AutomationGaugeProps) {
           </svg>
           
           {/* Center Content */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div className="absolute top-14 left-1/2 transform -translate-x-1/2 flex flex-col items-center justify-center pointer-events-none">
             <div className={`text-6xl font-bold ${scoreColor} mb-2`}>
               {automationPotential}%
             </div>
