@@ -43,45 +43,52 @@ export function AutomationGauge({ result }: AutomationGaugeProps) {
           </div>
         </div>
 
-        {/* Gauge SVG - Semi-circle */}
-        <div className="flex justify-center items-start relative py-8">
-          <svg width="280" height="140" viewBox="0 0 280 140" className="transform -rotate-180">
-            {/* Background Arc */}
-            <path
-              d="M 40,100 A 100,100 0 0,1 240,100"
-              fill="none"
-              stroke="#1f2937"
-              strokeWidth="18"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            {/* Progress Arc */}
-            <path
-              d="M 40,100 A 100,100 0 0,1 240,100"
-              fill="none"
-              stroke={`url(#gradient-${automationPotential})`}
-              strokeWidth="18"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeDasharray={Math.PI * 100}
-              strokeDashoffset={Math.PI * 100 - (automationPotential / 100) * Math.PI * 100}
-              className="transition-all duration-1500 ease-out"
-            />
-            {/* Gradient Definition */}
-            <defs>
-              <linearGradient id={`gradient-${automationPotential}`} x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#3b82f6" />
-                <stop offset="100%" stopColor="#8b5cf6" />
-              </linearGradient>
-            </defs>
-          </svg>
-          
-          {/* Center Content */}
-          <div className="absolute top-14 left-1/2 transform -translate-x-1/2 flex flex-col items-center justify-center pointer-events-none">
-            <div className={`text-6xl font-bold ${scoreColor} mb-2`}>
-              {automationPotential}%
+        {/* Circular Progress with Donut */}
+        <div className="flex justify-center items-center relative py-12">
+          {/* Large Circular Progress */}
+          <div className="relative" style={{ width: '240px', height: '240px' }}>
+            {/* Outer Circle Background */}
+            <svg className="absolute inset-0 transform -rotate-90" width="240" height="240">
+              <circle
+                cx="120"
+                cy="120"
+                r="105"
+                fill="none"
+                stroke="#1f2937"
+                strokeWidth="24"
+                strokeLinecap="round"
+              />
+              {/* Progress Circle */}
+              <circle
+                cx="120"
+                cy="120"
+                r="105"
+                fill="none"
+                stroke={`url(#gradient-${automationPotential})`}
+                strokeWidth="24"
+                strokeLinecap="round"
+                strokeDasharray={`${2 * Math.PI * 105}`}
+                strokeDashoffset={`${2 * Math.PI * 105 * (1 - automationPotential / 100)}`}
+                className="transition-all duration-1500 ease-out"
+              />
+              {/* Gradient Definition */}
+              <defs>
+                <linearGradient id={`gradient-${automationPotential}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#3b82f6" />
+                  <stop offset="50%" stopColor="#8b5cf6" />
+                  <stop offset="100%" stopColor="#ec4899" />
+                </linearGradient>
+              </defs>
+            </svg>
+            
+            {/* Center Content */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <div className={`text-7xl font-bold ${scoreColor} mb-2 leading-none`}>
+                {automationPotential}
+              </div>
+              <div className="text-xl text-gray-400 mb-1">%</div>
+              <div className="text-sm text-gray-500">자동화 가능</div>
             </div>
-            <div className="text-sm text-gray-400">자동화 가능</div>
           </div>
         </div>
 
