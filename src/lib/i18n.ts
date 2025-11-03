@@ -142,24 +142,84 @@ export const translations = {
       ],
     },
     consulting: {
-      title: '맞춤형 컨설팅 서비스',
-      subtitle: '기업의 특성에 맞는 AI 에이전트 전환 전략',
-      services: [
+      title: '기업 맞춤형 컨설팅 서비스',
+      subtitle: '단계별 체계적인 AI 에이전트 전환 프로세스',
+      steps: [
         {
-          title: '현황 분석',
-          description: '기업의 현재 업무 프로세스를 분석하여 자동화 가능 영역을 식별합니다.',
+          step: '1단계',
+          title: '현황 진단 및 전략 로드맵 수립',
+          icon: 'SearchCheck',
+          details: [
+            {
+              title: '업무 비효율 진단',
+              description: '조직 내 반복적/정형화된 비효율 업무를 식별하고, 에이전트 도입 시 가장 큰 개선 효과를 가져올 핵심 영역을 분석합니다.',
+            },
+            {
+              title: 'AI 잠재력 평가',
+              description: '고객사의 기술 인프라 및 데이터 환경을 평가하여 에이전트 시스템 통합 가능성을 진단하고, ROI 목표를 설정합니다.',
+            },
+            {
+              title: '로드맵 설계',
+              description: '단기 파일럿(Pilot) 목표부터 장기 전사 통합 목표까지, 단계별 전환 로드맵과 거버넌스 체계를 수립합니다.',
+            },
+          ],
         },
         {
-          title: '전략 수립',
-          description: 'AI 에이전트 도입 로드맵과 단계별 실행 계획을 수립합니다.',
+          step: '2단계',
+          title: '파일럿 에이전트 설계 및 PoC',
+          icon: 'FlaskConical',
+          details: [
+            {
+              title: '핵심 Use Case 선정',
+              description: '성공 가능성이 높고 측정 용이한 파일럿 프로젝트를 선정하고, 수행할 에이전트의 구체적인 역할(Goal)과 기능(Tool)을 정의합니다.',
+            },
+            {
+              title: 'PoC 실행 및 검증',
+              description: '실제 데이터 환경에서 에이전트를 구축하고 제한적으로 테스트하여 기술적 실현 가능성과 업무 목표 달성 여부를 중점적으로 검증합니다.',
+            },
+            {
+              title: '성과 분석',
+              description: '파일럿 결과를 바탕으로 정량적/정성적 KPI를 측정하고, 초기 모델의 개선점을 도출하여 확장 모델의 완성도를 높입니다.',
+            },
+          ],
         },
         {
-          title: '구현 지원',
-          description: 'AI 에이전트 개발 및 도입 과정을 전담 지원합니다.',
+          step: '3단계',
+          title: '전사적 확장 및 통합 아키텍처 구축',
+          icon: 'Network',
+          details: [
+            {
+              title: '확산 및 통합 전략',
+              description: '파일럿 모델을 다른 부서 및 유사 업무로 순차적으로 확장하고, 다양한 에이전트들을 관리할 중앙 집중식 플랫폼을 구축합니다.',
+            },
+            {
+              title: '시스템 연동',
+              description: '에이전트의 자율적 업무 수행을 위해 ERP, CRM 등 핵심 기간 시스템과의 API 연동을 완료하고 데이터 흐름을 최적화합니다.',
+            },
+            {
+              title: '조직 개편 및 교육',
+              description: '에이전트 도입에 따른 조직 역할 변화(Role Transformation) 방안을 제시하고, 직원들이 에이전트와 협업하는 방식을 익히도록 맞춤형 교육을 제공합니다.',
+            },
+          ],
         },
         {
-          title: '운영 최적화',
-          description: '도입 후 성과 측정 및 지속적인 개선 방안을 제시합니다.',
+          step: '4단계',
+          title: '운영 관리 및 지속적 성능 최적화',
+          icon: 'BarChart3',
+          details: [
+            {
+              title: '운영 모니터링',
+              description: '에이전트의 성능, 오류율, 비용 효율 등을 실시간으로 감시하는 대시보드를 구축하고, 운영 거버넌스를 확립합니다.',
+            },
+            {
+              title: '지속적 성능 고도화',
+              description: '실제 운영 데이터를 바탕으로 에이전트의 프롬프트, 로직, 도구 연동을 정기적으로 개선하여 최적의 성과를 유지합니다.',
+            },
+            {
+              title: '피드백 및 업그레이드',
+              description: '사용자 피드백을 수집하여 에이전트 개선에 반영하는 선순환 구조를 확립하고, 최신 AI 기술을 반영한 시스템 업그레이드를 제안합니다.',
+            },
+          ],
         },
       ],
     },
@@ -347,24 +407,84 @@ export const translations = {
       ],
     },
     consulting: {
-      title: 'Customized Consulting Services',
-      subtitle: 'AI agent transformation strategy tailored to your company',
-      services: [
+      title: 'Enterprise Custom Consulting Services',
+      subtitle: 'Systematic step-by-step AI Agent transformation process',
+      steps: [
         {
-          title: 'Current State Analysis',
-          description: 'Analyze current business processes to identify automation opportunities.',
+          step: 'Step 1',
+          title: 'Current State Diagnosis & Strategic Roadmap',
+          icon: 'SearchCheck',
+          details: [
+            {
+              title: 'Work Inefficiency Diagnosis',
+              description: 'Identify repetitive and standardized inefficient tasks within the organization and analyze key areas that will bring the greatest improvement effect when introducing agents.',
+            },
+            {
+              title: 'AI Potential Assessment',
+              description: 'Evaluate the customer\'s technology infrastructure and data environment to diagnose the feasibility of agent system integration and set ROI goals.',
+            },
+            {
+              title: 'Roadmap Design',
+              description: 'Establish a phased transformation roadmap and governance system from short-term pilot goals to long-term enterprise-wide integration goals.',
+            },
+          ],
         },
         {
-          title: 'Strategy Development',
-          description: 'Develop AI agent implementation roadmap and phased execution plans.',
+          step: 'Step 2',
+          title: 'Pilot Agent Design & PoC',
+          icon: 'FlaskConical',
+          details: [
+            {
+              title: 'Key Use Case Selection',
+              description: 'Select pilot projects with high success potential and easy measurement, and define specific roles (Goal) and functions (Tool) of agents to be performed.',
+            },
+            {
+              title: 'PoC Execution & Validation',
+              description: 'Build and test agents in a real data environment to verify technical feasibility and achievement of business goals.',
+            },
+            {
+              title: 'Performance Analysis',
+              description: 'Measure quantitative and qualitative KPIs based on pilot results and identify improvement points for the initial model to increase the completeness of the expansion model.',
+            },
+          ],
         },
         {
-          title: 'Implementation Support',
-          description: 'Provide dedicated support for AI agent development and implementation.',
+          step: 'Step 3',
+          title: 'Enterprise-wide Expansion & Integration Architecture',
+          icon: 'Network',
+          details: [
+            {
+              title: 'Spread & Integration Strategy',
+              description: 'Sequentially expand the pilot model to other departments and similar tasks, and build a centralized platform to manage various agents.',
+            },
+            {
+              title: 'System Integration',
+              description: 'Complete API integration with core legacy systems such as ERP and CRM for autonomous agent task execution and optimize data flow.',
+            },
+            {
+              title: 'Organizational Restructuring & Training',
+              description: 'Present organizational role transformation plans following agent introduction and provide customized training for employees to learn how to collaborate with agents.',
+            },
+          ],
         },
         {
-          title: 'Operation Optimization',
-          description: 'Present performance measurement and continuous improvement plans after implementation.',
+          step: 'Step 4',
+          title: 'Operations Management & Continuous Performance Optimization',
+          icon: 'BarChart3',
+          details: [
+            {
+              title: 'Operations Monitoring',
+              description: 'Build dashboards to monitor agent performance, error rates, and cost efficiency in real time and establish operational governance.',
+            },
+            {
+              title: 'Continuous Performance Enhancement',
+              description: 'Regularly improve agent prompts, logic, and tool integration based on actual operational data to maintain optimal performance.',
+            },
+            {
+              title: 'Feedback & Upgrade',
+              description: 'Establish a virtuous cycle structure that collects user feedback and reflects it in agent improvements, and propose system upgrades incorporating the latest AI technology.',
+            },
+          ],
         },
       ],
     },

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Search, 
+  SearchCheck,
   User, 
   FileText, 
   Target, 
@@ -36,7 +37,9 @@ import {
   X,
   Eye,
   Calendar,
-  Download
+  Download,
+  FlaskConical,
+  Network
 } from 'lucide-react';
 import { Language, AnalysisType, IndustryFeedback, ProcessStep, ContactForm, AnalysisResult } from '@/types';
 import { useTranslation } from '@/lib/i18n';
@@ -1033,23 +1036,53 @@ export default function HomePage() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {t.consulting.services.map((service, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="card-hover text-center"
-              >
-                <div className="w-16 h-16 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl flex items-center justify-center mx-auto mb-6">
-                  <Lightbulb className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-4">{service.title}</h3>
-                <p className="text-gray-400">{service.description}</p>
-              </motion.div>
-            ))}
+          <div className="space-y-12">
+            {t.consulting.steps.map((step, index) => {
+              const IconComponent = require('lucide-react')[step.icon];
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="card-hover relative overflow-hidden group"
+                >
+                  {/* Gradient background effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative">
+                    {/* Header Section */}
+                    <div className="flex items-start space-x-6 mb-6">
+                      <div className="w-20 h-20 bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <IconComponent className="w-10 h-10 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm font-bold text-primary-400 mb-2 tracking-wide">
+                          {step.step}
+                        </div>
+                        <h3 className="text-2xl font-bold text-white mb-3">{step.title}</h3>
+                      </div>
+                    </div>
+                    
+                    {/* Details Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pl-28">
+                      {step.details.map((detail, detailIndex) => (
+                        <div key={detailIndex} className="bg-dark-700/50 rounded-lg p-5 border border-dark-600 hover:border-primary-500/50 transition-colors">
+                          <div className="flex items-center space-x-2 mb-3">
+                            <div className="w-6 h-6 bg-primary-500/20 rounded-full flex items-center justify-center">
+                              <span className="text-primary-400 font-bold text-xs">{detailIndex + 1}</span>
+                            </div>
+                            <h4 className="text-base font-semibold text-white">{detail.title}</h4>
+                          </div>
+                          <p className="text-sm text-gray-400 leading-relaxed">{detail.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
